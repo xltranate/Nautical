@@ -5,236 +5,229 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Nautical — Offline Games</title>
 
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-  :root{ --nav-h:64px; --accent:#0ea5a6 }
+:root{--nav-h:64px;--accent:#0ea5a6}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:Inter,system-ui,Arial;color:#e9fbfb}
 
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;font-family:Inter,system-ui,Arial;color:#e9fbfb}
+body{
+  background:radial-gradient(circle at 10% 10%, rgba(6,30,40,.55) 0%, rgba(3,25,38,1) 40%),
+             linear-gradient(180deg,#042a33 0%, #02151a 100%);
+  overflow-x:hidden;
+}
 
-  /* Background (same as homepage) */
-  body{
-      background: radial-gradient(circle at 10% 10%, rgba(6,30,40,0.55) 0%, rgba(3,25,38,1) 40%),
-                  linear-gradient(180deg,#042a33 0%, #02151a 100%);
-      overflow-x:hidden;
-  }
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;height:var(--nav-h);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+  background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid rgba(255,255,255,.04);
+  z-index:80;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+  width:40px;height:40px;border-radius:8px;
+  background:linear-gradient(135deg,var(--accent),#036b6b);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;color:#012;
+}
+.brand h1{font-family:Playfair Display,serif;font-size:20px}
 
-  /* NAV */
-  nav{
-    position:fixed;top:0;left:0;right:0;height:var(--nav-h);
-    display:flex;align-items:center;justify-content:space-between;
-    padding:0 20px;
-    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    backdrop-filter:blur(6px);
-    border-bottom:1px solid rgba(255,255,255,0.04);
-    z-index:80;
-  }
+.navlinks a{
+  color:rgba(230,247,247,.85);
+  margin-left:18px;
+  text-decoration:none;
+}
+.navlinks a:hover{color:var(--accent)}
 
-  .brand{display:flex;align-items:center;gap:12px}
-  .logo{
-      width:40px;height:40px;border-radius:8px;
-      background:linear-gradient(135deg,var(--accent),#036b6b);
-      display:flex;align-items:center;justify-content:center;
-      font-weight:700;color:#012;
-      box-shadow:0 6px 18px rgba(3,108,108,0.14);
-  }
-  .brand h1{
-      font-family:Playfair Display,serif;
-      margin:0;font-size:20px;letter-spacing:0.6px;
-  }
+.page{padding-top:var(--nav-h);position:relative;z-index:10}
 
-  .navlinks a{
-      color:rgba(230,247,247,0.85);
-      margin-left:18px;
-      text-decoration:none;
-      font-weight:500;
-  }
-  .navlinks a:hover{color:var(--accent)}
+/* Header */
+header{text-align:center;padding:36px 20px 10px}
+.title{
+  font-family:Playfair Display,serif;
+  font-size:56px;
+  background:linear-gradient(90deg,#bfeef9,#a0f0e8,#2bd8c9);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+.subtitle{color:rgba(230,247,247,.75);margin-top:6px}
 
-  /* Page layout */
-  .page{padding-top:var(--nav-h);position:relative;z-index:10;}
+/* Search */
+.search-wrap{
+  display:flex;
+  justify-content:center;
+  padding:20px;
+}
+.search-wrap input{
+  width:100%;
+  max-width:420px;
+  padding:12px 16px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.05);
+  color:#e9fbfb;
+  outline:none;
+}
 
-  /* Title */
-  header{text-align:center;padding:36px 20px 10px 20px}
-  header .title{
-      font-family:Playfair Display,serif;
-      font-size:56px;
-      background:linear-gradient(90deg,#bfeef9,#a0f0e8,#2bd8c9);
-      -webkit-background-clip:text;background-clip:text;
-      color:transparent;
-  }
-  header .subtitle{
-      margin-top:8px;
-      color:rgba(230,247,247,0.8);
-      font-size:18px;
-  }
+/* Games */
+main{padding:20px;display:flex;justify-content:center}
+.games-grid{
+  width:100%;
+  max-width:1200px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+.game-box{
+  height:160px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:.18s;
+  backdrop-filter:blur(8px);
+}
+.game-box:hover{
+  transform:translateY(-6px);
+  background:rgba(255,255,255,.09);
+}
+.game-title{font-weight:600}
 
-  /* Games grid */
-  main{padding:20px;display:flex;justify-content:center}
-  .games-grid{
-      width:100%;
-      max-width:1200px;
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:18px;
-  }
-  .game-box{
-      height:160px;
-      background:rgba(255,255,255,0.05);
-      border:1px solid rgba(255,255,255,0.06);
-      border-radius:12px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      transition:0.18s;
-      backdrop-filter:blur(4px);
-  }
-  .game-box:hover{
-      transform:translateY(-6px);
-      background:rgba(255,255,255,0.09);
-  }
-  .game-title{font-weight:600}
-  .game-sub{font-size:12px;color:rgba(230,247,247,0.7);margin-top:6px}
+@media(max-width:1100px){.games-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:800px){.games-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.games-grid{grid-template-columns:1fr}}
 
-  /* Responsive */
-  @media (max-width:1100px){.games-grid{grid-template-columns:repeat(3,1fr)}}
-  @media (max-width:800px){.games-grid{grid-template-columns:repeat(2,1fr)}}
-  @media (max-width:480px){.games-grid{grid-template-columns:repeat(1,1fr)}}
-
-  /* Bubble canvas */
-  .bubbles-wrap{
-      position:fixed;inset:0;
-      pointer-events:none;
-      overflow:hidden;
-      z-index:0;
-  }
-  canvas{width:100%;height:100vh;display:block}
+/* Bubbles */
+.bubbles-wrap{position:fixed;inset:0;pointer-events:none;z-index:0}
+canvas{width:100%;height:100vh}
 </style>
 </head>
+
 <body>
 
-<nav aria-label="Main navigation">
-  <div class="brand"><div class="logo">N</div><h1>NAUTICAL</h1></div>
+<nav>
+  <div class="brand">
+    <div class="logo">N</div>
+    <h1>NAUTICAL</h1>
+  </div>
   <div class="navlinks">
-      <a href="index.html">Home</a>
-      <a href="games.html">Games</a>
-      <a href="apps.html">Apps</a>
+    <a href="index.html">Home</a>
+    <a href="games.html">Games</a>
+    <a href="apps.html">Apps</a>
   </div>
 </nav>
 
 <div class="bubbles-wrap"><canvas id="bubbles"></canvas></div>
 
 <div class="page">
-  <header>
-    <div class="title">Offline Games</div>
-    <div class="subtitle">Pick a game and enjoy.</div>
-  </header>
+<header>
+  <div class="title">Offline Games</div>
+  <div class="subtitle">Pick a game and enjoy</div>
+</header>
 
-  <main>
-    <div class="games-grid" id="games-grid"></div>
-  </main>
+<div class="search-wrap">
+  <input type="text" id="search" placeholder="Search games...">
+</div>
+
+<main>
+<div class="games-grid" id="grid">
+
+<!-- WORKING GAMES -->
+<div class="game-box"
+     data-name="Smashy Road"
+     data-href="https://xltranate.github.io/Nautical/games/smashyroad.html">
+  <div class="game-title">Smashy Road</div>
+</div>
+<div class="game-box"
+     data-name="Block Blast"
+     data-href="https://xltranate.github.io/Nautical/games/blockblast.html">
+  <div class="game-title">Block Blast</div>
+</div>
+
+</div>
+</main>
 </div>
 
 <script>
-/* ---------------- BUBBLES (canvas version from homepage) ---------------- */
-(function(){
-  const canvas = document.getElementById('bubbles');
-  const ctx = canvas.getContext('2d');
-  let bubbles = [];
+/* SORT + SEARCH + CLICK */
+const grid=document.getElementById('grid');
+let boxes=[...grid.children];
 
-  function resize(){
-    let rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * devicePixelRatio;
-    canvas.height = rect.height * devicePixelRatio;
-    ctx.scale(devicePixelRatio, devicePixelRatio);
-  }
-  resize();
-  window.addEventListener('resize', ()=>{
-    clearTimeout(window._rb);
-    window._rb = setTimeout(resize, 80);
+boxes.sort((a,b)=>a.dataset.name.localeCompare(b.dataset.name));
+boxes.forEach(b=>grid.appendChild(b));
+
+boxes.forEach(box=>{
+  box.addEventListener('click',()=>{
+    window.location.href = box.dataset.href;
   });
+});
 
-  function createBubble(){
-    let rect = canvas.getBoundingClientRect();
-    const size = 6 + Math.random()*18;
-    bubbles.push({
-      x: Math.random()*rect.width,
-      y: rect.height + size,
-      r: size,
-      speed: 20 + Math.random()*40,
-      drift: (Math.random()-.5)*20,
-      alpha: .6 + Math.random()*0.4,
-      life: 1,
-      wobble: .2 + Math.random()*0.6
-    });
-    if(bubbles.length>140) bubbles.shift();
+document.getElementById('search').addEventListener('input',e=>{
+  const q=e.target.value.toLowerCase();
+  boxes.forEach(b=>{
+    b.style.display=b.dataset.name.toLowerCase().includes(q)?"flex":"none";
+  });
+});
+</script>
+
+<script>
+/* NAUTICAL BUBBLES */
+(function(){
+  const canvas=document.getElementById('bubbles');
+  const ctx=canvas.getContext('2d');
+  let bubbles=[];
+  function resize(){
+    const r=canvas.getBoundingClientRect();
+    canvas.width=r.width*devicePixelRatio;
+    canvas.height=r.height*devicePixelRatio;
+    ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
   }
-
-  setInterval(()=>{
-    let n = Math.random()<.8 ? 2 : 3;
-    while(n--) createBubble();
-  }, 280);
-
-  let last = performance.now();
+  resize();window.addEventListener('resize',()=>setTimeout(resize,80));
+  function spawn(){
+    const r=canvas.getBoundingClientRect();
+    bubbles.push({
+      x:Math.random()*r.width,
+      y:r.height+20,
+      r:6+Math.random()*18,
+      speed:20+Math.random()*40,
+      drift:(Math.random()-.5)*20,
+      alpha:.6+Math.random()*.4,
+      life:1,
+      wobble:.2+Math.random()*.6
+    });
+    if(bubbles.length>140)bubbles.shift();
+  }
+  setInterval(()=>{spawn();spawn()},280);
+  let last=performance.now();
   function draw(now){
-    const dt = (now-last)/1000; last = now;
-    let rect = canvas.getBoundingClientRect();
-    ctx.clearRect(0,0,rect.width,rect.height);
-
-    for(let i=bubbles.length-1;i>=0;i--){
-      let b=bubbles[i];
-      b.y -= b.speed*dt;
-      b.x += b.drift*dt*Math.sin(now*b.wobble*0.001);
-      b.life -= dt*.06;
-      const op = Math.max(0, Math.min(b.alpha*(b.life+.2), .9));
-
-      ctx.beginPath();
-      ctx.globalAlpha = op;
-      const g=ctx.createRadialGradient(b.x,b.y,b.r*0.15,b.x,b.y,b.r);
-      g.addColorStop(0,'rgba(255,255,255,0.95)');
-      g.addColorStop(.5,'rgba(180,240,255,0.45)');
-      g.addColorStop(1,'rgba(160,220,235,0.08)');
+    const dt=(now-last)/1000;last=now;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    bubbles.forEach((b,i)=>{
+      b.y-=b.speed*dt;
+      b.x+=Math.sin(now*b.wobble*.001)*b.drift*dt;
+      b.life-=dt*.06;
+      const o=Math.max(0,b.alpha*(b.life+.2));
+      ctx.globalAlpha=o;
+      const g=ctx.createRadialGradient(b.x,b.y,b.r*.15,b.x,b.y,b.r);
+      g.addColorStop(0,'rgba(255,255,255,.95)');
+      g.addColorStop(.5,'rgba(180,240,255,.45)');
+      g.addColorStop(1,'rgba(160,220,235,.08)');
       ctx.fillStyle=g;
-      ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
-      ctx.fill();
-
-      ctx.globalAlpha = op*.6;
-      ctx.beginPath();
-      ctx.arc(b.x-b.r*.25,b.y-b.r*.25,b.r*.18,0,Math.PI*2);
-      ctx.fillStyle='rgba(255,255,255,0.9)';
-      ctx.fill();
-      ctx.globalAlpha = 1;
-
-      if(b.y+b.r < -20 || b.life <= -0.4) bubbles.splice(i,1);
-    }
-
+      ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();
+      if(b.y<-20||b.life<0)bubbles.splice(i,1);
+    });
+    ctx.globalAlpha=1;
     requestAnimationFrame(draw);
   }
   requestAnimationFrame(draw);
-})();
-
-/* ---------------- GAME BOXES ---------------- */
-(function(){
-  const grid = document.getElementById('games-grid');
-  for(let i=1;i<=50;i++){
-    const box = document.createElement('div');
-    box.className = 'game-box';
-    box.innerHTML = `
-      <div class="game-title">Game ${i}</div>
-      <div class="game-sub">Offline • Click to play</div>
-    `;
-
-    /* REAL LINKS (edit paths if needed) */
-    box.addEventListener('click', ()=>{
-      window.location.href = "games/game" + i + ".html";
-    });
-
-    grid.appendChild(box);
-  }
 })();
 </script>
 
