@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Re:Zero - Arc 3: The White Whale</title>
+    <style>
+        :root {
+            --bg-color: #0d0d0d;
+            --text-color: #e0e0e0;
+            --accent-purple: #9b59b6;
+            --accent-red: #c0392b;
+            --font-main: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #game-container {
+            width: 100%;
+            max-width: 900px;
+            height: 90vh; 
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        /* --- HUD (Top Bar) --- */
+        #hud {
+            padding: 10px 20px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: flex-end; 
+            font-size: 0.9rem;
+            background: #222;
+        }
+        #scent-val { color: var(--accent-purple); }
+        .stat-box { margin-left: 15px; }
+
+
+        /* --- CONTENT AREA (Text, Character, Choices) --- */
+        #content-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 20px 20px 20px; 
+            overflow: hidden;
+        }
+
+        /* --- 1. OUTPUT (Text Box at Top) --- */
+        #output-wrapper {
+            height: 35%; 
+            padding: 20px 0;
+            overflow-y: auto;
+            border-bottom: 1px solid #333;
+            margin-bottom: 10px;
+        }
+        #output {
+            white-space: pre-wrap;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        .death-text { color: var(--accent-red); font-weight: bold; }
+        .narrative { color: #aaa; font-style: italic; }
+        .dialogue { color: #fff; }
+
+        /* --- 2. CHARACTER FRAME (Middle) --- */
+        #character-frame {
+            height: 35%; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 10px 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+        #current-char-name {
+            color: var(--accent-purple);
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+        .char-shape {
+            width: 150px;
+            height: 150px;
+            border-radius: 20px;
+            border: 5px solid white;
+            transition: all 0.5s ease;
+        }
+        .none-char { background: #333; border-color: #555; }
+        .subaru-char { background: #0000FF; } 
+        .emilia-char { background: #800080; } 
+        .rem-char { background: #00FFFF; } 
+        .ram-char { background: #FFC0CB; } 
+        .elsa-char { background: #8B0000; border-radius: 50%; } 
+        .priscilla-char { background: #FF8C00; border-radius: 0; } /* Orange, square for pride */
+        .white-whale-char { background: #FFFFFF; border-radius: 50%; border-color: #000000; } /* White, circular for fog */
+
+
+        /* --- 3. CONTROLS (Choices at Bottom) --- */
+        #controls {
+            height: 20%; 
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button {
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+            padding: 12px;
+            font-family: var(--font-main);
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="hud">
+        <div class="stat-box">Witch's Scent: <span id="scent-val">0</span></div>
+        <div class="stat-box">Deaths: <span id="death-val">0</span></div>
+    </div>
+    
+    <div id="content-area">
+        <div id="output-wrapper">
+            <div id="output"></div>
+        </div>
+
+        <div id="character-frame">
+            <div id="char-shape" class="char-shape none-char"></div>
+            <div id="current-char-name">No Character</div>
+        </div>
+
+        <div id="controls">
+            </div>
+    </div>
+</div>
+
+<script>
+    // --- GAME STATE ---
+    const gameState = {
+        scent: 0,
+        deaths: 0,
+        checkpoint: 'start',
+        knowledge: {
+            loot_house_trap: false,
+            rem_suspicion: false,
+            whale_weakness: false, // NEW: Knowledge to defeat the whale
+            isBroken: false, // NEW: Used for the emotional collapse in Arc 3
+            trustRem: false // NEW: Did he accept Rem's help?
+        }
+    };
+
+    // --- CHARACTER CONFIGURATION (CSS Shapes) ---
+    const characters = {
+        none: { name: "Narrator/Environment", shapeClass: "none-char" },
+        subaru: { name: "Subaru Natsuki", shapeClass: "subaru-char" },
+        emilia: { name: "Emilia (Half-Elf)", shapeClass: "emilia-char" },
+        rem: { name: "Rem (Blue Maid)", shapeClass: "rem-char" },
+        ram: { name: "Ram (Pink Maid)", shapeClass: "ram-char" },
+        elsa: { name: "Elsa (Bowhunter)", shapeClass: "elsa-char" },
+        priscilla: { name: "Priscilla (Candidate)", shapeClass: "priscilla-char" },
+        whale: { name: "The White Whale", shapeClass: "white-whale-char" }
+    };
+
+    // --- DOM ELEMENTS ---
+    const outputDiv = document.getElementById('output');
+    const controlsDiv = document.getElementById('controls');
+    const scentDisplay = document.getElementById('scent-val');
+    const deathDisplay = document.getElementById('death-val');
+    const charShape = document.getElementById('char-shape');
+    const charName = document.getElementById('current-char-name');
+
+    // --- ENGINE FUNCTIONS ---
+    
+    function setCharacter(key) {
+        const char = characters[key] || characters.none;
+        charName.innerText = char.name;
+        charShape.className = 'char-shape ' + char.shapeClass;
+    }
+
+    function updateHUD() {
+        scentDisplay.innerText = gameState.scent;
+        deathDisplay.innerText = gameState.deaths;
+    }
+
+    function typeWriter(text) {
+        const p = document.createElement('div');
+        p.classList.add('fade-in');
+        p.innerHTML = text; 
+        outputDiv.appendChild(p);
+        outputDiv.scrollTop = outputDiv.scrollHeight;
+    }
+
+    function clearOutput() {
+        outputDiv.innerHTML = '';
+    }
+
+    function showChoices(choices) {
+        controlsDiv.innerHTML = '';
+        choices.forEach(choice => {
+            const btn = document.createElement('button');
+            btn.innerText = choice.text;
+            btn.onclick = () => {
+                controlsDiv.innerHTML = '';
+                choice.action();
+            };
+            controlsDiv.appendChild(btn);
+        });
+    }
+
+    function triggerDeath(reason, newScent = 1) {
+        controlsDiv.innerHTML = '';
+        setCharacter('subaru'); 
+        
+        typeWriter(`<br><span class="death-text">💀 YOU DIED: ${reason}</span><br>`);
+        
+        gameState.deaths++;
+        gameState.scent = Math.min(gameState.scent + newScent, 5); 
+        updateHUD();
+
+        setTimeout(() => {
+            typeWriter(`<span class="narrative">... The crushing weight returns. The Witch's shadow whispers ...</span>`);
+            setTimeout(() => {
+                typeWriter(`<span class="death-text">RETURN BY DEATH TRIGGERS.</span>`);
+                setTimeout(() => {
+                    clearOutput();
+                    loadScene(gameState.checkpoint);
+                }, 2000);
+            }, 1500);
+        }, 1500);
+    }
+
+    // --- SCENES (Arc 1 & 2 remain unchanged) ---
+
+    // [ ... ARC 1 & ARC 2 SCENES from previous response are included here ... ]
+    // NOTE: The code block below omits the copy/paste of Arc 1/2 for brevity,
+    // but in the final HTML file, these scenes must be present above 'mansion_cleared'.
+
+    const scenes = {
+        /* ARC 1 SCENES (start, alley, fruit_seller, meet_emilia, loot_house, beat_elsa) */
+        'start': {char: 'subaru', text: `<span class="narrative">You wake up in the Capital, dressed in your tracksuit. Arc 1: Find the Insignia.</span>`, choices: [{ text: "Head down a dark, quiet alleyway.", action: () => loadScene('alley') }, { text: "Ask a merchant for help and information.", action: () => loadScene('fruit_seller') }]},
+        'alley': {char: 'none', text: `<span class="narrative">You walk into the dark alley. Three thugs block your path.</span><br><span class="dialogue">**Thug:** Hand over everything, kid.</span>`, choices: [{ text: "Try to run past them.", action: () => triggerDeath("Stabbed by the thug leader, Chin, while attempting to escape.") }, { text: "Plead for your life and surrender your phone.", action: () => loadScene('meet_emilia') }]},
+        'fruit_seller': {char: 'none', text: `<span class="dialogue">**Merchant:** Get out of here!</span><br><span class="narrative">You wander aimlessly until nightfall, cold and alone.</span>`, choices: [{ text: "Try to find shelter", action: () => triggerDeath("Froze to death on a cold stone floor.") }]},
+        'meet_emilia': {char: 'emilia', text: `<span class="narrative">As the thugs close in, a silver-haired girl with elf ears appears in a flash of light.</span><br><span class="dialogue">**Emilia:** Leave them be. I am looking for something important.</span><br><span class="narrative">You offer to help her find her stolen insignia.</span>`, choices: [{ text: "Follow Emilia to the Loot House.", action: () => loadScene('loot_house') }]},
+        'loot_house': {char: 'none', text: () => {let content = `<span class="narrative">You arrive at the Loot House. It is deadly silent.</span><br>`; if (gameState.knowledge.loot_house_trap) {content += `<br><span class="death-text">** DÉJÀ VU: You vividly recall the ambush. Elsa the Bowhunter is inside, waiting! **</span>`; setCharacter('elsa');} else {setCharacter('none');} return content;}, choices: () => {let opts = []; opts.push({ text: gameState.knowledge.loot_house_trap ? "[KNOWLEDGE] Shout to Emilia to check for hidden attackers first." : "Open the door and walk straight in.", action: () => {if (gameState.knowledge.loot_house_trap) {loadScene('beat_elsa');} else {gameState.knowledge.loot_house_trap = true; triggerDeath("Elsa slices your abdomen open instantly. A truly horrifying way to die.", 0);}}}); opts.push({text: "Knock loudly on the door.", action: () => {gameState.knowledge.loot_house_trap = true; triggerDeath("Elsa attacks through the door with unnatural speed.", 0);}}); return opts;}},
+        'beat_elsa': {char: 'emilia', text: `<span class="narrative">Thanks to your warning, Emilia casts a protective barrier just as a shadowy blur attacks the door. Reinhard, the Sword Saint, arrives and drives off Elsa.<br><br><b>ARC 1 CLEARED.</b> Checkpoint Saved.</span>`, choices: [{ text: "Continue to Roswaal's Mansion (Arc 2)", action: () => {gameState.checkpoint = 'mansion'; loadScene('mansion');}}]},
+        /* ARC 2 SCENES (mansion, taboo_pain, survive_mansion) */
+        'mansion': {char: 'rem', text: `<span class="narrative">You wake up in a lavish bed. Arc 2: The Mansion of Paranoia. Rem is the maid assigned to you. Her gaze is sharp.</span>`, choices: [{ text: "Dedicate yourself to butler work to prove your innocence.", action: () => {if(gameState.knowledge.rem_suspicion && gameState.scent < 3) {loadScene('mansion_cleared');} else {gameState.knowledge.rem_suspicion = true; triggerDeath("You died in your sleep. Rem thought you were a spy/Witch Cultist due to suspicion or scent.", 1);}}},{ text: "Spend the day studying the mansion layout and maids' schedules.", action: () => {setCharacter('ram'); triggerDeath("You were caught lurking by Ram. She executed you with a gust of wind magic.", 1);}},{ text: "Try to speak of 'Return by Death' to Emilia.", action: () => loadScene('taboo_pain') }]},
+        'taboo_pain': {char: 'subaru', text: `<span class="narrative">You try to speak the forbidden words. Time stops. A shadowy hand crushes your heart. The pain is paralyzing, and you pass out. The scent of the Witch lingers.</span>`, choices: [{ text: "Wake up and try something else", action: () => loadScene('mansion') }]},
+        'mansion_cleared': {
+            char: 'emilia',
+            text: `<span class="narrative">You secured your trust in the mansion. The tension is broken. Time to return to the Capital for the Royal Selection.<br><br><b>ARC 2 CLEARED.</b> Checkpoint Saved.</span>`,
+            choices: [
+                { text: "Go to the Royal Selection", action: () => {
+                    gameState.checkpoint = 'royal_selection';
+                    loadScene('royal_selection');
+                }}
+            ]
+        },
+
+        // ================= ARC 3: ROYAL SELECTION & COLLAPSE =================
+        'royal_selection': {
+            char: 'priscilla',
+            text: `<span class="narrative">You arrive at the capital's castle for the Royal Selection ceremony. You feel possessive of Emilia and want to prove your worth.</span><br><span class="dialogue">**Priscilla:** Look at this boy. Does the half-devil truly rely on trash?</span>`,
+            choices: [
+                { text: "Publicly challenge the other candidates (Ego Route)", action: () => loadScene('humiliation') },
+                { text: "Stay quiet and support Emilia discretely (Humble Route)", action: () => loadScene('failed_evac') }
+            ]
+        },
+        
+        'humiliation': {
+            char: 'subaru',
+            text: `<span class="narrative">You loudly claim to be Emilia's knight and demand respect, but you lack the strength to back it up.</span><br><span class="dialogue">**Emilia:** Subaru! Stop! You are embarrassing me and yourself. I release you from duty.</span><br><span class="narrative">Emilia abandons you. You are rejected and banished from the castle.</span>`,
+            choices: [
+                { text: "Return to the mansion, broken.", action: () => loadScene('broken_loop') }
+            ]
+        },
+        
+        'failed_evac': {
+            char: 'rem',
+            text: `<span class="narrative">You notice the Capital is restless. You decide to return to the mansion with Rem to ensure everyone is safe from potential Witch Cult activity.</span><br><span class="dialogue">**Rem:** Subaru-kun, thank you for your prudence.</span>`,
+            choices: [
+                { text: "Journey back to the mansion.", action: () => loadScene('rem_death_loop') }
+            ]
+        },
+        
+        'rem_death_loop': {
+            char: 'rem',
+            text: `<span class="narrative">On the road, a dense fog rolls in. The smell of death is overwhelming.</span><br><span class="dialogue">**Rem:** It's... the White Whale!</span>`,
+            choices: [
+                { text: "Fight the Whale to protect Rem.", action: () => triggerDeath("Erased from existence by the White Whale's fog. Rem dies shortly after.", 0) },
+                { text: "Run as fast as you can toward the mansion.", action: () => triggerDeath("The Whale is faster. Rem is cut in half trying to shield you.", 0) }
+            ]
+        },
+
+        // --- THE EMOTIONAL CORE ---
+        'broken_loop': {
+            char: 'subaru',
+            text: () => {
+                if (gameState.knowledge.isBroken) {
+                    return `<span class="death-text">** DÉJÀ VU: You are still broken. Your failures echo. You have returned to the same painful place, realizing you can't save anyone. **</span>`;
+                }
+                gameState.knowledge.isBroken = true;
+                gameState.checkpoint = 'broken_loop';
+                return `<span class="narrative">You are back at the mansion. You have failed Emilia, and Rem died trying to save you (you remember her death vividly). You are completely broken. You weep on the floor.</span>`;
+            },
+            choices: [
+                { text: "Give up and stay in the corner.", action: () => triggerDeath("Ram finds you and executes you for 'suspicious madness'.", 1) },
+                { text: "Try to speak to Rem about your failures.", action: () => loadScene('rem_dialogue') }
+            ]
+        },
+        
+        'rem_dialogue': {
+            char: 'rem',
+            text: `<span class="dialogue">**Rem:** Subaru-kun, you only hate yourself because you can't see how truly amazing you are. I see a hero. Start from zero, and love yourself again.</span><br><span class="narrative">Rem's confession gives you the will to stand up and try a new approach.</span>`,
+            choices: [
+                { text: "Accept Rem's love and promise to fight for her. (Self-Worth Reset)", action: () => {
+                    gameState.knowledge.isBroken = false;
+                    gameState.knowledge.trustRem = true;
+                    loadScene('alliance_start');
+                }}
+            ]
+        },
+
+        // --- ALLIANCE BUILDING ---
+        'alliance_start': {
+            char: 'subaru',
+            text: `<span class="narrative">You are renewed. You decide to get help. You need an army to face the White Whale. You will ask Crusch Karsten for assistance.</span>`,
+            choices: [
+                { text: "Go to Crusch's territory to propose an alliance.", action: () => loadScene('negotiation_loop') }
+            ]
+        },
+
+        'negotiation_loop': {
+            char: 'priscilla',
+            text: () => {
+                let content = `<span class="narrative">You arrive at the negotiating table. Crusch is receptive, but you must offer something in return.</span><br>`;
+                if (gameState.knowledge.whale_weakness) {
+                    content += `<br><span class="death-text">** DÉJÀ VU: You remember the true condition for Crusch's aid is the promise of the whale's valuable corpse! **</span>`;
+                    setCharacter('none');
+                } else {
+                    setCharacter('priscilla');
+                    content += `<span class="dialogue">**Crusch:** Your life is not enough, Subaru-kun. What can you truly offer us?</span>`;
+                }
+                return content;
+            },
+            choices: () => {
+                let opts = [];
+                opts.push({ 
+                    text: gameState.knowledge.whale_weakness ? "[KNOWLEDGE] Offer the White Whale's corpse as payment." : "Offer your loyalty and future service.",
+                    action: () => {
+                        if (gameState.knowledge.whale_weakness) {
+                            loadScene('alliance_success');
+                        } else {
+                            gameState.knowledge.whale_weakness = true;
+                            triggerDeath("Crusch rejects your meager offering. You are turned away. Rem dies alone on the road.", 0);
+                        }
+                    }
+                });
+                opts.push({
+                    text: "Ask Priscilla for help instead (Pride).",
+                    action: () => triggerDeath("Priscilla, offended by your request, executes you for wasting her time.", 0)
+                });
+                return opts;
+            }
+        },
+
+        'alliance_success': {
+            char: 'rem',
+            text: `<span class="narrative">Crusch agrees! With the combined forces of Crusch's army and the mercenary company, you ride out with Rem to confront the White Whale.</span><br><span class="dialogue">**Rem:** I will always be with you, Subaru-kun.</span>`,
+            choices: [
+                { text: "Face the White Whale.", action: () => loadScene('whale_fight') }
+            ]
+        },
+
+        // --- FINAL CONFRONTATION ---
+        'whale_fight': {
+            char: 'whale',
+            text: `<span class="narrative">You arrive at the Mists. The **White Whale** appears, immense and terrifying. The battle begins!</span>`,
+            choices: [
+                { text: "Use the Whale's size to your advantage.", action: () => loadScene('whale_split_loop') },
+                { text: "Engage in direct combat (Suicide)", action: () => triggerDeath("You rush the beast and are crushed instantly. The alliance collapses.", 0) }
+            ]
+        },
+
+        'whale_split_loop': {
+            char: 'whale',
+            text: `<span class="narrative">The whale splits into three copies! The alliance falters, unable to tell the real one from the duplicates.</span>`,
+            choices: [
+                { text: "Try to remember which one is the real one.", action: () => triggerDeath("You guess incorrectly. The real whale hits the main force. Rem dies.", 0) },
+                { text: "Remember the Whale's weakness is gravity.", action: () => loadScene('whale_finish') }
+            ]
+        },
+        
+        'whale_finish': {
+            char: 'subaru',
+            text: `<span class="narrative">You remember the lore: the White Whale cannot fly! You direct the mages to use gravity magic, pulling the real whale down to the ground. The alliance exploits the opening and lands the final blow!</span><br><br><span class="death-text">** VICTORY! THE WHITE WHALE IS DEFEATED! **</span><br><br><b>ARC 3 CLEARED.</b> The danger is past, but the Witch Cult looms.`,
+            choices: [
+                { text: "Go to Arc 4: Sanctuary (Not yet implemented)", action: () => location.reload() }
+            ]
+        }
+    };
+
+    function loadScene(sceneId) {
+        const scene = scenes[sceneId];
+        
+        setCharacter(scene.char || 'none');
+        
+        const textContent = typeof scene.text === 'function' ? scene.text() : scene.text;
+        clearOutput(); 
+        typeWriter(textContent);
+
+        const choiceData = typeof scene.choices === 'function' ? scene.choices() : scene.choices;
+        showChoices(choiceData);
+    }
+
+    // --- INIT ---
+    updateHUD();
+    loadScene('start');
+</script>
+</body>
+</html>
