@@ -29,16 +29,28 @@ nav{
   z-index:80;
 }
 .brand{display:flex;align-items:center;gap:12px}
+
+/* Logo using image, fills square */
 .logo{
-  width:40px;height:40px;border-radius:8px;
-  background:linear-gradient(135deg,var(--accent),#036b6b);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:700;color:#012;
+  width:40px;
+  height:40px;
+  border-radius:8px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:none; /* remove gradient */
 }
-.brand h1{font-family:Playfair Display,serif;font-size:20px}
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:cover; /* fills entire square */
+}
+
+.brand h1{font-family:Playfair Display,serif;font-size:20px;color:#e9fbfb}
 
 .navlinks a{
-  color:rgba(230,247,247,.85);
+  color:#ffffff; /* visible */
   margin-left:18px;
   text-decoration:none;
 }
@@ -125,7 +137,9 @@ canvas{width:100%;height:100vh}
 
 <nav>
   <div class="brand">
-    <div class="logo">N</div>
+    <div class="logo">
+      <img src="https://iili.io/faD5fqB.png" alt="Nautical Logo">
+    </div>
     <h1>NAUTICAL</h1>
   </div>
   <div class="navlinks">
@@ -149,8 +163,7 @@ canvas{width:100%;height:100vh}
 
 <main>
 <div class="games-grid" id="grid">
-
-<div class="game-box" data-name="Learn to Fly" data-link="https://xltranate.github.io/Nautical/games/learntofly1.html">
+ <div class="game-box" data-name="Learn to Fly" data-link="https://xltranate.github.io/Nautical/games/learntofly1.html">
   <div class='gameText'>Learn to Fly</div>
   Help this penguin show all birds can fly!
 </div>
@@ -439,9 +452,6 @@ canvas{width:100%;height:100vh}
   <div class='gameText'>RBD</div>
   Based off Re:Zero (custom game)
 </div>
-
-
-</div> <!-- end games-grid -->
 </main>
 </div> <!-- end page -->
 
@@ -522,4 +532,3 @@ document.getElementById('search').addEventListener('input', e => {
 
 </body>
 </html>
-
