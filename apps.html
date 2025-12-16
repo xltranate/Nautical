@@ -121,21 +121,19 @@
 </nav>
 
 <div class="apps-wrap">
-  <a class="app-link">
+  <a class="app-link" href="https://xltranate.github.io/Nautical/apps/searchengine">
     <div class="app">
       <h2>Search Engine</h2>
-      <p>Private & fast browsing</p>
+      <p>Private & sorta fast browsing</p>
     </div>
   </a>
-
-  <a class="app-link">
+  <a class="app-link" href="https://xltranate.github.io/Nautical/apps/codeeditor">
     <div class="app">
-      <h2>Code Editor</h2>
-      <p>Write & run code</p>
+      <h2>Code editor</h2>
+      <p>View and Edit Code</p>
     </div>
   </a>
-
-  <a class="app-link">
+  <a class="app-link" href="https://xltranate.github.io/Nautical/apps/movies">
     <div class="app">
       <h2>Movies</h2>
       <p>Stream & discover</p>
@@ -148,14 +146,6 @@
 </div>
 
 <script>
-/* APP LINK AUTO-FILL */
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.app-link').forEach(link => {
-    const name = link.querySelector('h2').textContent.trim();
-    link.href = name.toLowerCase().replace(/\s+/g,'-') + '.html';
-  });
-});
-
 /* FIXED BUBBLES */
 (function () {
   const canvas = document.getElementById('bubbles');
