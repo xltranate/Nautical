@@ -4,86 +4,106 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Nautical — Apps</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
   <style>
     :root{
       --nav-height:64px;
-      --accent: #0ea5a6;
-      --bg:#031926;
+      --accent:#0ea5a6;
     }
+
     *{box-sizing:border-box;margin:0;padding:0}
+
     body{
-      background: radial-gradient(circle at 10% 10%, rgba(6,30,40,0.55) 0%, rgba(3,25,38,1) 40%), linear-gradient(180deg,#042a33 0%, #02151a 100%);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(6,30,40,0.55) 0%, rgba(3,25,38,1) 40%),
+        linear-gradient(180deg,#042a33 0%, #02151a 100%);
       font-family:Inter,system-ui;
       color:#e6f7f7;
-      overflow-x:hidden;
-      overflow-y:auto;
       min-height:100vh;
+      overflow-x:hidden;
     }
 
+    /* NAV */
     .nav{
-      position:fixed;top:0;left:0;right:0;height:var(--nav-height);
-      display:flex;align-items:center;justify-content:space-between;
-      padding:0 20px;
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      backdrop-filter: blur(6px);
-      border-bottom:1px solid rgba(255,255,255,0.04);
-      z-index:60;
-    }
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{
-      width:48px;
-      height:48px;
-      border-radius:8px;
-      overflow:hidden;
+      position:fixed;
+      top:0;left:0;right:0;
+      height:var(--nav-height);
       display:flex;
       align-items:center;
-      justify-content:center;
-      background:none;
+      justify-content:space-between;
+      padding:0 20px;
+      background:rgba(3,25,38,0.75);
+      backdrop-filter:blur(8px);
+      border-bottom:1px solid rgba(255,255,255,0.06);
+      z-index:100;
     }
-    .logo img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-    }
-    .brand h1{font-family:Playfair Display,serif;font-size:20px;color:#e6f7f7}
+
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:42px;height:42px;border-radius:8px;overflow:hidden}
+    .logo img{width:100%;height:100%;object-fit:cover}
+    .brand h1{font-family:"Playfair Display",serif;font-size:20px}
+
     .navlinks{display:flex;gap:18px}
-    .navlinks a{text-decoration:none;color:#d9ffff;font-weight:500}
+    .navlinks a{
+      text-decoration:none;
+      color:#d9ffff;
+      font-weight:500;
+    }
     .navlinks a:hover{color:var(--accent)}
 
+    /* APPS */
     .apps-wrap{
-      padding-top:var(--nav-height + 20px);
-      display:flex;
-      flex-direction:column;
-      gap:20px;
-      width:100%;
-      padding:80px 20px 20px 20px;
-      z-index:10;
+      padding-top:calc(var(--nav-height) + 32px);
+      padding-inline:20px;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:22px;
       position:relative;
-    }
-    .app{
-      width:100%;
-      height:25vh;
-      font-size:48px;
-      font-family:Playfair Display;
-      background:rgba(255,255,255,0.05);
-      backdrop-filter:blur(6px);
-      border-radius:16px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      box-shadow:0 20px 60px rgba(1,7,10,0.55);
-      transition:0.2s;
-    }
-    .app:hover{
-      transform:translateY(-6px);
-      box-shadow:0 30px 80px rgba(1,7,10,0.65);
+      z-index:10;
     }
 
-    .bubbles-wrap{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}
-    canvas{width:100%;height:100vh;display:block}
+    .app-link{text-decoration:none;color:inherit}
+
+    .app{
+      height:180px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.06);
+      backdrop-filter:blur(6px);
+      box-shadow:0 18px 50px rgba(1,7,10,0.55);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      transition:.25s;
+    }
+
+    .app h2{
+      font-family:"Playfair Display",serif;
+      font-size:28px;
+    }
+
+    .app p{font-size:14px;opacity:.75}
+
+    .app-link:hover .app{
+      transform:translateY(-6px);
+      box-shadow:0 30px 80px rgba(1,7,10,0.7);
+    }
+
+    /* BUBBLES */
+    .bubbles-wrap{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:1;
+    }
+
+    canvas{width:100%;height:100%;display:block}
   </style>
 </head>
+
 <body>
 
 <nav class="nav">
@@ -101,89 +121,110 @@
 </nav>
 
 <div class="apps-wrap">
-  <div class="app">Search Engine</div>
-  <div class="app">Code Editor</div>
-  <div class="app">Movies</div>
+  <a class="app-link">
+    <div class="app">
+      <h2>Search Engine</h2>
+      <p>Private & fast browsing</p>
+    </div>
+  </a>
+
+  <a class="app-link">
+    <div class="app">
+      <h2>Code Editor</h2>
+      <p>Write & run code</p>
+    </div>
+  </a>
+
+  <a class="app-link">
+    <div class="app">
+      <h2>Movies</h2>
+      <p>Stream & discover</p>
+    </div>
+  </a>
 </div>
 
-<div class="bubbles-wrap"><canvas id="bubbles"></canvas></div>
+<div class="bubbles-wrap">
+  <canvas id="bubbles"></canvas>
+</div>
 
 <script>
-(function(){
+/* APP LINK AUTO-FILL */
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.app-link').forEach(link => {
+    const name = link.querySelector('h2').textContent.trim();
+    link.href = name.toLowerCase().replace(/\s+/g,'-') + '.html';
+  });
+});
+
+/* FIXED BUBBLES */
+(function () {
   const canvas = document.getElementById('bubbles');
   const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
   let bubbles = [];
 
-  function resize(){
-    let rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * devicePixelRatio;
-    canvas.height = rect.height * devicePixelRatio;
-    ctx.scale(devicePixelRatio, devicePixelRatio);
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
   }
+
   resize();
-  window.addEventListener('resize', ()=>{
-    clearTimeout(window._rb);
-    window._rb = setTimeout(resize, 80);
-  });
+  window.addEventListener('resize', resize);
 
-  function createBubble(){
-    let rect = canvas.getBoundingClientRect();
-    const size = 6 + Math.random()*18;
+  function createBubble() {
+    const rect = canvas.getBoundingClientRect();
+    const r = 6 + Math.random() * 18;
     bubbles.push({
-      x: Math.random()*rect.width,
-      y: rect.height + size,
-      r: size,
-      speed: 20 + Math.random()*40,
-      drift: (Math.random()-.5)*20,
-      alpha: .6 + Math.random()*0.4,
+      x: Math.random() * rect.width,
+      y: rect.height + r,
+      r,
+      speed: 30 + Math.random() * 40,
+      drift: (Math.random() - .5) * 30,
+      alpha: .6 + Math.random() * .4,
       life: 1,
-      wobble: .2 + Math.random()*0.6
+      wobble: .5 + Math.random()
     });
-    if(bubbles.length>140) bubbles.shift();
+    if (bubbles.length > 150) bubbles.shift();
   }
 
-  setInterval(()=>{
-    let n = Math.random()<.8 ? 2 : 3;
-    while(n--) createBubble();
-  }, 280);
+  setInterval(() => {
+    let n = Math.random() < .8 ? 2 : 3;
+    while (n--) createBubble();
+  }, 260);
 
   let last = performance.now();
-  function draw(now){
-    const dt = (now-last)/1000; last = now;
-    let rect = canvas.getBoundingClientRect();
+  function draw(now) {
+    const dt = (now - last) / 1000;
+    last = now;
+    const rect = canvas.getBoundingClientRect();
     ctx.clearRect(0,0,rect.width,rect.height);
 
-    for(let i=bubbles.length-1;i>=0;i--){
-      let b=bubbles[i];
-      b.y -= b.speed*dt;
-      b.x += b.drift*dt*Math.sin(now*b.wobble*0.001);
-      b.life -= dt*.06;
-      const op = Math.max(0, Math.min(b.alpha*(b.life+.2), .9));
+    for (let i=bubbles.length-1;i>=0;i--) {
+      const b = bubbles[i];
+      b.y -= b.speed * dt;
+      b.x += Math.sin(now * 0.001 * b.wobble) * b.drift * dt;
+      b.life -= dt * .07;
 
+      ctx.globalAlpha = Math.max(0, b.alpha * b.life);
       ctx.beginPath();
-      ctx.globalAlpha = op;
-      const g=ctx.createRadialGradient(b.x,b.y,b.r*0.15,b.x,b.y,b.r);
-      g.addColorStop(0,'rgba(255,255,255,0.95)');
-      g.addColorStop(.5,'rgba(180,240,255,0.45)');
-      g.addColorStop(1,'rgba(160,220,235,0.08)');
-      ctx.fillStyle=g;
+      const g = ctx.createRadialGradient(b.x,b.y,b.r*.2,b.x,b.y,b.r);
+      g.addColorStop(0,'rgba(255,255,255,.9)');
+      g.addColorStop(.5,'rgba(180,240,255,.4)');
+      g.addColorStop(1,'rgba(160,220,235,.08)');
+      ctx.fillStyle = g;
       ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
-      ctx.fill();
-
-      ctx.globalAlpha = op*.6;
-      ctx.beginPath();
-      ctx.arc(b.x-b.r*.25,b.y-b.r*.25,b.r*.18,0,Math.PI*2);
-      ctx.fillStyle='rgba(255,255,255,0.9)';
       ctx.fill();
       ctx.globalAlpha = 1;
 
-      if(b.y+b.r < -20 || b.life <= -0.4) bubbles.splice(i,1);
+      if (b.y + b.r < -20 || b.life <= 0) bubbles.splice(i,1);
     }
-
     requestAnimationFrame(draw);
   }
   requestAnimationFrame(draw);
 })();
 </script>
+
 </body>
 </html>
