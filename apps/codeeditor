@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nautical Code Editor</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ocean-dark: #061a23;
+  --ocean-mid: #0b2d3a;
+  --ocean-light: #0f4c5c;
+  --foam: #e6f7ff;
+  --gold: #cfa44a;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: Inter, sans-serif;
+  background: radial-gradient(circle at top, #0f4c5c 0%, #061a23 70%);
+  color: var(--foam);
+  overflow: hidden;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(120deg, rgba(255,255,255,0.04) 25%, transparent 25%),
+                    linear-gradient(300deg, rgba(255,255,255,0.04) 25%, transparent 25%);
+  background-size: 80px 80px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: linear-gradient(to bottom, rgba(6,26,35,0.95), rgba(6,26,35,0.75));
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+header h1 { font-family: "Playfair Display", serif; font-size: 22px; margin: 0; }
+header span { color: var(--gold); }
+button {
+  background: linear-gradient(to bottom, #1b6b7a, #0f4c5c);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--foam);
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+main { display: grid; grid-template-columns: 1fr 1fr; height: calc(100% - 64px); }
+.editor { display: flex; flex-direction: column; }
+.panel-title { padding: 8px 12px; font-weight: 600; background: rgba(0,0,0,0.35); border-bottom: 1px solid rgba(255,255,255,0.08); }
+textarea { flex: 1; width: 100%; resize: none; border: none; outline: none; background: linear-gradient(to bottom, #03131a, #061a23); color: #d7f3ff; font-family: Consolas, monospace; font-size: 14px; padding: 12px; }
+.preview { display: flex; flex-direction: column; }
+iframe { flex: 1; border: none; background: white; }
+.fullscreen { position: fixed; inset: 0; z-index: 999; }
+@media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Nautical <span>Editor</span></h1>
+  <div><button onclick="toggleFullscreen()">Fullscreen Preview</button></div>
+</header>
+<main>
+  <div class="editor">
+    <div class="panel-title">HTML</div>
+    <textarea id="htmlCode">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Nautical Live&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;⚓ Ahoy, Nautical!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+  </div>
+  <div class="preview">
+    <div class="panel-title">Live Preview</div>
+    <iframe id="preview" sandbox="allow-scripts allow-same-origin"></iframe>
+  </div>
+</main>
+<script>
+const htmlInput = document.getElementById('htmlCode');
+const iframe = document.getElementById('preview');
+
+function buildPreview() {
+  const content = htmlInput.value.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+  iframe.srcdoc = content;
+}
+
+htmlInput.addEventListener('input', buildPreview);
+function toggleFullscreen() { iframe.classList.toggle('fullscreen'); }
+buildPreview();
+</script>
+</body>
+</html>
