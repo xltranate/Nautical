@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Breakout Game</title>
+  <meta charset="UTF-8">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    #game {
+      display: block;
+    }
+
+    /* Start menu styles */
+    #startMenu {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    #startMenu h1 {
+      font-size: 60px;
+      color: #0ff;
+      text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff;
+      margin: 0 0 20px 0;
+    }
+
+    #startMenu p {
+      font-size: 20px;
+      margin: 10px 0;
+      text-align: center;
+    }
+
+    #startMenu span {
+      color: #0ff;
+    }
+  </style>
+</head>
+<body>
+<canvas width="400" height="500" id="game"></canvas>
+
+<div id="startMenu">
+  <h1>Breakout</h1>
+  <p>Click anywhere to start</p>
+  <p>Hit <span>SPACE</span> to shoot the ball</p>
+  <p>Use <span>ARROW KEYS</span> to move the paddle</p>
+</div>
+
+<script>
+const canvas = document.getElementById('game');
+const context = canvas.getContext('2d');
+const startMenu = document.getElementById('startMenu');
+
+let gameStarted = false;
+let ballLaunched = false;
+
+// Level and color mapping
+const level1 = [
+  [],[],[],[],[],[],
+  ['R','R','R','R','R','R','R','R','R','R','R','R','R','R'],
+  ['R','R','R','R','R','R','R','R','R','R','R','R','R','R'],
+  ['O','O','O','O','O','O','O','O','O','O','O','O','O','O'],
+  ['O','O','O','O','O','O','O','O','O','O','O','O','O','O'],
+  ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
+  ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
+  ['Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y'],
+  ['Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y']
+];
+
+const colorMap = { 'R':'red','O':'orange','G':'green','Y':'yellow' };
+
+const brickGap = 2;
+const brickWidth = 25;
+const brickHeight = 12;
+const wallSize = 12;
+const bricks = [];
+
+for (let row=0; row<level1.length; row++){
+  for (let col=0; col<level1[row].length; col++){
+    const colorCode = level1[row][col];
+    if(colorCode){
+      bricks.push({
+        x: wallSize + (brickWidth + brickGap)*col,
+        y: wallSize + (brickHeight + brickGap)*row,
+        color: colorMap[colorCode],
+        width: brickWidth,
+        height: brickHeight
+      });
+    }
+  }
+}
+
+// Longer paddle
+const paddle = { x: canvas.width/2 - 50, y: 440, width: 100, height: brickHeight, dx:0 };
+
+// Slower ball
+const ball = { x: 130, y: 260, width:5, height:5, speed:1, dx:0, dy:0 };
+
+function collides(obj1,obj2){
+  return obj1.x < obj2.x + obj2.width &&
+         obj1.x + obj1.width > obj2.x &&
+         obj1.y < obj2.y + obj2.height &&
+         obj1.y + obj1.height > obj2.y;
+}
+
+function loop(){
+  requestAnimationFrame(loop);
+  context.clearRect(0,0,canvas.width,canvas.height);
+
+  if(!gameStarted) return;
+
+  // Move paddle
+  paddle.x += paddle.dx;
+  if(paddle.x < wallSize) paddle.x = wallSize;
+  else if(paddle.x + paddle.width > canvas.width - wallSize) paddle.x = canvas.width - wallSize - paddle.width;
+
+  // Move ball if launched
+  if(ballLaunched){
+    ball.x += ball.dx;
+    ball.y += ball.dy;
+
+    // Wall collisions
+    if(ball.x < wallSize){ ball.x = wallSize; ball.dx *= -1; }
+    else if(ball.x + ball.width > canvas.width - wallSize){ ball.x = canvas.width - wallSize - ball.width; ball.dx *= -1; }
+    if(ball.y < wallSize){ ball.y = wallSize; ball.dy *= -1; }
+
+    // Ball fell below paddle
+    if(ball.y > canvas.height){
+      ball.x = 130; ball.y = 260; ball.dx=0; ball.dy=0; gameStarted=false; ballLaunched=false;
+      startMenu.style.display='flex';
+    }
+
+    // Paddle collision
+    if(collides(ball,paddle)){
+      ball.dy *= -1;
+      ball.y = paddle.y - ball.height;
+    }
+
+    // Brick collisions
+    for(let i=0;i<bricks.length;i++){
+      const brick=bricks[i];
+      if(collides(ball,brick)){
+        bricks.splice(i,1);
+        if(ball.y+ball.height-ball.speed <= brick.y || ball.y >= brick.y+brick.height-ball.speed) ball.dy*=-1;
+        else ball.dx*=-1;
+        break;
+      }
+    }
+  }
+
+  // Draw walls
+  context.fillStyle='lightgrey';
+  context.fillRect(0,0,canvas.width,wallSize);
+  context.fillRect(0,0,wallSize,canvas.height);
+  context.fillRect(canvas.width-wallSize,0,wallSize,canvas.height);
+
+  // Draw ball
+  if(ballLaunched) context.fillRect(ball.x,ball.y,ball.width,ball.height);
+
+  // Draw bricks
+  bricks.forEach(brick=>{ context.fillStyle=brick.color; context.fillRect(brick.x,brick.y,brick.width,brick.height); });
+
+  // Draw paddle
+  context.fillStyle='cyan';
+  context.fillRect(paddle.x,paddle.y,paddle.width,paddle.height);
+}
+
+// Paddle controls
+document.addEventListener('keydown',function(e){
+  if(e.which===37)paddle.dx=-3;
+  else if(e.which===39)paddle.dx=3;
+
+  // Launch ball on SPACE
+  if(gameStarted && !ballLaunched && e.which===32){
+    ball.dx = ball.speed;
+    ball.dy = ball.speed;
+    ballLaunched = true;
+  }
+});
+
+document.addEventListener('keyup',function(e){
+  if(e.which===37||e.which===39)paddle.dx=0;
+});
+
+// Start game on click
+startMenu.addEventListener('click',()=>{
+  gameStarted = true;
+  startMenu.style.display='none';
+});
+
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
