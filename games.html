@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -155,7 +155,12 @@ canvas{width:100%;height:100vh}
       <option value="az">Alphabetical (A–Z)</option>
       <option value="newest">Newest</option>
     </select>
-  </div><div class="game-box" data-name="Learn to Fly" data-link="https://xltranate.github.io/Nautical/games/learntofly1.html">
+  </div>
+</div>
+
+<main>
+<div class="games-grid" id="grid">
+ <div class="game-box" data-name="Learn to Fly" data-link="https://xltranate.github.io/Nautical/games/learntofly1.html">
     <div class='gameText'>Learn to Fly</div> Help this penguin show all birds can fly!
 </div>
 <div class="game-box" data-name="Pokemon Emerald" data-link="https://xltranate.github.io/Nautical/games/pokemonemerald.html">
@@ -353,7 +358,7 @@ canvas{width:100%;height:100vh}
     Chaotic physics boxing game
 </div>
 
-<div class="game-box" data-name="Bendy and the Ink Machine" data-link="https://xltranate.github.io/Nautical/games/bendyandtheinkmachine.html">
+<div class="game-box" data-name="Bendy and the Ink Machine" data-link="https://xltranate.github.io/Nautical/games/bendy.html">
     <div class='gameText'>Bendy and the Ink Machine</div>
     Horror adventure game
 </div>
@@ -420,10 +425,10 @@ canvas{width:100%;height:100vh}
     <div class='gameText'>Temple Run</div>
     Endless runner
 </div>
-
+</div>
 </main>
 </div>
-</div>
+
 <script>
 const grid = document.getElementById("grid");
 let boxes = [...grid.children];
