@@ -1,12 +1,10 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head> 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Nautical — Offline Games</title>
-  <link rel="icon" type="image/png" href="https://iili.io/fcbfGHX.png">
-
-
+<link rel="icon" type="image/png" href="https://iili.io/fcbfGHX.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -16,7 +14,7 @@ html,body{height:100%;font-family:Inter,system-ui,Arial;color:#e9fbfb}
 
 body{
   background:radial-gradient(circle at 10% 10%, rgba(6,30,40,.55) 0%, rgba(3,25,38,1) 40%),
-             linear-gradient(180deg,#042a33 0%, #02151a 100%);
+              linear-gradient(180deg,#042a33 0%, #02151a 100%);
   overflow-x:hidden;
 }
 
@@ -31,22 +29,14 @@ nav{
   z-index:80;
 }
 .brand{display:flex;align-items:center;gap:12px}
-
-.logo{
-  width:40px;height:40px;border-radius:8px;overflow:hidden;
-}
+.logo{width:40px;height:40px;border-radius:8px;overflow:hidden;}
 .logo img{width:100%;height:100%;object-fit:cover}
-
 .brand h1{font-family:Playfair Display,serif;font-size:20px}
-
-.navlinks a{
-  color:#fff;margin-left:18px;text-decoration:none
-}
+.navlinks a{color:#fff;margin-left:18px;text-decoration:none}
 .navlinks a:hover{color:var(--accent)}
 
 .page{padding-top:var(--nav-h);position:relative;z-index:10}
 
-/* HEADER */
 header{text-align:center;padding:36px 20px 10px}
 .title{
   font-family:Playfair Display,serif;
@@ -57,64 +47,83 @@ header{text-align:center;padding:36px 20px 10px}
 }
 .subtitle{color:rgba(230,247,247,.75);margin-top:6px}
 
-/* SEARCH + SORT */
-.search-wrap{
-  display:flex;
-  justify-content:center;
-  padding:20px;
-}
-.search-controls{
-  display:flex;
-  gap:12px;
-  width:100%;
-  max-width:520px;
-}
-.search-controls input,
-.search-controls select{
-  padding:12px 16px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,.15);
-  background:rgba(255,255,255,.05);
-  color:#e9fbfb;
-  outline:none;
-}
-.search-controls select{
-  cursor:pointer;
-}
-.search-controls option{
-  background:#02151a;
+.search-wrap{display:flex;justify-content:center;padding:20px;}
+.search-controls{display:flex;gap:12px;width:100%;max-width:520px;}
+.search-controls input, .search-controls select{
+  padding:12px 16px; border-radius:10px; border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.05); color:#e9fbfb; outline:none; width: 100%;
 }
 
-/* GAMES */
+/* GAMES GRID & BOXES */
 main{padding:20px;display:flex;justify-content:center}
 .games-grid{
-  width:100%;
-  max-width:1200px;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:18px;
+  width:100%; max-width:1200px;
+  display:grid; grid-template-columns:repeat(4,1fr); gap:18px;
 }
 
 .game-box{
-  height:160px;
+  position: relative;
+  min-height:160px;
   background:rgba(0,128,160,.35);
   border:1px solid rgba(0,128,160,.5);
   border-radius:12px;
   display:flex;
   flex-direction:column;
-  justify-content:center;
+  justify-content:flex-start;
   align-items:center;
   cursor:pointer;
-  transition:.18s;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   backdrop-filter:blur(8px);
   text-align:center;
-  padding:10px;
+  padding:20px 10px;
+  overflow: hidden;
 }
+
 .game-box:hover{
-  transform:translateY(-6px);
+  transform:translateY(-4px);
   background:rgba(0,128,160,.55);
+  min-height: 250px;
 }
+
 .gameText{font-weight:600;font-size:18px;margin-bottom:6px}
+.gameDesc{font-size: 13px; color: rgba(233, 251, 251, 0.8); margin-bottom: 15px; flex-grow: 1;}
+
+/* EXTRA ACTIONS */
+.extra-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.3s ease;
+  pointer-events: none;
+  margin-top: auto;
+}
+
+.game-box:hover .extra-actions {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.action-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.action-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
 
 @media(max-width:1100px){.games-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:800px){.games-grid{grid-template-columns:repeat(2,1fr)}}
@@ -122,7 +131,7 @@ main{padding:20px;display:flex;justify-content:center}
 
 /* BUBBLES */
 .bubbles-wrap{position:fixed;inset:0;pointer-events:none;z-index:0}
-canvas{width:100%;height:100vh}
+canvas{width:100%;height:100%;display:block;}
 </style>
 </head>
 
@@ -130,9 +139,7 @@ canvas{width:100%;height:100vh}
 
 <nav>
   <div class="brand">
-    <div class="logo">
-      <img src="https://iili.io/faD5fqB.png">
-    </div>
+    <div class="logo"><img src="https://iili.io/faD5fqB.png"></div>
     <h1>NAUTICAL</h1>
   </div>
   <div class="navlinks">
@@ -162,298 +169,149 @@ canvas{width:100%;height:100vh}
 
 <main>
 <div class="games-grid" id="grid">
- <div class="game-box" data-name="Learn to Fly" data-link="https://xltranate.github.io/Nautical/games/learntofly1.html">
-    <div class='gameText'>Learn to Fly</div> Help this penguin show all birds can fly!
-</div>
-<div class="game-box" data-name="Pokemon Emerald" data-link="https://xltranate.github.io/Nautical/games/pokemonemerald.html">
-    <div class='gameText'>Pokemon Emerald</div> Pokemon emerald version
-</div>
-<div class="game-box" data-name="SnowBattle.io" data-link="https://xltranate.github.io/Nautical/games/snowbattleio.html">
-    <div class='gameText'>SnowBattle.io</div> Push people off cliffs with snowballs
-</div>
-<div class="game-box" data-name="Buckshot Roulette" data-link="https://xltranate.github.io/Nautical/games/buckshotroulette.html">
-    <div class='gameText'>Buckshot Roulette</div> Gamble with your life on the line
-</div>
-<div class="game-box" data-name="SM64" data-link="https://xltranate.github.io/Nautical/games/sm64.html">
-    <div class='gameText'>SM64</div> Super Mario but in 3D
-</div>
-<div class="game-box" data-name="Ragdoll Archers" data-link="https://xltranate.github.io/Nautical/games/ragdollarchers.html">
-    <div class='gameText'>Ragdoll Archers</div> Upgrade your archer to become the best
-</div>
-<div class="game-box" data-name="Cookie Clicker" data-link="https://xltranate.github.io/Nautical/games/cookieclicker.html">
-    <div class='gameText'>Cookie Clicker</div> Click to gain cookies and take over the world
-</div>
-<div class="game-box" data-name="Learn to Fly Idle" data-link="https://xltranate.github.io/Nautical/games/learntoflyidle.html">
-    <div class='gameText'>Learn to Fly Idle</div> This is cause I can't get learn to fly 2
-</div>
-<div class="game-box" data-name="FNF" data-link="https://xltranate.github.io/Nautical/games/fnf.html">
-    <div class='gameText'>FNF</div> Rhythm based rap battle
-</div>
-<div class="game-box" data-name="Suika" data-link="https://xltranate.github.io/Nautical/games/suikawatergame.html">
-    <div class='gameText'>Suika</div> Watermelon drop & merge game
-</div>
-<div class="game-box" data-name="Riddle School" data-link="https://xltranate.github.io/Nautical/games/riddleschool.html">
-    <div class='gameText'>Riddle School</div> Use your head and escape the school
-</div>
-<div class="game-box" data-name="Schoolboy Runaway" data-link="https://xltranate.github.io/Nautical/games/schoolboyrunaway.html">
-    <div class='gameText'>Schoolboy Runaway</div> Find out how to escape home
-</div>
-<div class="game-box" data-name="Baldi's Basics" data-link="https://xltranate.github.io/Nautical/games/baldisbasics.html">
-    <div class='gameText'>Baldi's Basics</div> Evil teacher is trying to kill you!
-</div>
-<div class="game-box" data-name="Little Academy" data-link="https://xltranate.github.io/Nautical/games/littlealchemy.html">
-    <div class='gameText'>Little Academy</div> Merging game
-</div>
-<div class="game-box" data-name="OVO" data-link="https://xltranate.github.io/Nautical/games/ovo.html">
-    <div class='gameText'>OVO</div> Level based platformer
-</div>
-<div class="game-box" data-name="Baseball Bros" data-link="https://xltranate.github.io/Nautical/games/baseballbros.html">
-    <div class='gameText'>Baseball Bros</div> Go against your friends in baseball
-</div>
-<div class="game-box" data-name="Moto X3M" data-link="https://xltranate.github.io/Nautical/games/moto.html">
-    <div class='gameText'>Moto X3M</div> Motorcycle obby
-</div>
-<div class="game-box" data-name="Snow Rider 3D" data-link="https://xltranate.github.io/Nautical/games/snowrider.html">
-    <div class='gameText'>Snow Rider 3D</div> Sledding subway surfers copy
-</div>
-<div class="game-box" data-name="Granny" data-link="https://xltranate.github.io/Nautical/games/granny.html">
-    <div class='gameText'>Granny</div> Evil Grandma really doesn't like you
-</div>
-<div class="game-box" data-name="Slope" data-link="https://xltranate.github.io/Nautical/games/slope.html">
-    <div class='gameText'>Slope</div> TS game so buns bro
-</div>
-<div class="game-box" data-name="House of Hazards" data-link="https://xltranate.github.io/Nautical/games/houseofhazards.html">
-    <div class='gameText'>House of Hazards</div> Fight against your friends in dodging booby traps
-</div>
-<div class="game-box" data-name="Bitlife" data-link="https://xltranate.github.io/Nautical/games/bitlife.html">
-    <div class='gameText'>Bitlife</div> Play out your dream life
-</div>
-<div class="game-box" data-name="Worlds Hardest Game" data-link="https://xltranate.github.io/Nautical/games/worldshardestgame.html">
-    <div class='gameText'>Worlds Hardest Game</div> Play now
-</div>
-<div class="game-box" data-name="Vex" data-link="https://xltranate.github.io/Nautical/games/vex5.html">
-    <div class='gameText'>Vex</div> Stickman Jumping Game
-</div>
-<div class="game-box" data-name="FNAF" data-link="https://xltranate.github.io/Nautical/games/fnaf.html">
-    <div class='gameText'>FNAF</div> Jumpscare game
-</div>
-<div class="game-box" data-name="Basket Random" data-link="https://xltranate.github.io/Nautical/games/basketrandom.html">
-    <div class='gameText'>Basket Random</div> Basketball 2v2s
-</div>
-<div class="game-box" data-name="PVZ" data-link="https://xltranate.github.io/Nautical/games/plantsvszombies.html">
-    <div class='gameText'>PVZ</div> Garden Warfare
-</div>
-<div class="game-box" data-name="Papas Pizzeria" data-link="https://xltranate.github.io/Nautical/games/papaspizzeria.html">
-    <div class='gameText'>Papas Pizzeria</div> Make pizzas for customers
-</div>
-<div class="game-box" data-name="Hollow Knight" data-link="https://xltranate.github.io/Nautical/games/hollowknight.html">
-    <div class='gameText'>Hollow Knight</div> Platformer where you kill things
-</div>
-<div class="game-box" data-name="Google Feud" data-link="https://xltranate.github.io/Nautical/games/feud.html">
-    <div class='gameText'>Google Feud</div> Guess what the google search is
-</div>
-<div class="game-box" data-name="Sort the Court" data-link="https://xltranate.github.io/Nautical/games/sortthecourt.html">
-    <div class='gameText'>Sort the Court</div> Make decisions to change the fate of your kingdom
-</div>
-<div class="game-box" data-name="2048" data-link="https://xltranate.github.io/Nautical/games/2048.html">
-    <div class='gameText'>2048</div> OG merging game
-</div>
-<div class="game-box" data-name="CrazyCattle3D" data-link="https://xltranate.github.io/Nautical/games/crazycattle3d.html">
-    <div class='gameText'>CrazyCattle3D</div> Fight to become the best sheep!
-</div>
-<div class="game-box" data-name="Breakout" data-link="https://xltranate.github.io/Nautical/games/breakout.html">
-    <div class='gameText'>Breakout</div> Break blocks to win
-</div>
-<div class="game-box" data-name="Idle Breakout" data-link="https://xltranate.github.io/Nautical/games/idlebreakout.html">
-    <div class='gameText'>Idle Breakout</div> Breakout but idle
-</div>
-<div class="game-box" data-name="Bacon May Die" data-link="https://xltranate.github.io/Nautical/games/baconmaydie.html">
-    <div class='gameText'>Bacon May Die</div> Fight off hordes of pigs
-</div>
-<div class="game-box" data-name="Solar Smash" data-link="https://xltranate.github.io/Nautical/games/solarsmash.html">
-    <div class='gameText'>Solar Smash</div> Break planets apart
-</div>
-<div class="game-box" data-name="Time Shooter SWAT" data-link="https://xltranate.github.io/Nautical/games/timeshooterswat.html">
-    <div class='gameText'>Time Shooter SWAT</div> Kill enemies but slowed down based on your movement speed
-</div>
-<div class="game-box" data-name="Stick With It" data-link="https://xltranate.github.io/Nautical/games/stickwithit.html">
-    <div class='gameText'>Stick With It</div> Sticky obstacle course
-</div>
-<div class="game-box" data-name="World Box" data-link="https://xltranate.github.io/Nautical/games/worldbox.html">
-    <div class='gameText'>World Box</div> Recreate civilization
-</div>
-<div class="game-box" data-name="DOOM" data-link="https://xltranate.github.io/Nautical/games/doom.html">
-    <div class='gameText'>DOOM</div> Kill enemies or something
-</div>
-<div class="game-box" data-name="Legend of Zelda" data-link="https://xltranate.github.io/Nautical/games/legendofzeldaoot.html">
-    <div class='gameText'>Legend of Zelda</div> Get the ocarina of time
-</div>
-<div class="game-box" data-name="Slime Rancher" data-link="https://xltranate.github.io/Nautical/games/slimerancher.html">
-    <div class='gameText'>Slime Rancher</div> Own a ranch from sliming slime out
-</div>
-<div class="game-box" data-name="Getting Over It" data-link="https://xltranate.github.io/Nautical/games/getoverit.html">
-    <div class='gameText'>Getting Over It</div> Get over hills
-</div>
-<div class="game-box" data-name="The Binding of Isaac" data-link="https://xltranate.github.io/Nautical/games/thebindingofisaac.html">
-    <div class='gameText'>The Binding of Isaac</div> Fight enemies and progress through rooms
-</div>
-<div class="game-box" data-name="A Small World Cup" data-link="https://xltranate.github.io/Nautical/games/asmallworldcup.html">
-    <div class='gameText'>A Small World Cup</div> Win the world cup
-</div>
-<div class="game-box" data-name="Retro Bowl" data-link="https://xltranate.github.io/Nautical/games/retrobowl.html">
-    <div class='gameText'>Retro Bowl</div> Win the Super Bowl
-</div>
-<div class="game-box" data-name="Learn to Fly 3" data-link="https://xltranate.github.io/Nautical/games/learntofly3.html">
-    <div class='gameText'>Learn to Fly 3</div> Third time's the charm
-</div>
-<div class="game-box" data-name="Block Blast" data-link="https://xltranate.github.io/Nautical/games/blockblast.html">
-    <div class='gameText'>Block Blast</div> Match blocks!
-</div>
-<div class="game-box" data-name="Slope 2" data-link="https://xltranate.github.io/Nautical/games/slope2.html">
-    <div class='gameText'>Slope 2</div> Race your friends
-</div>
-<div class="game-box" data-name="Drift Boss" data-link="https://xltranate.github.io/Nautical/games/driftboss.html">
-    <div class='gameText'>Drift Boss</div> Drift and don't fall!
-</div>
-<div class="game-box" data-name="Bloons TD" data-link="https://xltranate.github.io/Nautical/games/bloonstd.html">
-    <div class='gameText'>Bloons TD</div> Monkey tower defense
-</div>
-<div class="game-box" data-name="Super Mario" data-link="https://xltranate.github.io/Nautical/games/mario.html">
-    <div class='gameText'>Super Mario</div> Old mario
-</div>
-<div class="game-box" data-name="Soccer Random" data-link="https://xltranate.github.io/Nautical/games/soccerrandom.html">
-    <div class='gameText'>Soccer Random</div> Play now
-</div>
-<div class="game-box" data-name="Class of 09" data-link="https://xltranate.github.io/Nautical/games/classof09.html">
-    <div class='gameText'>Class of 09</div> idk
-</div>
-<div class="game-box" data-name="Smashy Road" data-link="https://xltranate.github.io/Nautical/games/smashyroad.html">
-    <div class='gameText'>Smashy Road</div> Dodge cops in a car
-</div>
-<div class="game-box" data-name="Jetpack Joyride" data-link="https://xltranate.github.io/Nautical/games/jetpackjoyride.html">
-    <div class='gameText'>Jetpack Joyride</div> Escape the lab
-</div>
-<div class="game-box" data-name="RBD" data-link="https://xltranate.github.io/Nautical/games/rbd.html">
-    <div class='gameText'>RBD</div> Based off Re:Zero (custom game)
-</div>
-<div class="game-box" data-name="Crossy Road" data-link="https://xltranate.github.io/Nautical/games/crossyroad.html">
-    <div class='gameText'>Crossy Road</div>
-    Arcade hopping game
-</div>
-<div class="game-box" data-name="City Defense" data-link="https://xltranate.github.io/Nautical/games/citydefense.html">
-    <div class='gameText'>City Defense</div>
-    Tower defense strategy game
-</div>
-
-<div class="game-box" data-name="Burrito Bison" data-link="https://xltranate.github.io/Nautical/games/burritobison.html">
-    <div class='gameText'>Burrito Bison</div>
-    Launch and destruction game
-</div>
-
-<div class="game-box" data-name="Candy Crush" data-link="https://xltranate.github.io/Nautical/games/candycrush.html">
-    <div class='gameText'>Candy Crush</div>
-    Match-three puzzle game
-</div>
-
-<div class="game-box" data-name="Boxing Random" data-link="https://xltranate.github.io/Nautical/games/boxingrandom.html">
-    <div class='gameText'>Boxing Random</div>
-    Chaotic physics boxing game
-</div>
-
-<div class="game-box" data-name="Bendy and the Ink Machine" data-link="https://xltranate.github.io/Nautical/games/bendy.html">
-    <div class='gameText'>Bendy and the Ink Machine</div>
-    Horror adventure game
-</div>
-
-<div class="game-box" data-name="Bad Monday Simulator" data-link="https://xltranate.github.io/Nautical/games/badmondaysimulator.html">
-    <div class='gameText'>Bad Monday Simulator</div>
-    Dark humor simulator
-</div>
-<div class="game-box" data-name="Cut the Rope" data-link="https://xltranate.github.io/Nautical/games/cuttherope.html">
-    <div class='gameText'>Cut the Rope</div>
-    Physics puzzle game
-</div>
-<div class="game-box" data-name="Dont You Lecture Me" data-link="https://xltranate.github.io/Nautical/games/dontyoulectureme.html">
-    <div class='gameText'>Dont You Lecture Me</div>
-    Comedy reaction game
-</div>
-
-<div class="game-box" data-name="Football Bros" data-link="https://xltranate.github.io/Nautical/games/footballbros.html">
-    <div class='gameText'>Football Bros</div>
-    Multiplayer football game
-</div>
-
-<div class="game-box" data-name="Fruit Ninja" data-link="https://xltranate.github.io/Nautical/games/fruitninja.html">
-    <div class='gameText'>Fruit Ninja</div>
-    Arcade slicing game
-</div>
-
-<div class="game-box" data-name="Gladihoppers" data-link="https://xltranate.github.io/Nautical/games/gladihoppers.html">
-    <div class='gameText'>Gladihoppers</div>
-    Physics gladiator combat
-</div>
-
-<div class="game-box" data-name="Happy Wheels" data-link="https://xltranate.github.io/Nautical/games/happywheels.html">
-    <div class='gameText'>Happy Wheels</div>
-    Physics-based obstacle game
-</div>
-
-<div class="game-box" data-name="Omori" data-link="https://xltranate.github.io/Nautical/games/omori.html">
-    <div class='gameText'>Omori</div>
-    Psychological RPG
-</div>
-
-<div class="game-box" data-name="Osu" data-link="https://xltranate.github.io/Nautical/games/osu.html">
-    <div class='gameText'>Osu</div>
-    Rhythm click game
-</div>
-
-<div class="game-box" data-name="Parappa the Rappa" data-link="https://xltranate.github.io/Nautical/games/parappatherappa.html">
-    <div class='gameText'>Parappa the Rappa</div>
-    Rhythm rap game
-</div>
-
-<div class="game-box" data-name="Stickman Hook" data-link="https://xltranate.github.io/Nautical/games/stickmanhook.html">
-    <div class='gameText'>Stickman Hook</div>
-    Swinging platformer
-</div>
-
-<div class="game-box" data-name="Tag" data-link="https://xltranate.github.io/Nautical/games/tag.html">
-    <div class='gameText'>Tag</div>
-    Fast-paced chase game
-</div>
-
-<div class="game-box" data-name="Temple Run" data-link="https://xltranate.github.io/Nautical/games/templerun.html">
-    <div class='gameText'>Temple Run</div>
-    Endless runner
-</div>
-
- <div class="game-box" data-name="Color Match" data-link="https://xltranate.github.io/Nautical/games/colormatch.html">
-    <div class='gameText'>Color Match</div>
-    Match colors to their objects
-
 </div>
 </main>
 </div>
 
 <script>
-const grid = document.getElementById("grid");
-let boxes = [...grid.children];
-const originalOrder = [...boxes];
+const games = [
+  { name: "Learn to Fly", link: "learntofly1.html", desc: "Help a determined penguin defy gravity and reach the horizon!" },
+  { name: "Pokemon Emerald", link: "pokemonemerald.html", desc: "Experience the classic Hoenn adventure in your browser." },
+  { name: "SnowBattle.io", link: "snowbattleio.html", desc: "Gather snow and knock opponents off the platform in this chilly battle royale." },
+  { name: "Buckshot Roulette", link: "buckshotroulette.html", desc: "A high-stakes game of chance where survival is the ultimate prize." },
+  { name: "SM64", link: "sm64.html", desc: "Explore the Mushroom Kingdom in the legendary 3D platformer." },
+  { name: "Ragdoll Archers", link: "ragdollarchers.html", desc: "Master the physics of archery to take down waves of enemies." },
+  { name: "Cookie Clicker", link: "cookieclicker.html", desc: "Start a baking empire and bake an infinite number of cookies." },
+  { name: "Learn to Fly Idle", link: "learntoflyidle.html", desc: "Keep the flight progress going even when you aren't clicking." },
+  { name: "FNF", link: "fnf.html", desc: "Keep the beat and win the rap battle to impress the Girlfriend." },
+  { name: "Suika", link: "suikawatergame.html", desc: "Merge small fruits into massive watermelons in this addictive puzzle." },
+  { name: "Riddle School", link: "riddleschool.html", desc: "Use your wits to outsmart the teachers and escape the classroom." },
+  { name: "Schoolboy Runaway", link: "schoolboyrunaway.html", desc: "A stealth-puzzle challenge where you must escape home undetected." },
+  { name: "Baldi's Basics", link: "baldisbasics.html", desc: "A surreal horror game that turns school subjects into a nightmare." },
+  { name: "Little Academy", link: "littlealchemy.html", desc: "Combine elements to discover hundreds of unique items." },
+  { name: "OVO", link: "ovo.html", desc: "A fast-paced parkour platformer that tests your reflexes." },
+  { name: "Baseball Bros", link: "baseballbros.html", desc: "Step up to the plate and swing for the fences in this sports classic." },
+  { name: "Moto X3M", link: "moto.html", desc: "Perform stunts and dodge deadly traps on your way to the finish line." },
+  { name: "Snow Rider 3D", link: "snowrider.html", desc: "Sled through a winter wonderland while avoiding obstacles." },
+  { name: "Granny", link: "granny.html", desc: "Can you survive five days in Granny's house of horrors?" },
+  { name: "Slope", link: "slope.html", desc: "Test your balance as you roll down an endless, neon-lit obstacle course." },
+  { name: "House of Hazards", link: "houseofhazards.html", desc: "Complete daily chores while dodging ridiculous household traps." },
+  { name: "Bitlife", link: "bitlife.html", desc: "Make choices to live a thousand different lives in this text simulator." },
+  { name: "Worlds Hardest Game", link: "worldshardestgame.html", desc: "Think you're good? Try to finish this without losing your mind." },
+  { name: "Vex", link: "vex5.html", desc: "A challenging stickman platformer filled with spikes and saws." },
+  { name: "FNAF", link: "fnaf.html", desc: "Survive the night shift at Freddy Fazbear's Pizza." },
+  { name: "Basket Random", link: "basketrandom.html", desc: "One-button basketball physics that are as fun as they are unpredictable." },
+  { name: "PVZ", link: "plantsvszombies.html", desc: "Defend your brain from a zombie horde using organic weaponry." },
+  { name: "Papas Pizzeria", link: "papaspizzeria.html", desc: "Manage the rush and bake the perfect pizza for every customer." },
+  { name: "Hollow Knight", link: "hollowknight.html", desc: "A beautiful, atmospheric action-adventure through a fallen kingdom." },
+  { name: "Google Feud", link: "feud.html", desc: "Can you guess how the world finishes their Google searches?" },
+  { name: "Sort the Court", link: "sortthecourt.html", desc: "Rule your kingdom with simple 'Yes' or 'No' decisions." },
+  { name: "2048", link: "2048.html", desc: "Slide tiles and reach the 2048 mark in this classic math puzzle." },
+  { name: "CrazyCattle3D", link: "crazycattle3d.html", desc: "Engage in chaotic livestock combat to prove you're the best." },
+  { name: "Breakout", link: "breakout.html", desc: "Classic arcade action: bounce the ball and smash the bricks." },
+  { name: "Idle Breakout", link: "idlebreakout.html", desc: "A clicker twist on the brick-breaking genre." },
+  { name: "Bacon May Die", link: "baconmaydie.html", desc: "A fast-paced brawler starring a very angry pig." },
+  { name: "Solar Smash", link: "solarsmash.html", desc: "Use planetary weapons to destroy entire solar systems." },
+  { name: "Time Shooter SWAT", link: "timeshooterswat.html", desc: "Time only moves when you do—plan your shots and survive." },
+  { name: "Stick With It", link: "stickwithit.html", desc: "Climb to the top by sticking to everything in your path." },
+  { name: "World Box", link: "worldbox.html", desc: "Become a god and build or destroy your own civilization." },
+  { name: "DOOM", link: "doom.html", desc: "The iconic first-person shooter that started it all." },
+  { name: "Legend of Zelda", link: "legendofzeldaoot.html", desc: "Embark on an epic quest to save Hyrule from Ganon." },
+  { name: "Slime Rancher", link: "slimerancher.html", desc: "Collect colorful slimes and grow your ranch on a far-away planet." },
+  { name: "Getting Over It", link: "getoverit.html", desc: "A frustratingly fun climb with nothing but a hammer and a pot." },
+  { name: "The Binding of Isaac", link: "thebindingofisaac.html", desc: "A roguelike journey through a basement filled with monsters." },
+  { name: "A Small World Cup", link: "asmallworldcup.html", desc: "Fast-paced soccer action with simple controls and big goals." },
+  { name: "Retro Bowl", link: "retrobowl.html", desc: "Manage your team and lead them to Super Bowl glory." },
+  { name: "Learn to Fly 3", link: "learntofly3.html", desc: "The ultimate penguin flight simulator—reach for the stars!" },
+  { name: "Block Blast", link: "blockblast.html", desc: "A colorful puzzle game where matching blocks clears the way." },
+  { name: "Slope 2", link: "slope2.html", desc: "Speed through futuristic tracks and avoid falling into the abyss." },
+  { name: "Drift Boss", link: "driftboss.html", desc: "Master the art of timing and drift your way through sharp corners." },
+  { name: "Bloons TD", link: "bloonstd.html", desc: "The ultimate tower defense: pop every balloon before they escape." },
+  { name: "Super Mario", link: "mario.html", desc: "The original platforming adventure with everyone's favorite plumber." },
+  { name: "Soccer Random", link: "soccerrandom.html", desc: "Randomized soccer physics where every goal is a surprise." },
+  { name: "Smashy Road", link: "smashyroad.html", desc: "Escape the law for as long as you can in this high-speed chase." },
+  { name: "Jetpack Joyride", link: "jetpackjoyride.html", desc: "Fly through the lab and collect coins in this endless runner." },
+  { name: "Crossy Road", link: "crossyroad.html", desc: "Navigate traffic and rivers in this modern take on a classic." },
+  { name: "Burrito Bison", link: "burritobison.html", desc: "Launch yourself at gummy bears to reclaim your stolen wallet." },
+  { name: "Candy Crush", link: "candycrush.html", desc: "The world's most famous match-three puzzle adventure." },
+  { name: "Fruit Ninja", link: "fruitninja.html", desc: "Slice fruit like a pro but watch out for the bombs!" },
+  { name: "Happy Wheels", link: "happywheels.html", desc: "A gory, hilarious physics-based obstacle course." },
+  { name: "Temple Run", link: "templerun.html", desc: "Run for your life as you escape ancient temple guardians." },
+  { name: "Class of 09", link: "classof09.html", desc: "A dark comedy visual novel about high school life." }
+];
 
-// default A–Z
-sortAZ();
+const gridEl = document.getElementById('grid');
+const baseUrl = "https://xltranate.github.io/Nautical/games/";
 
-boxes.forEach(box=>{
-  box.onclick=()=>location.href=box.dataset.link;
+// Render all games
+games.forEach(g => {
+    const box = document.createElement('div');
+    box.className = 'game-box';
+    box.dataset.name = g.name;
+    box.dataset.link = baseUrl + g.link;
+    box.innerHTML = `
+        <div class="gameText">${g.name}</div>
+        <div class="gameDesc">${g.desc}</div>
+        <div class="extra-actions">
+            <button class="action-btn blob-btn">Open in Blob</button>
+            <button class="action-btn dl-btn">Download</button>
+        </div>
+    `;
+    gridEl.appendChild(box);
 });
 
-document.getElementById("search").addEventListener("input",apply);
-document.getElementById("sort").addEventListener("change",apply);
+// Logic
+let boxes = [...gridEl.children];
+const originalOrder = [...boxes];
+
+sortAZ();
+
+boxes.forEach(box => {
+  box.addEventListener('click', (e) => {
+    if(!e.target.classList.contains('action-btn')) {
+        location.href = box.dataset.link;
+    }
+  });
+
+  box.querySelector('.blob-btn').onclick = (e) => {
+    e.stopPropagation();
+    handleGameAction(box.dataset.link, 'blob', box.dataset.name);
+  };
+
+  box.querySelector('.dl-btn').onclick = (e) => {
+    e.stopPropagation();
+    handleGameAction(box.dataset.link, 'download', box.dataset.name);
+  };
+});
+
+async function handleGameAction(url, mode, name) {
+    try {
+        const response = await fetch(url);
+        const text = await response.text();
+        const blob = new Blob([text], { type: 'text/html' });
+        const blobUrl = URL.createObjectURL(blob);
+        if (mode === 'blob') {
+            window.open(blobUrl, '_blank');
+        } else {
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = `${name.replace(/\s+/g, '_')}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    } catch (err) {
+        alert("Action blocked. This usually happens in code editors due to security. Try it on your live site!");
+    }
+}
+
+document.getElementById("search").addEventListener("input", apply);
+document.getElementById("sort").addEventListener("change", apply);
 
 function apply(){
-  const q = search.value.toLowerCase();
-  sort.value==="az" ? sortAZ() : sortNewest();
+  const q = document.getElementById("search").value.toLowerCase();
+  const s = document.getElementById("sort").value;
+  s==="az" ? sortAZ() : sortNewest();
   boxes.forEach(b=>{
     b.style.display = b.dataset.name.toLowerCase().includes(q) ? "flex" : "none";
   });
@@ -461,37 +319,47 @@ function apply(){
 
 function sortAZ(){
   boxes.sort((a,b)=>a.dataset.name.localeCompare(b.dataset.name));
-  boxes.forEach(b=>grid.appendChild(b));
+  boxes.forEach(b=>gridEl.appendChild(b));
 }
 function sortNewest(){
-  [...originalOrder].reverse().forEach(b=>grid.appendChild(b));
+  [...originalOrder].reverse().forEach(b=>gridEl.appendChild(b));
 }
-</script>
 
-<script>
-/* BUBBLES (UNCHANGED) */
+// Bubbles
 (function(){
-  const c=document.getElementById("bubbles"),x=c.getContext("2d");let b=[];
-  function r(){const s=c.getBoundingClientRect();c.width=s.width*devicePixelRatio;c.height=s.height*devicePixelRatio;x.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
-  r();addEventListener("resize",()=>setTimeout(r,80));
-  setInterval(()=>b.push({x:Math.random()*innerWidth,y:innerHeight+20,r:6+Math.random()*18,s:20+Math.random()*40,d:(Math.random()-.5)*20,a:.6+Math.random()*.4,l:1,w:.2+Math.random()*.6}),280);
-  let p=performance.now();
-  (function f(n){
-    const d=(n-p)/1e3;p=n;x.clearRect(0,0,c.width,c.height);
-    b.forEach((o,i)=>{
-      o.y-=o.s*d;o.x+=Math.sin(n*o.w*.001)*o.d*d;o.l-=d*.06;
-      x.globalAlpha=Math.max(0,o.a*(o.l+.2));
-      const g=x.createRadialGradient(o.x,o.y,o.r*.2,o.x,o.y,o.r);
-      g.addColorStop(0,"rgba(255,255,255,.95)");
-      g.addColorStop(.6,"rgba(180,240,255,.4)");
-      g.addColorStop(1,"rgba(160,220,235,.05)");
-      x.fillStyle=g;x.beginPath();x.arc(o.x,o.y,o.r,0,Math.PI*2);x.fill();
-      if(o.y<-20||o.l<0)b.splice(i,1);
-    });
-    x.globalAlpha=1;requestAnimationFrame(f);
-  })(p);
+  const c = document.getElementById("bubbles");
+  const x = c.getContext("2d");
+  let b = [];
+  function r() { c.width = window.innerWidth; c.height = window.innerHeight; }
+  r(); window.addEventListener("resize", r);
+  setInterval(() => {
+    if (b.length < 35) { 
+      b.push({
+        x: Math.random() * c.width,
+        y: c.height + 20,
+        r: 4 + Math.random() * 12,
+        s: 0.4 + Math.random() * 0.6,
+        wobble: Math.random() * 1.0,  
+        wobbleSpeed: 0.01 + Math.random() * 0.02, 
+        opacity: 0.1 + Math.random() * 0.2
+      });
+    }
+  }, 500);
+  function animate() {
+    x.clearRect(0, 0, c.width, c.height);
+    for (let i = b.length - 1; i >= 0; i--) {
+      let o = b[i]; o.y -= o.s; o.x += Math.sin(o.y * o.wobbleSpeed) * o.wobble;
+      const g = x.createRadialGradient(o.x, o.y, o.r * 0.2, o.x, o.y, o.r);
+      g.addColorStop(0, "rgba(255, 255, 255, " + (o.opacity + 0.1) + ")");
+      g.addColorStop(0.6, "rgba(180, 240, 255, " + o.opacity + ")");
+      g.addColorStop(1, "rgba(160, 220, 235, 0)");
+      x.fillStyle = g; x.beginPath(); x.arc(o.x, o.y, o.r, 0, Math.PI * 2); x.fill();
+      if (o.y < -50) b.splice(i, 1);
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
 })();
 </script>
-
 </body>
 </html>
