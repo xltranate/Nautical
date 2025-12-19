@@ -77,6 +77,7 @@ main{padding:20px;display:flex;justify-content:center}
   text-align:center;
   padding:20px 10px;
   overflow: hidden;
+  will-change: min-height, transform;
 }
 
 .game-box:hover{
@@ -237,7 +238,8 @@ const games = [
   { name: "Fruit Ninja", link: "fruitninja.html", desc: "Slice fruit like a pro but watch out for the bombs!" },
   { name: "Happy Wheels", link: "happywheels.html", desc: "A gory, hilarious physics-based obstacle course." },
   { name: "Temple Run", link: "templerun.html", desc: "Run for your life as you escape ancient temple guardians." },
-  { name: "Class of 09", link: "classof09.html", desc: "A dark comedy visual novel about high school life." }
+  { name: "Class of 09", link: "classof09.html", desc: "A dark comedy visual novel about high school life." },
+  { name: "Smash Karts", link: "smashkarts.html", desc: "Battle other players in 3D kart combat with crazy weapons!" }
 ];
 
 const gridEl = document.getElementById('grid');
