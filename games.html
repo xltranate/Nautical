@@ -56,7 +56,7 @@ header { text-align: center; padding: 60px 20px 10px; }
 }
 .subtitle { color: rgba(230, 247, 247, 0.6); font-size: 16px; }
 
-/* REFINED SEARCH & SORT BAR */
+/* UNIFIED SEARCH & SORT BAR */
 .search-wrap { display: flex; justify-content: center; padding: 40px 20px; }
 .search-controls {
     display: flex;
@@ -65,7 +65,7 @@ header { text-align: center; padding: 60px 20px 10px; }
     max-width: 650px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--border);
-    border-radius: 100px; /* Pill shape */
+    border-radius: 100px;
     padding: 6px 10px 6px 20px;
     backdrop-filter: blur(15px);
     transition: all 0.3s ease;
@@ -75,55 +75,29 @@ header { text-align: center; padding: 60px 20px 10px; }
 .search-controls:focus-within {
     border-color: var(--accent);
     box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
-    background: rgba(255, 255, 255, 0.06);
 }
 
 .search-controls input {
-    flex: 2;
-    background: transparent;
-    border: none;
-    padding: 12px 0;
-    color: #fff;
-    outline: none;
-    font-size: 16px;
+    flex: 2; background: transparent; border: none; padding: 12px 0;
+    color: #fff; outline: none; font-size: 16px;
 }
 
 .sort-container {
-    display: flex;
-    align-items: center;
-    border-left: 1px solid var(--border);
-    margin-left: 15px;
-    padding-left: 15px;
-    position: relative;
+    display: flex; align-items: center; border-left: 1px solid var(--border);
+    margin-left: 15px; padding-left: 15px;
 }
 
 .sort-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.4);
-    margin-right: 10px;
-    white-space: nowrap;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.4); margin-right: 10px; white-space: nowrap;
 }
 
 .search-controls select {
-    background: transparent;
-    border: none;
-    color: var(--accent);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    outline: none;
-    padding: 5px 25px 5px 5px;
-    appearance: none; /* Hide default arrow */
+    background: transparent; border: none; color: var(--accent);
+    font-size: 14px; font-weight: 600; cursor: pointer; outline: none;
+    padding-right: 20px; appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2300f2ff' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right center;
-}
-
-.search-controls select option {
-    background: #042a33;
-    color: #fff;
+    background-repeat: no-repeat; background-position: right center;
 }
 
 /* GAMES GRID */
@@ -133,7 +107,7 @@ main { padding: 20px 20px 60px; display: flex; justify-content: center; }
     display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;
 }
 
-/* THE BOXES */
+/* THE BOXES (Fixed shape and size) */
 .game-box {
     position: relative;
     height: 240px; 
@@ -154,7 +128,7 @@ main { padding: 20px 20px 60px; display: flex; justify-content: center; }
 .game-box:hover {
     transform: translateY(-8px);
     border-color: var(--accent);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(0, 242, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     background: rgba(6, 45, 56, 0.6);
 }
 
@@ -167,56 +141,33 @@ main { padding: 20px 20px 60px; display: flex; justify-content: center; }
     transform: translateY(-30px);
 }
 
-.gameText { font-weight: 700; font-size: 20px; margin-bottom: 10px; color: #fff; }
-.gameDesc { font-size: 13px; color: rgba(233, 251, 251, 0.6); line-height: 1.5; }
+.gameText { font-weight: 700; font-size: 19px; margin-bottom: 8px; color: #fff; }
+.gameDesc { font-size: 13px; color: rgba(233, 251, 251, 0.5); line-height: 1.5; }
 
+/* HOVER BUTTONS */
 .extra-actions {
-    position: absolute;
-    bottom: 25px;
-    left: 20px;
-    right: 20px;
-    display: flex;
-    gap: 10px;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: 0.4s;
-    z-index: 3;
+    position: absolute; bottom: 25px; left: 20px; right: 20px;
+    display: flex; gap: 10px; opacity: 0; transform: translateY(20px);
+    transition: 0.4s; z-index: 3;
 }
 
-.game-box:hover .extra-actions {
-    opacity: 1;
-    transform: translateY(0);
-}
+.game-box:hover .extra-actions { opacity: 1; transform: translateY(0); }
 
 .action-btn {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #fff;
-    padding: 10px 0;
-    border-radius: 8px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    transition: 0.2s;
+    flex: 1; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff; padding: 10px 0; border-radius: 8px; font-size: 11px;
+    font-weight: 600; text-transform: uppercase; cursor: pointer; transition: 0.2s;
 }
 
-.action-btn:hover {
-    background: var(--accent);
-    color: #02151a;
-    border-color: var(--accent);
-}
+.action-btn:hover { background: var(--accent); color: #02151a; border-color: var(--accent); }
 
-/* BUBBLES */
-.bubbles-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.4; }
+/* BUBBLES BACKGROUND */
+.bubbles-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.35; }
 canvas { width: 100%; height: 100%; display: block; }
 
 @media(max-width: 600px) {
     .search-controls { flex-direction: column; border-radius: 20px; padding: 15px; }
-    .sort-container { border-left: none; border-top: 1px solid var(--border); margin: 10px 0 0 0; padding: 10px 0 0 0; width: 100%; }
-    .search-controls input { text-align: center; }
+    .sort-container { border-left: none; border-top: 1px solid var(--border); margin-top: 10px; padding: 10px 0 0; width: 100%; }
 }
 </style>
 </head>
@@ -240,14 +191,14 @@ canvas { width: 100%; height: 100%; display: block; }
 <div class="page">
     <header>
         <div class="title">Offline Games</div>
-        <div class="subtitle">Pick a game and enjoy your time</div>
+        <div class="subtitle">A vast library for whenever the internet isn't.</div>
     </header>
 
     <div class="search-wrap">
         <div class="search-controls">
-            <input id="search" type="text" placeholder="Search the collection...">
+            <input id="search" type="text" placeholder="Search the library...">
             <div class="sort-container">
-                <span class="sort-label">Sort by</span>
+                <span class="sort-label">Sort</span>
                 <select id="sort">
                     <option value="az">A – Z</option>
                     <option value="newest">Newest</option>
@@ -262,71 +213,89 @@ canvas { width: 100%; height: 100%; display: block; }
 </div>
 
 <script>
+// Full Merged Game List
 const games = [
-    { name: "Learn to Fly", link: "learntofly1.html", desc: "Help a determined penguin defy gravity and reach the horizon!" },
-    { name: "Pokemon Emerald", link: "pokemonemerald.html", desc: "Experience the classic Hoenn adventure in your browser." },
-    { name: "SnowBattle.io", link: "snowbattleio.html", desc: "Gather snow and knock opponents off the platform." },
-    { name: "Buckshot Roulette", link: "buckshotroulette.html", desc: "A high-stakes game of chance where survival is the ultimate prize." },
-    { name: "SM64", link: "sm64.html", desc: "Explore the Mushroom Kingdom in the legendary 3D platformer." },
-    { name: "Ragdoll Archers", link: "ragdollarchers.html", desc: "Master the physics of archery to take down waves of enemies." },
-    { name: "Cookie Clicker", link: "cookieclicker.html", desc: "Start a baking empire and bake an infinite number of cookies." },
-    { name: "Learn to Fly Idle", link: "learntoflyidle.html", desc: "Keep the flight progress going even when you aren't clicking." },
-    { name: "FNF", link: "fnf.html", desc: "Keep the beat and win the rap battle to impress the Girlfriend." },
-    { name: "Suika", link: "suikawatergame.html", desc: "Merge small fruits into massive watermelons in this addictive puzzle." },
-    { name: "Riddle School", link: "riddleschool.html", desc: "Use your wits to outsmart the teachers and escape the classroom." },
-    { name: "Schoolboy Runaway", link: "schoolboyrunaway.html", desc: "A stealth-puzzle challenge where you must escape home undetected." },
-    { name: "Baldi's Basics", link: "baldisbasics.html", desc: "A surreal horror game that turns school subjects into a nightmare." },
-    { name: "Little Academy", link: "littlealchemy.html", desc: "Combine elements to discover hundreds of unique items." },
-    { name: "OVO", link: "ovo.html", desc: "A fast-paced parkour platformer that tests your reflexes." },
-    { name: "Baseball Bros", link: "baseballbros.html", desc: "Step up to the plate and swing for the fences in this sports classic." },
-    { name: "Moto X3M", link: "moto.html", desc: "Perform stunts and dodge deadly traps on your way to the finish line." },
-    { name: "Snow Rider 3D", link: "snowrider.html", desc: "Sled through a winter wonderland while avoiding obstacles." },
-    { name: "Granny", link: "granny.html", desc: "Can you survive five days in Granny's house of horrors?" },
-    { name: "Slope", link: "slope.html", desc: "Test your balance as you roll down an endless, neon-lit obstacle course." },
-    { name: "House of Hazards", link: "houseofhazards.html", desc: "Complete daily chores while dodging household traps." },
-    { name: "Bitlife", link: "bitlife.html", desc: "Make choices to live a thousand different lives in this text simulator." },
-    { name: "Worlds Hardest Game", link: "worldshardestgame.html", desc: "Think you're good? Try to finish this without losing your mind." },
-    { name: "Vex", link: "vex5.html", desc: "A challenging stickman platformer filled with spikes and saws." },
-    { name: "FNAF", link: "fnaf.html", desc: "Survive the night shift at Freddy Fazbear's Pizza." },
-    { name: "Basket Random", link: "basketrandom.html", desc: "One-button basketball physics that are unpredictable and fun." },
-    { name: "PVZ", link: "plantsvszombies.html", desc: "Defend your brain from a zombie horde using organic weaponry." },
-    { name: "Papas Pizzeria", link: "papaspizzeria.html", desc: "Manage the rush and bake the perfect pizza for every customer." },
-    { name: "Hollow Knight", link: "hollowknight.html", desc: "A beautiful, atmospheric action-adventure through a fallen kingdom." },
-    { name: "Google Feud", link: "feud.html", desc: "Can you guess how the world finishes their Google searches?" },
-    { name: "Sort the Court", link: "sortthecourt.html", desc: "Rule your kingdom with simple 'Yes' or 'No' decisions." },
-    { name: "2048", link: "2048.html", desc: "Slide tiles and reach the 2048 mark in this classic math puzzle." },
-    { name: "CrazyCattle3D", link: "crazycattle3d.html", desc: "Engage in chaotic livestock combat to prove you're the best." },
-    { name: "Breakout", link: "breakout.html", desc: "Classic arcade action: bounce the ball and smash the bricks." },
-    { name: "Idle Breakout", link: "idlebreakout.html", desc: "A clicker twist on the brick-breaking genre." },
-    { name: "Bacon May Die", link: "baconmaydie.html", desc: "A fast-paced brawler starring a very angry pig." },
-    { name: "Solar Smash", link: "solarsmash.html", desc: "Use planetary weapons to destroy entire solar systems." },
-    { name: "Time Shooter SWAT", link: "timeshooterswat.html", desc: "Time only moves when you do—plan your shots and survive." },
-    { name: "Stick With It", link: "stickwithit.html", desc: "Climb to the top by sticking to everything in your path." },
-    { name: "World Box", link: "worldbox.html", desc: "Become a god and build or destroy your own civilization." },
-    { name: "DOOM", link: "doom.html", desc: "The iconic first-person shooter that started it all." },
-    { name: "Legend of Zelda", link: "legendofzeldaoot.html", desc: "Embark on an epic quest to save Hyrule from Ganon." },
-    { name: "Slime Rancher", link: "slimerancher.html", desc: "Collect colorful slimes and grow your ranch on a far-away planet." },
-    { name: "Getting Over It", link: "getoverit.html", desc: "A frustratingly fun climb with nothing but a hammer and a pot." },
-    { name: "The Binding of Isaac", link: "thebindingofisaac.html", desc: "A roguelike journey through a basement filled with monsters." },
-    { name: "A Small World Cup", link: "asmallworldcup.html", desc: "Fast-paced soccer action with simple controls and big goals." },
-    { name: "Retro Bowl", link: "retrobowl.html", desc: "Manage your team and lead them to Super Bowl glory." },
-    { name: "Learn to Fly 3", link: "learntofly3.html", desc: "The ultimate penguin flight simulator—reach for the stars!" },
-    { name: "Block Blast", link: "blockblast.html", desc: "A colorful puzzle game where matching blocks clears the way." },
-    { name: "Slope 2", link: "slope2.html", desc: "Speed through futuristic tracks and avoid falling into the abyss." },
-    { name: "Drift Boss", link: "driftboss.html", desc: "Master the art of timing and drift your way through sharp corners." },
-    { name: "Bloons TD", link: "bloonstd.html", desc: "The ultimate tower defense: pop every balloon before they escape." },
-    { name: "Super Mario", link: "mario.html", desc: "The original platforming adventure with everyone's favorite plumber." },
-    { name: "Soccer Random", link: "soccerrandom.html", desc: "Randomized soccer physics where every goal is a surprise." },
-    { name: "Smashy Road", link: "smashyroad.html", desc: "Escape the law for as long as you can in this high-speed chase." },
-    { name: "Jetpack Joyride", link: "jetpackjoyride.html", desc: "Fly through the lab and collect coins in this endless runner." },
-    { name: "Crossy Road", link: "crossyroad.html", desc: "Navigate traffic and rivers in this modern take on a classic." },
-    { name: "Burrito Bison", link: "burritobison.html", desc: "Launch yourself at gummy bears to reclaim your stolen wallet." },
+    { name: "1v1.LOL", link: "1v1.html", desc: "Build and battle in this competitive third-person shooter." },
+    { name: "2048", link: "2048.html", desc: "Slide tiles to reach the legendary 2048 mark." },
+    { name: "A Small World Cup", link: "asmallworldcup.html", desc: "Ragdoll soccer with big goals and fast physics." },
+    { name: "Bacon May Die", link: "baconmaydie.html", desc: "Fast-paced brawler starring one very angry pig." },
+    { name: "Bad Monday Simulator", link: "badmondaysimulator.html", desc: "Experience the ultimate surreal 'bad day' challenge." },
+    { name: "Baldi's Basics", link: "baldibasics.html", desc: "A surreal horror game that makes math a nightmare." },
+    { name: "Baseball Bros", link: "baseballbros.html", desc: "Step up to the plate and swing for the fences." },
+    { name: "Basket Random", link: "basketrandom.html", desc: "One-button basketball physics that are pure chaos." },
+    { name: "Bendy", link: "bendy.html", desc: "Escape the ink-filled halls of Joey Drew Studios." },
+    { name: "Bitlife", link: "bitlife.html", desc: "Live a thousand different lives in this text-based sim." },
+    { name: "Block Blast", link: "blockblast.html", desc: "Tetris-style puzzle fun with colorful block clearing." },
+    { name: "Bloons TD", link: "bloonstd.html", desc: "Strategy tower defense: pop every balloon that passes." },
+    { name: "Boxing Random", link: "boxingrandom.html", desc: "Wacky physics-based boxing with randomized rules." },
+    { name: "Breakout", link: "breakout.html", desc: "Classic arcade action: bounce the ball and smash bricks." },
+    { name: "Buckshot Roulette", link: "buckshotroulette.html", desc: "A high-stakes game of chance and survival." },
+    { name: "Burrito Bison", link: "burritobison.html", desc: "Launch yourself at gummy bears to reclaim your wallet." },
     { name: "Candy Crush", link: "candycrush.html", desc: "The world's most famous match-three puzzle adventure." },
-    { name: "Fruit Ninja", link: "fruitninja.html", desc: "Slice fruit like a pro but watch out for the bombs!" },
-    { name: "Happy Wheels", link: "happywheels.html", desc: "A gory, hilarious physics-based obstacle course." },
-    { name: "Temple Run", link: "templerun.html", desc: "Run for your life as you escape ancient temple guardians." },
+    { name: "City Defense", link: "citydefense.html", desc: "Build your defenses and protect your city from the horde." },
     { name: "Class of 09", link: "classof09.html", desc: "A dark comedy visual novel about high school life." },
-    { name: "Smash Karts", link: "smashkarts.html", desc: "Battle other players in 3D kart combat with crazy weapons!" }
+    { name: "Color Match", link: "colormatch.html", desc: "Test your artistic eye by mixing and matching shades." },
+    { name: "Cookie Clicker", link: "cookieclicker.html", desc: "Bake an infinite number of cookies and build an empire." },
+    { name: "Crazy Cattle 3D", link: "crazycattle3d.html", desc: "Engage in chaotic livestock combat in full 3D." },
+    { name: "Crossy Road", link: "crossyroad.html", desc: "Help the chicken cross the road in this endless hopper." },
+    { name: "Cut the Rope", link: "cuttherope.html", desc: "Feed the candy to Om Nom in this physics classic." },
+    { name: "Don't You Lecture Me", link: "dontyoulectureme.html", desc: "Navigate this bizarre meme-fueled platformer." },
+    { name: "DOOM", link: "doom.html", desc: "The iconic FPS that defined a generation of gaming." },
+    { name: "Drift Boss", link: "driftboss.html", desc: "Perfect your timing and drift through sharp corners." },
+    { name: "Google Feud", link: "feud.html", desc: "Guess the most popular search auto-completes." },
+    { name: "FNAF", link: "fnaf.html", desc: "Survive the night at Freddy Fazbear's Pizzeria." },
+    { name: "FNF", link: "fnf.html", desc: "Keep the beat and win the rap battle." },
+    { name: "Football Bros", link: "footballbros.html", desc: "Fast-paced American football with a competitive twist." },
+    { name: "Fruit Ninja", link: "fruitninja.html", desc: "Slice fruit like a pro, but watch out for bombs." },
+    { name: "Getting Over It", link: "getoverit.html", desc: "A frustratingly fun climb with a hammer and a pot." },
+    { name: "Gladihoppers", link: "gladihoppers.html", desc: "Battle in the arena in this 2D physics gladiator sim." },
+    { name: "Granny", link: "granny.html", desc: "Survive five days in Granny's house of horrors." },
+    { name: "Happy Wheels", link: "happywheels.html", desc: "Gory, hilarious physics-based obstacle courses." },
+    { name: "Hollow Knight", link: "hollowknight.html", desc: "An atmospheric adventure through a fallen kingdom." },
+    { name: "House of Hazards", link: "houseofhazards.html", desc: "Avoid household traps while doing daily chores." },
+    { name: "Idle Breakout", link: "idlebreakout.html", desc: "A clicker twist on the classic brick-breaking genre." },
+    { name: "Jetpack Joyride", link: "jetpackjoyride.html", desc: "Fly through the lab and collect coins." },
+    { name: "Learn to Fly", link: "learntofly1.html", desc: "Help a penguin defy gravity and reach the horizon." },
+    { name: "Learn to Fly 3", link: "learntofly3.html", desc: "Reach the stars in the ultimate penguin flight sim." },
+    { name: "Learn to Fly Idle", link: "learntoflyidle.html", desc: "Keep the flight progress going without clicking." },
+    { name: "Little Alchemy", link: "littlealchemy.html", desc: "Combine elements to discover hundreds of items." },
+    { name: "Super Mario", link: "mario.html", desc: "The original platformer with the world's favorite plumber." },
+    { name: "Minecraft", link: "minecraft.html", desc: "Explore, build, and survive in the infinite voxel world." },
+    { name: "Moto X3M", link: "moto.html", desc: "Perform stunts and dodge traps on your motorcycle." },
+    { name: "Omori", link: "omori.html", desc: "A psychological horror RPG about memory and dreams." },
+    { name: "Osu!", link: "osu.html", desc: "The ultimate rhythm game—click the circles to the beat." },
+    { name: "OVO", link: "ovo.html", desc: "Fast-paced parkour platforming at its finest." },
+    { name: "Papa's Pizzeria", link: "papapizzeria.html", desc: "Manage the rush and bake the perfect pizza." },
+    { name: "PaRappa", link: "papparappa.html", desc: "The original rhythm game: You gotta believe!" },
+    { name: "Pokemon Emerald", link: "pokemonemerald.html", desc: "Classic GBA monster catching in your browser." },
+    { name: "PVZ", link: "pvz.html", desc: "Defend your garden from the zombie horde." },
+    { name: "Ragdoll Archers", link: "ragdollarchers.html", desc: "Master archery physics to take down waves of enemies." },
+    { name: "Retro Bowl", link: "retrobowl.html", desc: "Lead your team to glory in this retro sports sim." },
+    { name: "Riddle School", link: "riddleschool.html", desc: "Outsmart the teacher and escape the school." },
+    { name: "Schoolboy Runaway", link: "schoolboyrunaway.html", desc: "A stealth-puzzle challenge where you escape home." },
+    { name: "Slime Rancher", link: "slimerancher.html", desc: "Collect colorful slimes on a distant planet." },
+    { name: "Slope", link: "slope.html", desc: "Roll down a neon course at breakneck speeds." },
+    { name: "Slope 2", link: "slope2.html", desc: "More speed, more obstacles, more neon." },
+    { name: "SM64", link: "sm64.html", desc: "The legendary 3D platformer that started it all." },
+    { name: "Smash Karts", link: "smashkarts.html", desc: "Battle other players in 3D kart combat." },
+    { name: "Smashy Road", link: "smashyroad.html", desc: "Escape the law for as long as possible." },
+    { name: "Snowbattle.io", link: "snowbattleio.html", desc: "Knock opponents off in this chilly battle royale." },
+    { name: "Snow Rider 3D", link: "snowrider3d.html", desc: "Sled through a winter wonderland." },
+    { name: "Soccer Random", link: "soccerrandom.html", desc: "Randomized soccer physics for hilarious goals." },
+    { name: "Solar Smash", link: "solarsmash.html", desc: "Use planetary weapons to destroy entire systems." },
+    { name: "Sort the Court", link: "sortthecourt.html", desc: "Rule your kingdom with simple Yes or No choices." },
+    { name: "Spelunky", link: "spelunky.html", desc: "Explore dangerous caves in this iconic roguelike." },
+    { name: "Stickman Hook", link: "stickmanhook.html", desc: "Swing like a pro and reach the finish line." },
+    { name: "Stick With It", link: "stickwithit.html", desc: "Stick to walls to climb to the top." },
+    { name: "Suika", link: "suika.html", desc: "Merge fruits into massive watermelons." },
+    { name: "Tag", link: "tag.html", desc: "The classic game of Tag, but on your screen." },
+    { name: "Temple Run", link: "templerun.html", desc: "Run for your life as you escape ancient guardians." },
+    { name: "The Binding of Isaac", link: "thebindingofisaac.html", desc: "A dark roguelike basement journey." },
+    { name: "Time Shooter SWAT", link: "timeshooterswat.html", desc: "Time only moves when you do." },
+    { name: "Vex 5", link: "vex5.html", desc: "A challenging stickman parkour platformer." },
+    { name: "World Box", link: "worldbox.html", desc: "Become a god and build your own civilization." },
+    { name: "Worlds Hardest Game", link: "worldshardestgame.html", desc: "Think you're good? Try this." },
+    { name: "Zelda", link: "zelda.html", desc: "Embark on an epic quest to save Hyrule." }
 ];
 
 const gridEl = document.getElementById('grid');
@@ -371,15 +340,12 @@ function renderGames(gameList) {
 function applyFilters() {
     const query = document.getElementById("search").value.toLowerCase();
     const sortVal = document.getElementById("sort").value;
-    
     let filtered = games.filter(g => g.name.toLowerCase().includes(query));
-    
     if (sortVal === "az") {
         filtered.sort((a,b) => a.name.localeCompare(b.name));
     } else {
         filtered = filtered.reverse(); 
     }
-    
     renderGames(filtered);
 }
 
@@ -405,7 +371,7 @@ async function handleGameAction(url, mode, name) {
             document.body.removeChild(a);
         }
     } catch (err) {
-        alert("This action might be blocked by your browser's security settings while in a preview mode. Try it on the live site!");
+        alert("Action blocked. This usually happens in code editors due to security. Try it on your live site!");
     }
 }
 
@@ -416,18 +382,18 @@ async function handleGameAction(url, mode, name) {
     function r() { c.width = window.innerWidth; c.height = window.innerHeight; }
     r(); window.addEventListener("resize", r);
     setInterval(() => {
-        if (b.length < 30) { 
+        if (b.length < 35) { 
             b.push({
                 x: Math.random() * c.width,
                 y: c.height + 20,
-                r: 3 + Math.random() * 9,
-                s: 0.4 + Math.random() * 0.6,
-                wobble: Math.random() * 1.2,
+                r: 2 + Math.random() * 7,
+                s: 0.3 + Math.random() * 0.7,
+                wobble: Math.random() * 1.5,
                 wobbleSpeed: 0.01 + Math.random() * 0.02,
                 opacity: 0.1 + Math.random() * 0.2
             });
         }
-    }, 500);
+    }, 450);
     function animate() {
         x.clearRect(0, 0, c.width, c.height);
         for (let i = b.length - 1; i >= 0; i--) {
