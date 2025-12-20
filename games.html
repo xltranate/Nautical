@@ -3,26 +3,32 @@
 <head> 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Nautical — Offline Games</title>
+<title>Nautical</title>
 <link rel="icon" type="image/png" href="https://iili.io/fcbfGHX.png">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
-    --nav-h: 70px;
+    --nav-h: 90px;
     --accent: #00f2ff;
-    --glass: rgba(255, 255, 255, 0.05);
+    --accent-glow: rgba(0, 242, 255, 0.5);
+    --glass: rgba(255, 255, 255, 0.04);
     --border: rgba(255, 255, 255, 0.12);
-    --bg-card: rgba(6, 45, 56, 0.4);
+    --bg-dark: #02151a;
+    --navy-blue: #021c24; /* New Navy Variable */
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; font-family: 'Inter', sans-serif; color: #e9fbfb; scroll-behavior: smooth; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
+* { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-    background: radial-gradient(circle at 10% 10%, rgba(6,30,40,.55) 0%, rgba(3,25,38,1) 40%),
-                linear-gradient(180deg,#042a33 0%, #02151a 100%);
+    background: radial-gradient(circle at 10% 10%, #062a33 0%, #02151a 50%),
+                linear-gradient(180deg, #042a33 0%, #010a0d 100%);
     background-attachment: fixed;
+    font-family: 'Inter', sans-serif;
+    color: #e9fbfb;
     overflow-x: hidden;
 }
 
@@ -30,159 +36,115 @@ body {
 nav {
     position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0 40px;
-    background: rgba(2, 21, 26, 0.7);
-    backdrop-filter: blur(12px);
+    padding: 0 5%;
+    background: rgba(2, 21, 26, 0.85);
+    backdrop-filter: blur(25px);
     border-bottom: 1px solid var(--border);
-    z-index: 100;
+    z-index: 1000;
 }
-.brand { display: flex; align-items: center; gap: 15px; }
-.logo { width: 38px; height: 38px; border-radius: 10px; overflow: hidden; border: 1px solid var(--accent); }
+.brand { display: flex; align-items: center; gap: 12px; }
+.logo { width: 35px; height: 35px; border-radius: 8px; border: 1.5px solid var(--accent); overflow: hidden; }
 .logo img { width: 100%; height: 100%; object-fit: cover; }
-.brand h1 { font-family: 'Playfair Display', serif; font-size: 22px; letter-spacing: 1px; }
-.navlinks a { color: rgba(255,255,255,0.7); margin-left: 24px; text-decoration: none; font-size: 14px; transition: 0.3s; }
-.navlinks a:hover { color: var(--accent); }
+.brand h1 { font-family: 'Playfair Display', serif; font-size: 20px; letter-spacing: 2px; }
 
-/* HEADER */
+.nav-tiles { display: flex; gap: 12px; }
+.nav-tile {
+    text-decoration: none; color: #fff; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px; padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
+    border-radius: 10px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.nav-tile:hover {
+    background: var(--accent); color: var(--bg-dark); border-color: var(--accent);
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+/* PAGE WRAPPER */
 .page { padding-top: var(--nav-h); position: relative; z-index: 10; }
-header { text-align: center; padding: 60px 20px 10px; }
+header { text-align: center; padding: 60px 20px 20px; }
 .title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(32px, 8vw, 64px);
-    background: linear-gradient(90deg, #fff, #a0f0e8, var(--accent));
-    -webkit-background-clip: text;
-    color: transparent;
-    margin-bottom: 10px;
+    font-family: 'Playfair Display', serif; font-size: clamp(38px, 8vw, 68px);
+    background: linear-gradient(135deg, #fff 30%, var(--accent));
+    -webkit-background-clip: text; color: transparent; margin-bottom: 10px;
 }
-.subtitle { color: rgba(230, 247, 247, 0.6); font-size: 16px; }
+.subtitle { color: rgba(230, 247, 247, 0.4); font-size: 16px; font-weight: 300; }
 
-/* UNIFIED SEARCH & SORT BAR */
-.search-wrap { display: flex; justify-content: center; padding: 40px 20px; }
-.search-controls {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    max-width: 650px;
-    background: rgba(255, 255, 255, 0.03);
+/* SEARCH & SORT - UPDATED TO NAVY */
+.controls-container { display: flex; justify-content: center; padding: 40px 5%; }
+.control-glass {
+    display: flex; align-items: center; width: 100%; max-width: 800px;
+    background: var(--navy-blue);
     border: 1px solid var(--border);
-    border-radius: 100px;
-    padding: 6px 10px 6px 20px;
-    backdrop-filter: blur(15px);
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    border-radius: 20px; padding: 10px 10px 10px 30px;
+    backdrop-filter: blur(30px); box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
+.control-glass input { flex: 1; background: transparent; border: none; color: #fff; font-size: 15px; outline: none; }
+.control-glass input::placeholder { color: rgba(255,255,255,0.3); }
 
-.search-controls:focus-within {
-    border-color: var(--accent);
-    box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+.aesthetic-sort {
+    background: rgba(255,255,255,0.05); 
+    border-left: 1px solid var(--border);
+    padding: 10px 5px 10px 20px; margin-left: 15px; display: flex; align-items: center; gap: 10px;
 }
-
-.search-controls input {
-    flex: 2; background: transparent; border: none; padding: 12px 0;
-    color: #fff; outline: none; font-size: 16px;
-}
-
-.sort-container {
-    display: flex; align-items: center; border-left: 1px solid var(--border);
-    margin-left: 15px; padding-left: 15px;
-}
-
-.sort-label {
-    font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.4); margin-right: 10px; white-space: nowrap;
-}
-
-.search-controls select {
-    background: transparent; border: none; color: var(--accent);
-    font-size: 14px; font-weight: 600; cursor: pointer; outline: none;
-    padding-right: 20px; appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2300f2ff' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+.aesthetic-sort label { font-size: 10px; text-transform: uppercase; color: var(--accent); font-weight: 800; }
+.aesthetic-sort select {
+    background: transparent; border: none; color: #fff; font-size: 12px; font-weight: 600; 
+    outline: none; cursor: pointer; appearance: none; padding-right: 25px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%2300f2ff' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
     background-repeat: no-repeat; background-position: right center;
 }
+.aesthetic-sort select option { background: var(--navy-blue); color: #fff; }
 
-/* GAMES GRID */
-main { padding: 20px 20px 60px; display: flex; justify-content: center; }
-.games-grid {
-    width: 100%; max-width: 1400px;
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;
+/* GRIDS & CARDS */
+.section-tag {
+    padding: 0 5% 20px; font-family: 'Playfair Display', serif; font-size: 24px; color: var(--accent);
+    display: flex; align-items: center; gap: 15px;
 }
+.section-tag::after { content: ''; height: 1px; flex: 1; background: linear-gradient(90deg, var(--border), transparent); }
 
-/* THE BOXES (Fixed shape and size) */
-.game-box {
-    position: relative;
-    height: 240px; 
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    overflow: hidden;
-    text-align: center;
+.featured-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; padding: 0 5% 60px; }
+.archive-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 0 5% 100px; }
+
+.game-card {
+    position: relative; height: 260px; background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border); border-radius: 20px; padding: 25px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    cursor: pointer; transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); overflow: hidden; text-align: center;
 }
+.featured-card { height: 340px; border-color: rgba(0, 242, 255, 0.25); background: rgba(0, 242, 255, 0.03); }
+.game-card:hover { transform: translateY(-8px); background: rgba(6, 45, 56, 0.7); border-color: var(--accent); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+.card-inner { transition: 0.4s; }
+.game-card:hover .card-inner { transform: translateY(-40px); }
+.g-title { font-size: 21px; font-weight: 700; color: #fff; margin-bottom: 8px; letter-spacing: -0.5px; }
+.g-desc { font-size: 13.5px; color: rgba(255,255,255,0.45); line-height: 1.6; padding: 0 10px; }
 
-.game-box:hover {
-    transform: translateY(-8px);
-    border-color: var(--accent);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    background: rgba(6, 45, 56, 0.6);
+.card-actions {
+    position: absolute; bottom: 30px; left: 20px; right: 20px;
+    display: flex; flex-direction: column; gap: 8px; opacity: 0; transform: translateY(20px); transition: 0.4s;
 }
-
-.box-content {
-    transition: transform 0.4s ease;
-    z-index: 2;
+.game-card:hover .card-actions { opacity: 1; transform: translateY(0); }
+.btn-ui {
+    width: 100%; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border);
+    color: #fff; padding: 10px 0; border-radius: 10px; font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; transition: 0.2s;
 }
+.btn-ui:hover { background: var(--accent); color: var(--bg-dark); border-color: var(--accent); }
 
-.game-box:hover .box-content {
-    transform: translateY(-30px);
-}
+.bubbles-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
 
-.gameText { font-weight: 700; font-size: 19px; margin-bottom: 8px; color: #fff; }
-.gameDesc { font-size: 13px; color: rgba(233, 251, 251, 0.5); line-height: 1.5; }
-
-/* HOVER BUTTONS */
-.extra-actions {
-    position: absolute; bottom: 25px; left: 20px; right: 20px;
-    display: flex; gap: 10px; opacity: 0; transform: translateY(20px);
-    transition: 0.4s; z-index: 3;
-}
-
-.game-box:hover .extra-actions { opacity: 1; transform: translateY(0); }
-
-.action-btn {
-    flex: 1; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #fff; padding: 10px 0; border-radius: 8px; font-size: 11px;
-    font-weight: 600; text-transform: uppercase; cursor: pointer; transition: 0.2s;
-}
-
-.action-btn:hover { background: var(--accent); color: #02151a; border-color: var(--accent); }
-
-/* BUBBLES BACKGROUND */
-.bubbles-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.35; }
-canvas { width: 100%; height: 100%; display: block; }
-
-@media(max-width: 600px) {
-    .search-controls { flex-direction: column; border-radius: 20px; padding: 15px; }
-    .sort-container { border-left: none; border-top: 1px solid var(--border); margin-top: 10px; padding: 10px 0 0; width: 100%; }
-}
+@media(max-width: 900px) { .featured-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 
 <body>
-
 <nav>
     <div class="brand">
         <div class="logo"><img src="https://iili.io/faD5fqB.png" alt="Logo"></div>
-        <h1>NAUTICAL</h1>
+        <h1>Nautical</h1>
     </div>
-    <div class="navlinks">
-        <a href="index.html">Home</a>
-        <a href="games.html">Games</a>
-        <a href="apps.html">Apps</a>
+    <div class="nav-tiles">
+        <a href="https://xltranate.github.io/Nautical/index.html" class="nav-tile">Home</a>
+        <a href="https://xltranate.github.io/Nautical/apps.html" class="nav-tile">Apps</a>
     </div>
 </nav>
 
@@ -190,221 +152,208 @@ canvas { width: 100%; height: 100%; display: block; }
 
 <div class="page">
     <header>
-        <div class="title">Offline Games</div>
-        <div class="subtitle">A vast library for whenever the internet isn't.</div>
+        <div class="title">Games</div>
+        <div class="subtitle">A selection of games to make your school day a little better.</div>
     </header>
 
-    <div class="search-wrap">
-        <div class="search-controls">
-            <input id="search" type="text" placeholder="Search the library...">
-            <div class="sort-container">
-                <span class="sort-label">Sort</span>
+    <div class="controls-container">
+        <div class="control-glass">
+            <input id="search" type="text" placeholder="Search the games...">
+            <div class="aesthetic-sort">
+                <label>View</label>
                 <select id="sort">
-                    <option value="az">A – Z</option>
-                    <option value="newest">Newest</option>
+                    <option value="az">Alphabetic (A-Z)</option>
+                    <option value="newest">Latest Additions</option>
                 </select>
             </div>
         </div>
     </div>
 
-    <main>
-        <div class="games-grid" id="grid"></div>
-    </main>
+    <div class="section-tag">Featured</div>
+    <div id="featured-grid" class="featured-grid"></div>
+
+    <div class="section-tag">Games</div>
+    <div id="grid" class="archive-grid"></div>
 </div>
 
 <script>
-// Full Merged Game List
-const games = [
-    { name: "1v1.LOL", link: "1v1.html", desc: "Build and battle in this competitive third-person shooter." },
-    { name: "2048", link: "2048.html", desc: "Slide tiles to reach the legendary 2048 mark." },
-    { name: "A Small World Cup", link: "asmallworldcup.html", desc: "Ragdoll soccer with big goals and fast physics." },
-    { name: "Bacon May Die", link: "baconmaydie.html", desc: "Fast-paced brawler starring one very angry pig." },
-    { name: "Bad Monday Simulator", link: "badmondaysimulator.html", desc: "Experience the ultimate surreal 'bad day' challenge." },
-    { name: "Baldi's Basics", link: "baldibasics.html", desc: "A surreal horror game that makes math a nightmare." },
-    { name: "Baseball Bros", link: "baseballbros.html", desc: "Step up to the plate and swing for the fences." },
-    { name: "Basket Random", link: "basketrandom.html", desc: "One-button basketball physics that are pure chaos." },
-    { name: "Bendy", link: "bendy.html", desc: "Escape the ink-filled halls of Joey Drew Studios." },
-    { name: "Bitlife", link: "bitlife.html", desc: "Live a thousand different lives in this text-based sim." },
-    { name: "Block Blast", link: "blockblast.html", desc: "Tetris-style puzzle fun with colorful block clearing." },
-    { name: "Bloons TD", link: "bloonstd.html", desc: "Strategy tower defense: pop every balloon that passes." },
-    { name: "Boxing Random", link: "boxingrandom.html", desc: "Wacky physics-based boxing with randomized rules." },
-    { name: "Breakout", link: "breakout.html", desc: "Classic arcade action: bounce the ball and smash bricks." },
-    { name: "Buckshot Roulette", link: "buckshotroulette.html", desc: "A high-stakes game of chance and survival." },
-    { name: "Burrito Bison", link: "burritobison.html", desc: "Launch yourself at gummy bears to reclaim your wallet." },
-    { name: "Candy Crush", link: "candycrush.html", desc: "The world's most famous match-three puzzle adventure." },
-    { name: "City Defense", link: "citydefense.html", desc: "Build your defenses and protect your city from the horde." },
-    { name: "Class of 09", link: "classof09.html", desc: "A dark comedy visual novel about high school life." },
-    { name: "Color Match", link: "colormatch.html", desc: "Test your artistic eye by mixing and matching shades." },
-    { name: "Cookie Clicker", link: "cookieclicker.html", desc: "Bake an infinite number of cookies and build an empire." },
-    { name: "Crazy Cattle 3D", link: "crazycattle3d.html", desc: "Engage in chaotic livestock combat in full 3D." },
-    { name: "Crossy Road", link: "crossyroad.html", desc: "Help the chicken cross the road in this endless hopper." },
-    { name: "Cut the Rope", link: "cuttherope.html", desc: "Feed the candy to Om Nom in this physics classic." },
-    { name: "Don't You Lecture Me", link: "dontyoulectureme.html", desc: "Navigate this bizarre meme-fueled platformer." },
-    { name: "DOOM", link: "doom.html", desc: "The iconic FPS that defined a generation of gaming." },
-    { name: "Drift Boss", link: "driftboss.html", desc: "Perfect your timing and drift through sharp corners." },
-    { name: "Google Feud", link: "feud.html", desc: "Guess the most popular search auto-completes." },
-    { name: "FNAF", link: "fnaf.html", desc: "Survive the night at Freddy Fazbear's Pizzeria." },
-    { name: "FNF", link: "fnf.html", desc: "Keep the beat and win the rap battle." },
-    { name: "Football Bros", link: "footballbros.html", desc: "Fast-paced American football with a competitive twist." },
-    { name: "Fruit Ninja", link: "fruitninja.html", desc: "Slice fruit like a pro, but watch out for bombs." },
-    { name: "Getting Over It", link: "getoverit.html", desc: "A frustratingly fun climb with a hammer and a pot." },
-    { name: "Gladihoppers", link: "gladihoppers.html", desc: "Battle in the arena in this 2D physics gladiator sim." },
-    { name: "Granny", link: "granny.html", desc: "Survive five days in Granny's house of horrors." },
-    { name: "Happy Wheels", link: "happywheels.html", desc: "Gory, hilarious physics-based obstacle courses." },
-    { name: "Hollow Knight", link: "hollowknight.html", desc: "An atmospheric adventure through a fallen kingdom." },
-    { name: "House of Hazards", link: "houseofhazards.html", desc: "Avoid household traps while doing daily chores." },
-    { name: "Idle Breakout", link: "idlebreakout.html", desc: "A clicker twist on the classic brick-breaking genre." },
-    { name: "Jetpack Joyride", link: "jetpackjoyride.html", desc: "Fly through the lab and collect coins." },
-    { name: "Learn to Fly", link: "learntofly1.html", desc: "Help a penguin defy gravity and reach the horizon." },
-    { name: "Learn to Fly 3", link: "learntofly3.html", desc: "Reach the stars in the ultimate penguin flight sim." },
-    { name: "Learn to Fly Idle", link: "learntoflyidle.html", desc: "Keep the flight progress going without clicking." },
-    { name: "Little Alchemy", link: "littlealchemy.html", desc: "Combine elements to discover hundreds of items." },
-    { name: "Super Mario", link: "mario.html", desc: "The original platformer with the world's favorite plumber." },
-    { name: "Minecraft", link: "minecraft.html", desc: "Explore, build, and survive in the infinite voxel world." },
-    { name: "Moto X3M", link: "moto.html", desc: "Perform stunts and dodge traps on your motorcycle." },
-    { name: "Omori", link: "omori.html", desc: "A psychological horror RPG about memory and dreams." },
-    { name: "Osu!", link: "osu.html", desc: "The ultimate rhythm game—click the circles to the beat." },
-    { name: "OVO", link: "ovo.html", desc: "Fast-paced parkour platforming at its finest." },
-    { name: "Papa's Pizzeria", link: "papapizzeria.html", desc: "Manage the rush and bake the perfect pizza." },
-    { name: "PaRappa", link: "papparappa.html", desc: "The original rhythm game: You gotta believe!" },
-    { name: "Pokemon Emerald", link: "pokemonemerald.html", desc: "Classic GBA monster catching in your browser." },
-    { name: "PVZ", link: "pvz.html", desc: "Defend your garden from the zombie horde." },
-    { name: "Ragdoll Archers", link: "ragdollarchers.html", desc: "Master archery physics to take down waves of enemies." },
-    { name: "Retro Bowl", link: "retrobowl.html", desc: "Lead your team to glory in this retro sports sim." },
-    { name: "Riddle School", link: "riddleschool.html", desc: "Outsmart the teacher and escape the school." },
-    { name: "Schoolboy Runaway", link: "schoolboyrunaway.html", desc: "A stealth-puzzle challenge where you escape home." },
-    { name: "Slime Rancher", link: "slimerancher.html", desc: "Collect colorful slimes on a distant planet." },
-    { name: "Slope", link: "slope.html", desc: "Roll down a neon course at breakneck speeds." },
-    { name: "Slope 2", link: "slope2.html", desc: "More speed, more obstacles, more neon." },
-    { name: "SM64", link: "sm64.html", desc: "The legendary 3D platformer that started it all." },
-    { name: "Smash Karts", link: "smashkarts.html", desc: "Battle other players in 3D kart combat." },
-    { name: "Smashy Road", link: "smashyroad.html", desc: "Escape the law for as long as possible." },
-    { name: "Snowbattle.io", link: "snowbattleio.html", desc: "Knock opponents off in this chilly battle royale." },
-    { name: "Snow Rider 3D", link: "snowrider3d.html", desc: "Sled through a winter wonderland." },
-    { name: "Soccer Random", link: "soccerrandom.html", desc: "Randomized soccer physics for hilarious goals." },
-    { name: "Solar Smash", link: "solarsmash.html", desc: "Use planetary weapons to destroy entire systems." },
-    { name: "Sort the Court", link: "sortthecourt.html", desc: "Rule your kingdom with simple Yes or No choices." },
-    { name: "Spelunky", link: "spelunky.html", desc: "Explore dangerous caves in this iconic roguelike." },
-    { name: "Stickman Hook", link: "stickmanhook.html", desc: "Swing like a pro and reach the finish line." },
-    { name: "Stick With It", link: "stickwithit.html", desc: "Stick to walls to climb to the top." },
-    { name: "Suika", link: "suika.html", desc: "Merge fruits into massive watermelons." },
-    { name: "Tag", link: "tag.html", desc: "The classic game of Tag, but on your screen." },
-    { name: "Temple Run", link: "templerun.html", desc: "Run for your life as you escape ancient guardians." },
-    { name: "The Binding of Isaac", link: "thebindingofisaac.html", desc: "A dark roguelike basement journey." },
-    { name: "Time Shooter SWAT", link: "timeshooterswat.html", desc: "Time only moves when you do." },
-    { name: "Vex 5", link: "vex5.html", desc: "A challenging stickman parkour platformer." },
-    { name: "World Box", link: "worldbox.html", desc: "Become a god and build your own civilization." },
-    { name: "Worlds Hardest Game", link: "worldshardestgame.html", desc: "Think you're good? Try this." },
-    { name: "Zelda", link: "zelda.html", desc: "Embark on an epic quest to save Hyrule." }
+const baseUrl = "https://xltranate.github.io/Nautical/games/";
+const gridEl = document.getElementById('grid');
+const featuredGridEl = document.getElementById('featured-grid');
+
+const featuredGames = [
+    { name: "Smash Karts", link: "smashkarts.html", desc: "Battle other pilots in high-octane 3D kart warfare with chaotic weapons." },
+    { name: "Basket Random", link: "basketrandom.html", desc: "A surreal, physics-driven basketball duel where every goal is a surprise." },
+    { name: "Stickman Hook", link: "stickmanhook.html", desc: "A fluid test of timing and gravity. Swing with precision to reach the exit." }
 ];
 
-const gridEl = document.getElementById('grid');
-const baseUrl = "https://xltranate.github.io/Nautical/games/";
+const games = [
+    { name: "1v1.LOL", link: "1v1.html", desc: "Competitive third-person building and shooting simulator." },
+    { name: "2048", link: "2048.html", desc: "The ultimate mathematical tile-sliding puzzle." },
+    { name: "A Small World Cup", link: "asmallworldcup.html", desc: "Fast-paced ragdoll soccer with explosive physics." },
+    { name: "Bacon May Die", link: "baconmaydie.html", desc: "Aggressive brawler featuring a very capable pig." },
+    { name: "Bad Monday Simulator", link: "badmondaysimulator.html", desc: "A surreal and challenging 'bad day' experience." },
+    { name: "Baldi's Basics", link: "baldibasics.html", desc: "Surreal educational horror in a 90s aesthetic." },
+    { name: "Baseball Bros", link: "baseballbros.html", desc: "Competitive baseball with stylized characters." },
+    { name: "Bendy", link: "bendy.html", desc: "Atmospheric horror inside a haunted animation studio." },
+    { name: "Bitlife", link: "bitlife.html", desc: "Deep life simulation from birth to the afterlife." },
+    { name: "Block Blast", link: "blockblast.html", desc: "Modernized brick-clearing puzzle with vibrant effects." },
+    { name: "Bloons TD", link: "bloonstd.html", desc: "Strategic defense against waves of colorful invaders." },
+    { name: "Boxing Random", link: "boxingrandom.html", desc: "Unpredictable boxing matches driven by physics." },
+    { name: "Breakout", link: "breakout.html", desc: "Arcade classic brick-shattering experience." },
+    { name: "Buckshot Roulette", link: "buckshotroulette.html", desc: "High-stakes psychological game of survival." },
+    { name: "Burrito Bison", link: "burritobison.html", desc: "Launch yourself at gummy bears for ultimate revenge." },
+    { name: "Candy Crush", link: "candycrush.html", desc: "The iconic match-three puzzle world-traveler." },
+    { name: "City Defense", link: "citydefense.html", desc: "Strategic management and defense of urban zones." },
+    { name: "Class of 09", link: "classof09.html", desc: "Dark comedy visual novel centered on high school life." },
+    { name: "Color Match", link: "colormatch.html", desc: "Test your artistic perception with color blending." },
+    { name: "Cookie Clicker", link: "cookieclicker.html", desc: "The legendary incremental baking empire simulator." },
+    { name: "Crazy Cattle 3D", link: "crazycattle3d.html", desc: "Bizarre 3D livestock combat and exploration." },
+    { name: "Crossy Road", link: "crossyroad.html", desc: "Endless hopping through traffic and obstacles." },
+    { name: "Cut the Rope", link: "cuttherope.html", desc: "Physics puzzles to feed a hungry green monster." },
+    { name: "Don't You Lecture Me", link: "dontyoulectureme.html", desc: "Experimental platformer based on classic memes." },
+    { name: "DOOM", link: "doom.html", desc: "The foundational first-person shooter experience." },
+    { name: "Drift Boss", link: "driftboss.html", desc: "Precise drifting action through narrow pathways." },
+    { name: "Google Feud", link: "feud.html", desc: "Predict what the internet is searching for." },
+    { name: "FNAF", link: "fnaf.html", desc: "Survival horror in a haunted animatronic pizzeria." },
+    { name: "FNF", link: "fnf.html", desc: "Rhythm-based rap battles and musical duels." },
+    { name: "Football Bros", link: "footballbros.html", desc: "Fast-paced American football competition." },
+    { name: "Fruit Ninja", link: "fruitninja.html", desc: "Precision fruit-slicing action with katana blades." },
+    { name: "Getting Over It", link: "getoverit.html", desc: "A psychological journey of climbing with a hammer." },
+    { name: "Gladihoppers", link: "gladihoppers.html", desc: "Physics gladiator combat in the ancient arena." },
+    { name: "Granny", link: "granny.html", desc: "Stealth horror: escape the house without being seen." },
+    { name: "Happy Wheels", link: "happywheels.html", desc: "Brutal and hilarious obstacle courses for commuters." },
+    { name: "Hollow Knight", link: "hollowknight.html", desc: "Beautifully atmospheric metroidvania exploration." },
+    { name: "House of Hazards", link: "houseofhazards.html", desc: "Sabotage your friends in this trap-filled home." },
+    { name: "Idle Breakout", link: "idlebreakout.html", desc: "The perfect fusion of brick-breaking and idle clicking." },
+    { name: "Jetpack Joyride", link: "jetpackjoyride.html", desc: "Fly through a secret lab using experimental tech." },
+    { name: "Learn to Fly", link: "learntofly1.html", desc: "Help a penguin achieve flight through research." },
+    { name: "Learn to Fly 3", link: "learntofly3.html", desc: "Reach the stars in a custom-built ship." },
+    { name: "Learn to Fly Idle", link: "learntoflyidle.html", desc: "Automatic progress in the penguin flight project." },
+    { name: "Little Alchemy", link: "littlealchemy.html", desc: "Creative elemental combination simulation." },
+    { name: "Super Mario", link: "mario.html", desc: "The original platformer that defined gaming." },
+    { name: "Minecraft", link: "minecraft.html", desc: "Infinite voxel creative and survival sandbox." },
+    { name: "Moto X3M", link: "moto.html", desc: "Extreme stunt racing across dangerous tracks." },
+    { name: "Omori", link: "omori.html", desc: "A surreal psychological horror RPG experience." },
+    { name: "Osu!", link: "osu.html", desc: "High-intensity rhythm game based on timing." },
+    { name: "OVO", link: "ovo.html", desc: "Minimalist parkour platforming with fluid movement." },
+    { name: "Papa's Pizzeria", link: "papapizzeria.html", desc: "Classic time-management and culinary strategy." },
+    { name: "PaRappa", link: "papparappa.html", desc: "The pioneer of the rhythm-game genre." },
+    { name: "Pokemon Emerald", link: "pokemonemerald.html", desc: "The classic monster-collecting GBA journey." },
+    { name: "PVZ", link: "pvz.html", desc: "Flora-based defense against a zombie invasion." },
+    { name: "Ragdoll Archers", link: "ragdollarchers.html", desc: "Archery duels powered by unpredictable physics." },
+    { name: "Retro Bowl", link: "retrobowl.html", desc: "Stylized management and play of American football." },
+    { name: "Riddle School", link: "riddleschool.html", desc: "Escape the classroom using your wits alone." },
+    { name: "Schoolboy Runaway", link: "schoolboyrunaway.html", desc: "Sneak out of the house in this stealth puzzle." },
+    { name: "Slime Rancher", link: "slimerancher.html", desc: "Wrangle colorful slimes on a distant planet." },
+    { name: "Slope", link: "slope.html", desc: "High-speed descent through a geometric abyss." },
+    { name: "Slope 2", link: "slope2.html", desc: "Evolved neon descent with new obstacles." },
+    { name: "SM64", link: "sm64.html", desc: "The gold standard of 3D platforming adventures." },
+    { name: "Smashy Road", link: "smashyroad.html", desc: "Infinite voxel-based police chase survival." },
+    { name: "Snowbattle.io", link: "snowbattleio.html", desc: "Multiplayer snow-rolling arena combat." },
+    { name: "Snow Rider 3D", link: "snowrider3d.html", desc: "Downhill sledding through winter landscapes." },
+    { name: "Soccer Random", link: "soccerrandom.html", desc: "Soccer matches where anything can happen." },
+    { name: "Solar Smash", link: "solarsmash.html", desc: "Interstellar weapon testing on celestial bodies." },
+    { name: "Sort the Court", link: "sortthecourt.html", desc: "A simple yes-no kingdom management sim." },
+    { name: "Spelunky", link: "spelunky.html", desc: "Classic procedurally generated cave exploration." },
+    { name: "Stick With It", link: "stickwithit.html", desc: "Challenging climb using sticky mechanics." },
+    { name: "Suika", link: "suika.html", desc: "Addictive fruit-merging physics challenge." },
+    { name: "Tag", link: "tag.html", desc: "Digital adaptation of the classic playground game." },
+    { name: "Temple Run", link: "templerun.html", desc: "Endless escape from ancient jungle guardians." },
+    { name: "The Binding of Isaac", link: "thebindingofisaac.html", desc: "Dark roguelike exploration of a deep basement." },
+    { name: "Time Shooter SWAT", link: "timeshooterswat.html", desc: "Time manipulation tactical combat simulator." },
+    { name: "Vex 5", link: "vex5.html", desc: "Lethal stickman parkour with razor-sharp traps." },
+    { name: "World Box", link: "worldbox.html", desc: "God-simulator with deep civilization evolution." },
+    { name: "Worlds Hardest Game", link: "worldshardestgame.html", desc: "The ultimate test of precision and patience." },
+    { name: "Zelda", link: "zelda.html", desc: "Legendary adventure quest in the kingdom of Hyrule." }
+];
 
-function renderGames(gameList) {
-    gridEl.innerHTML = '';
-    gameList.forEach(g => {
-        const box = document.createElement('div');
-        box.className = 'game-box';
-        box.innerHTML = `
-            <div class="box-content">
-                <div class="gameText">${g.name}</div>
-                <div class="gameDesc">${g.desc}</div>
-            </div>
-            <div class="extra-actions">
-                <button class="action-btn blob-btn">Open in Blob</button>
-                <button class="action-btn dl-btn">Download</button>
-            </div>
-        `;
-
-        box.addEventListener('click', (e) => {
-            if(!e.target.classList.contains('action-btn')) {
-                window.location.href = baseUrl + g.link;
-            }
-        });
-
-        box.querySelector('.blob-btn').onclick = (e) => {
-            e.stopPropagation();
-            handleGameAction(baseUrl + g.link, 'blob', g.name);
-        };
-
-        box.querySelector('.dl-btn').onclick = (e) => {
-            e.stopPropagation();
-            handleGameAction(baseUrl + g.link, 'download', g.name);
-        };
-
-        gridEl.appendChild(box);
-    });
+function createCard(g, isFeatured) {
+    const card = document.createElement('div');
+    card.className = isFeatured ? 'game-card featured-card' : 'game-card';
+    card.innerHTML = `
+        <div class="card-inner">
+            <div class="g-title">${g.name}</div>
+            <div class="g-desc">${g.desc}</div>
+        </div>
+        <div class="card-actions">
+            <button class="btn-ui open-blob">Open in Blob</button>
+            <button class="btn-ui download-html">Download</button>
+        </div>
+    `;
+    card.addEventListener('click', (e) => { if(!e.target.classList.contains('btn-ui')) window.location.href = baseUrl + g.link; });
+    card.querySelector('.open-blob').onclick = (e) => { e.stopPropagation(); handleAction(baseUrl + g.link, 'blob', g.name); };
+    card.querySelector('.download-html').onclick = (e) => { e.stopPropagation(); handleAction(baseUrl + g.link, 'dl', g.name); };
+    return card;
 }
 
+featuredGames.forEach(g => featuredGridEl.appendChild(createCard(g, true)));
+
 function applyFilters() {
-    const query = document.getElementById("search").value.toLowerCase();
-    const sortVal = document.getElementById("sort").value;
-    let filtered = games.filter(g => g.name.toLowerCase().includes(query));
-    if (sortVal === "az") {
-        filtered.sort((a,b) => a.name.localeCompare(b.name));
-    } else {
-        filtered = filtered.reverse(); 
-    }
-    renderGames(filtered);
+    const q = document.getElementById("search").value.toLowerCase();
+    const s = document.getElementById("sort").value;
+    let filtered = games.filter(g => g.name.toLowerCase().includes(q));
+    if (s === "az") filtered.sort((a,b) => a.name.localeCompare(b.name));
+    else filtered = filtered.reverse();
+    gridEl.innerHTML = '';
+    filtered.forEach(g => gridEl.appendChild(createCard(g, false)));
 }
 
 document.getElementById("search").addEventListener("input", applyFilters);
 document.getElementById("sort").addEventListener("change", applyFilters);
-
 applyFilters();
 
-async function handleGameAction(url, mode, name) {
+async function handleAction(url, mode, name) {
     try {
-        const response = await fetch(url);
-        const text = await response.text();
-        const blob = new Blob([text], { type: 'text/html' });
-        const blobUrl = URL.createObjectURL(blob);
-        if (mode === 'blob') {
-            window.open(blobUrl, '_blank');
-        } else {
-            const a = document.createElement('a');
-            a.href = blobUrl;
+        const res = await fetch(url);
+        const txt = await res.text();
+        const b = new Blob([txt], { type: 'text/html' });
+        const bu = URL.createObjectURL(b);
+        if (mode === 'blob') window.open(bu, '_blank');
+        else {
+            const a = document.createElement('a'); a.href = bu;
             a.download = `${name.replace(/\s+/g, '_')}.html`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
         }
-    } catch (err) {
-        alert("Action blocked. This usually happens in code editors due to security. Try it on your live site!");
-    }
+    } catch (e) { alert("Action requires GitHub Pages hosting."); }
 }
 
+/* CLEAN BUBBLE ENGINE */
 (function(){
-    const c = document.getElementById("bubbles");
-    const x = c.getContext("2d");
-    let b = [];
-    function r() { c.width = window.innerWidth; c.height = window.innerHeight; }
-    r(); window.addEventListener("resize", r);
-    setInterval(() => {
-        if (b.length < 35) { 
-            b.push({
-                x: Math.random() * c.width,
-                y: c.height + 20,
-                r: 2 + Math.random() * 7,
-                s: 0.3 + Math.random() * 0.7,
-                wobble: Math.random() * 1.5,
-                wobbleSpeed: 0.01 + Math.random() * 0.02,
-                opacity: 0.1 + Math.random() * 0.2
-            });
-        }
-    }, 450);
-    function animate() {
-        x.clearRect(0, 0, c.width, c.height);
-        for (let i = b.length - 1; i >= 0; i--) {
-            let o = b[i]; o.y -= o.s; o.x += Math.sin(o.y * o.wobbleSpeed) * o.wobble;
-            x.fillStyle = `rgba(180, 245, 255, ${o.opacity})`;
-            x.beginPath(); x.arc(o.x, o.y, o.r, 0, Math.PI * 2); x.fill();
-            if (o.y < -50) b.splice(i, 1);
-        }
-        requestAnimationFrame(animate);
+    const canvas = document.getElementById('bubbles');
+    const ctx = canvas.getContext('2d');
+    let bobs = [];
+    
+    function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.onresize = resize; resize();
+
+    function create(){
+      if(bobs.length > 40) return;
+      bobs.push({ 
+        x: Math.random() * canvas.width, 
+        y: canvas.height + 50, 
+        r: 2 + Math.random() * 6, 
+        s: 0.4 + Math.random() * 0.8,
+        o: 0.1 + Math.random() * 0.2
+      });
     }
-    animate();
+    setInterval(create, 400);
+
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      bobs.forEach((b, i) => {
+        b.y -= b.s;
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${b.o})`;
+        ctx.fill();
+        ctx.strokeStyle = `rgba(255, 255, 255, ${b.o + 0.1})`;
+        ctx.stroke();
+        if(b.y < -50) bobs.splice(i, 1);
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
 })();
 </script>
 </body>
