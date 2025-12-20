@@ -34,14 +34,13 @@
       flex-direction: column;
     }
 
-    /* The outer frame stays locked */
     .glass-frame {
       flex: 1;
       background: rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(10px);
       border: 1px solid var(--glass-border);
       border-radius: 12px;
-      overflow: hidden; /* This crops the hidden header */
+      overflow: hidden;
       box-shadow: 0 0 50px rgba(0,0,0,0.9);
       position: relative;
     }
@@ -64,12 +63,12 @@
     .status-active { color: var(--accent-light); font-weight: 800; display: flex; align-items: center; gap: 5px; }
     .dot { width: 5px; height: 5px; background-color: var(--accent-light); border-radius: 50%; box-shadow: 0 0 8px var(--accent-light); }
 
-    /* The Magic Part: Negative Margin */
-    /* Adjust 'margin-top' if the Velara bar is taller or shorter */
+    /* --- LEFT CROP ONLY --- */
     .iframe-wrapper {
-      width: 100%;
-      height: calc(100% + 180px); /* Height plus the amount we are hiding */
-      margin-top: -180px; /* This pushes the Velara nav bar up out of view */
+      width: calc(100% + 50px); /* Extra width to compensate for left shift */
+      height: 100%;             /* Normal height */
+      margin-top: 0;            /* No top crop */
+      margin-left: -50px;       /* Hide the left side */
     }
 
     iframe {
@@ -89,12 +88,12 @@
     <div class="glass-frame">
       <div class="security-bar">
         <span>Terminal: Securly-Cooked</span>
-        <span class="status-active"><span class="dot"></span> Nautical Proxy Shield Active</span>
+        <span class="status-active"><span class="dot"></span> Nautical Proxy Shield Engaged</span>
       </div>
       
       <div class="iframe-wrapper">
         <iframe 
-          src="https://securly-cooked.surendrapant.com.np" 
+          src="https://read.onnemaa.ee/&" 
           sandbox="allow-forms allow-scripts allow-same-origin"
           id="secureFrame">
         </iframe>
@@ -105,7 +104,6 @@
   <div class="bubbles-wrap"><canvas id="bubbles"></canvas></div>
 
 <script>
-  // Bubble background logic remains the same for the Nautical vibe
   (function(){
     const canvas = document.getElementById('bubbles');
     const ctx = canvas.getContext('2d');
