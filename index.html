@@ -1,19 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CCPH8D75GM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-CCPH8D75GM');
-</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="https://iili.io/fcbfGHX.png">
-  <title>Nautical</title>
+  <title>Nautical | Peak Gaming</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@200;400;600;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -45,27 +36,17 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 40px;
-      background: rgba(3, 25, 38, 0.9);
+      background: rgba(3, 25, 38, 0.95);
       backdrop-filter: blur(15px);
       border-bottom: 1px solid var(--glass-border);
       z-index: 1000;
     }
 
-    /* Brand Home Link */
-    .brand-link {
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: opacity 0.3s;
-    }
-    .brand-link:hover { opacity: 0.8; }
-
+    .brand-link { text-decoration: none; display: flex; align-items: center; gap: 12px; }
     .logo { width: 34px; height: 34px; border-radius: 6px; overflow: hidden; box-shadow: 0 0 15px rgba(14, 165, 166, 0.4); }
     .logo img { width: 100%; height: 100%; object-fit: cover; }
     .brand-link h1 { font-family: 'Playfair Display', serif; margin: 0; font-size: 20px; letter-spacing: 2px; color: #fff; }
 
-    /* Nav Buttons/Boxes */
     .nav-actions { display: flex; gap: 15px; }
     .nav-box {
       text-decoration: none;
@@ -74,26 +55,23 @@
       font-weight: 800;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      padding: 10px 20px;
+      padding: 10px 22px;
       border-radius: 8px;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--glass-border);
       transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     .nav-box:hover {
-      background: rgba(14, 165, 166, 0.2);
+      background: rgba(14, 165, 166, 0.25);
       border-color: var(--accent-light);
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(14, 165, 166, 0.3);
+      box-shadow: 0 5px 15px rgba(14, 165, 166, 0.2);
     }
 
     /* Hero */
     .hero {
-      padding-top: 120px;
-      padding-bottom: 20px;
+      padding-top: 130px;
+      padding-bottom: 30px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -125,7 +103,7 @@
     .content-container {
       width: 100%;
       max-width: 1000px;
-      margin: 0 auto 120px auto;
+      margin: 0 auto 160px auto;
       padding: 0 25px;
       position: relative;
       z-index: 100;
@@ -141,28 +119,19 @@
       margin-bottom: 25px;
     }
 
-    .description-text {
-      text-align: center;
-      line-height: 1.6;
-      color: rgba(230, 247, 247, 0.8);
-      font-size: 15px;
-    }
-
     .games-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 25px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding-bottom: 10px;
+      padding-bottom: 12px;
     }
 
-    #clock { font-size: 38px; font-weight: 200; color: #fff; }
+    #clock { font-size: 38px; font-weight: 200; color: #fff; letter-spacing: -1px; }
 
     .game-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 15px; }
-
     .game-link { text-decoration: none; color: inherit; }
-
     .game-card {
       background: rgba(3, 25, 38, 0.5);
       padding: 25px;
@@ -173,14 +142,36 @@
       align-items: center;
       justify-content: space-between;
     }
+    .game-link:hover .game-card { border-color: var(--accent-light); background: rgba(14, 165, 166, 0.2); transform: translateY(-5px); }
 
-    .game-link:hover .game-card {
-      border-color: var(--accent-light);
-      background: rgba(14, 165, 166, 0.2);
-      transform: translateY(-5px);
+    /* Updated Stat Counter Section */
+    .stats-container {
+      margin-top: 35px;
+      text-align: center;
+      padding: 25px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 20px;
+      border: 1px solid rgba(14, 165, 166, 0.2);
     }
+    .stats-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--accent-light);
+      margin-bottom: 15px;
+      display: block;
+      font-weight: 800;
+    }
+    .counter-wrapper { display: inline-block; color: #fff; }
+    .counter-wrapper a {
+        color: rgba(255, 255, 255, 0.3);
+        text-decoration: none;
+        font-size: 10px;
+        transition: color 0.3s;
+    }
+    .counter-wrapper a:hover { color: var(--accent-light); }
 
-    /* --- SCREEN-BOTTOM SEAFLOOR --- */
+    /* --- SEAFLOOR (Fixed at Bottom) --- */
     .floor-container {
       position: fixed;
       bottom: 0; left: 0; width: 100%;
@@ -188,23 +179,19 @@
       z-index: 50;
       pointer-events: none;
     }
-
     .sand-dunes {
       position: absolute;
       bottom: 0; width: 100%; height: 100%;
       background: linear-gradient(to top, #0f0f05 0%, #1e1c0c 100%);
-      box-shadow: 0 -20px 40px rgba(0,0,0,0.8);
+      box-shadow: 0 -20px 40px rgba(0,0,0,0.6);
     }
-
     .starfish {
       position: absolute;
       z-index: 60;
       width: 24px; height: 24px;
       clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.15));
       animation: pulse 4s infinite ease-in-out;
     }
-
     @keyframes pulse {
       0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.7; }
       50% { transform: scale(1.1) rotate(5deg); opacity: 1; }
@@ -212,12 +199,6 @@
 
     .bubbles-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 5; }
     canvas { width: 100%; height: 100%; }
-
-    @media (max-width: 600px) {
-      .nav { padding: 0 15px; }
-      #clock { font-size: 28px; }
-      .brand-link h1 { display: none; } /* Hide text on small screens to fit boxes */
-    }
   </style>
 </head>
 <body>
@@ -241,8 +222,9 @@
 
     <div class="content-container">
       <div class="glass-box">
-        <p class="description-text">
-         Nautical is a gaming website made by xltranate. 
+        <p style="text-align: center; line-height: 1.8; opacity: 0.85; font-size: 16px; margin: 0;">
+          Nautical is the premier destination for high-speed browser entertainment. 
+          Created by Nate the Great, we provide a seamless experience for gamers who value quality.
         </p>
       </div>
 
@@ -254,38 +236,32 @@
         
         <div class="game-grid">
           <a href="https://xltranate.github.io/Nautical/games/smashkarts.html" class="game-link">
-            <div class="game-card">
-              <span class="game-name" style="font-weight: 600;">Smash Karts</span>
-              <span style="color: var(--accent-light); font-weight: 800; font-size: 14px; opacity: 0.6;">#1</span>
-            </div>
+            <div class="game-card"><span>Smash Karts</span><span style="color: var(--accent-light); font-weight: 800; font-size: 14px; opacity: 0.6;">#1</span></div>
           </a>
           <a href="https://xltranate.github.io/Nautical/games/tag.html" class="game-link">
-            <div class="game-card">
-              <span class="game-name" style="font-weight: 600;">Tag</span>
-              <span style="color: var(--accent-light); font-weight: 800; font-size: 14px; opacity: 0.6;">#2</span>
-            </div>
+            <div class="game-card"><span>Tag</span><span style="color: var(--accent-light); font-weight: 800; font-size: 14px; opacity: 0.6;">#2</span></div>
           </a>
           <a href="https://xltranate.github.io/Nautical/games/cookieclicker.html" class="game-link">
-            <div class="game-card">
-              <span class="game-name" style="font-weight: 600;">Cookie Clicker</span>
-              <span style="color: var(--accent-light); font-weight: 800; font-size: 14px; opacity: 0.6;">#3</span>
-            </div>
+            <div class="game-card"><span>Cookie Clicker</span><span style="color: var(--accent-light); font-weight: 800; font-size: 14px; opacity: 0.6;">#3</span></div>
           </a>
           <a href="https://xltranate.github.io/Nautical/games/basketrandom.html" class="game-link">
-            <div class="game-card">
-              <span class="game-name" style="font-weight: 600;">Basket Random</span>
-              <span style="color: var(--accent-light); font-weight: 800; font-size: 14px; opacity: 0.6;">#4</span>
-            </div>
+            <div class="game-card"><span>Basket Random</span><span style="color: var(--accent-light); font-weight: 800; font-size: 14px; opacity: 0.6;">#4</span></div>
           </a>
+        </div>
+
+        <div class="stats-container">
+          <span class="stats-label">Nautical Traffic Metrics</span>
+          <div class="counter-wrapper">
+            <script type="text/javascript" src="https://www.stat-counter.org/count/j4e5"></script><br>
+            <a href='https://www.acadoo.de/'>acadoo</a> 
+            <script type='text/javascript' src='https://www.whomania.com/ctr?id=b8c0ae911b93b32c32399e5d0f2807685f563f23'></script>
+          </div>
         </div>
       </div>
     </div>
   </main>
 
-  <div class="floor-container" id="floor">
-    <div class="sand-dunes"></div>
-  </div>
-
+  <div class="floor-container" id="floor"><div class="sand-dunes"></div></div>
   <div class="bubbles-wrap"><canvas id="bubbles"></canvas></div>
 
 <script>
@@ -296,7 +272,7 @@
     const s = String(now.getSeconds()).padStart(2, '0');
     const ampm = h >= 12 ? 'PM' : 'AM';
     h = h % 12 || 12;
-    document.getElementById('clock').innerHTML = `${h}:${m}:${s} <span style="font-size: 14px; font-weight: 800; color: var(--accent-light); vertical-align: middle;">${ampm}</span>`;
+    document.getElementById('clock').innerHTML = `${h}:${m}:${s} <span style="font-size: 14px; font-weight: 800; color: var(--accent-light);">${ampm}</span>`;
   }
   setInterval(updateTime, 1000); updateTime();
 
@@ -305,7 +281,7 @@
   for(let i=0; i<6; i++) {
     const star = document.createElement('div');
     star.className = 'starfish';
-    star.style.bottom = `${10 + Math.random() * 25}px`; 
+    star.style.bottom = `${10 + Math.random() * 20}px`; 
     star.style.left = `${5 + (i * 16) + Math.random() * 5}%`;
     star.style.backgroundColor = colors[i % colors.length];
     star.style.animationDelay = `${i * 0.5}s`;
@@ -320,16 +296,16 @@
     window.onresize = resize; resize();
 
     function create(){
-      if(bobs.length > 40) return;
+      if(bobs.length > 45) return;
       bobs.push({ 
         x: Math.random() * canvas.width, 
         y: canvas.height + 50, 
         r: 2 + Math.random() * 6, 
-        s: 0.4 + Math.random() * 0.8,
-        o: 0.1 + Math.random() * 0.2
+        s: 0.4 + Math.random() * 0.9,
+        o: 0.1 + Math.random() * 0.25
       });
     }
-    setInterval(create, 400);
+    setInterval(create, 350);
 
     function draw(){
       ctx.clearRect(0,0,canvas.width,canvas.height);
