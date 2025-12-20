@@ -1,163 +1,270 @@
 <!doctype html>
 <html lang="en">
 <head> 
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CCPH8D75GM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CCPH8D75GM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CCPH8D75GM');
+  </script>
 
-  gtag('config', 'G-CCPH8D75GM');
-</script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nautical</title>
-   <link rel="icon" type="image/png" href="https://iili.io/fcbfGHX.png">
-
-
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>Nautical | Peak Entertainment</title>
+  <link rel="icon" type="image/png" href="https://iili.io/fcbfGHX.png">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@200;400;600;800&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      --nav-height:64px;
-      --accent:#0ea5a6;
+    :root {
+      --nav-height: 70px;
+      --accent: #0ea5a6;
+      --accent-light: #2bd8c9;
+      --glass-border: rgba(255, 255, 255, 0.15);
+      --glass-bg: rgba(255, 255, 255, 0.04);
     }
 
-    *{box-sizing:border-box;margin:0;padding:0}
+    * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
 
-    body{
-      background:
-        radial-gradient(circle at 10% 10%, rgba(6,30,40,0.55) 0%, rgba(3,25,38,1) 40%),
-        linear-gradient(180deg,#042a33 0%, #02151a 100%);
-      font-family:Inter,system-ui;
-      color:#e6f7f7;
-      min-height:100vh;
-      overflow-x:hidden;
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 10% 10%, #061e28 0%, #031926 60%);
+      color: #e6f7f7;
+      overflow-x: hidden;
+      min-height: 100vh;
     }
 
-    /* NAV */
-    .nav{
-      position:fixed;
-      top:0;left:0;right:0;
-      height:var(--nav-height);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 20px;
-      background:rgba(3,25,38,0.75);
-      backdrop-filter:blur(8px);
-      border-bottom:1px solid rgba(255,255,255,0.06);
-      z-index:100;
+    /* NAVIGATION - Updated with Home & Games */
+    .nav {
+      position: fixed;
+      top: 0; width: 100%;
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      background: rgba(3, 25, 38, 0.85);
+      backdrop-filter: blur(15px);
+      border-bottom: 1px solid var(--glass-border);
+      z-index: 1000;
     }
 
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:42px;height:42px;border-radius:8px;overflow:hidden}
-    .logo img{width:100%;height:100%;object-fit:cover}
-    .brand h1{font-family:"Playfair Display",serif;font-size:20px}
+    .brand-link { text-decoration: none; display: flex; align-items: center; gap: 12px; color: #fff; }
+    .logo { width: 38px; height: 38px; border-radius: 8px; overflow: hidden; box-shadow: 0 0 15px rgba(14, 165, 166, 0.4); }
+    .logo img { width: 100%; height: 100%; object-fit: cover; }
+    .brand-link h1 { font-family: 'Playfair Display', serif; font-size: 22px; letter-spacing: 2px; }
 
-    .navlinks{display:flex;gap:18px}
-    .navlinks a{
-      text-decoration:none;
-      color:#d9ffff;
-      font-weight:500;
+    .nav-actions { display: flex; gap: 15px; }
+    .nav-box {
+      text-decoration: none;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 10px 22px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      transition: all 0.3s ease;
     }
-    .navlinks a:hover{color:var(--accent)}
-
-    /* APPS */
-    .apps-wrap{
-      padding-top:calc(var(--nav-height) + 32px);
-      padding-inline:20px;
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-      gap:22px;
-      position:relative;
-      z-index:10;
-    }
-
-    .app-link{text-decoration:none;color:inherit}
-
-    .app{
-      height:180px;
-      border-radius:18px;
-      background:rgba(255,255,255,0.06);
-      backdrop-filter:blur(6px);
-      box-shadow:0 18px 50px rgba(1,7,10,0.55);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      transition:.25s;
+    .nav-box:hover {
+      background: rgba(14, 165, 166, 0.25);
+      border-color: var(--accent-light);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(14, 165, 166, 0.2);
     }
 
-    .app h2{
-      font-family:"Playfair Display",serif;
-      font-size:28px;
+    /* HERO SECTION */
+    .hero {
+      padding-top: 140px;
+      padding-bottom: 40px;
+      text-align: center;
+      z-index: 10;
+      position: relative;
     }
 
-    .app p{font-size:14px;opacity:.75}
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(50px, 8vw, 80px);
+      background: linear-gradient(180deg, #fff 0%, #a0f0e8 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 5px;
+    }
 
-    .app-link:hover .app{
-      transform:translateY(-6px);
-      box-shadow:0 30px 80px rgba(1,7,10,0.7);
+    .hero-subtitle {
+      color: var(--accent-light);
+      font-weight: 200;
+      font-size: 14px;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    /* GRID LAYOUT */
+    .content-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      position: relative;
+      z-index: 10;
+      padding-bottom: 120px;
+    }
+
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 30px;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 200px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Special Glow for the Opener */
+    .opener-card {
+      border-color: rgba(43, 216, 201, 0.3);
+      box-shadow: inset 0 0 20px rgba(14, 165, 166, 0.05);
+    }
+
+    .glass-card:hover {
+      transform: translateY(-8px);
+      background: rgba(14, 165, 166, 0.12);
+      border-color: var(--accent-light);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .glass-card h2 {
+      font-family: "Playfair Display", serif;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .glass-card p {
+      font-size: 14px;
+      opacity: 0.7;
+      line-height: 1.6;
+    }
+
+    .badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: var(--accent);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    /* SEAFLOOR */
+    .floor-container {
+      position: fixed;
+      bottom: 0; left: 0; width: 100%;
+      height: 60px;
+      z-index: 50;
+      pointer-events: none;
+    }
+    .sand-dunes {
+      position: absolute;
+      bottom: 0; width: 100%; height: 100%;
+      background: linear-gradient(to top, #080802 0%, #15140a 100%);
+    }
+    .starfish {
+      position: absolute;
+      z-index: 60;
+      width: 18px; height: 18px;
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+      animation: pulse 4s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+      50% { transform: scale(1.1) rotate(5deg); opacity: 0.8; }
     }
 
     /* BUBBLES */
-    .bubbles-wrap{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:1;
-    }
-
-    canvas{width:100%;height:100%;display:block}
+    .bubbles-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+    canvas { width: 100%; height: 100%; display: block; }
   </style>
 </head>
 
 <body>
 
 <nav class="nav">
-  <div class="brand">
-    <div class="logo">
-      <img src="https://iili.io/faD5fqB.png" alt="Nautical Logo">
-    </div>
+  <a href="https://xltranate.github.io/Nautical/" class="brand-link">
+    <div class="logo"><img src="https://iili.io/faD5fqB.png" alt="Logo"></div>
     <h1>NAUTICAL</h1>
-  </div>
-  <div class="navlinks">
-    <a href="index.html">Home</a>
-    <a href="games.html">Games</a>
-    <a href="apps.html">Apps</a>
+  </a>
+  <div class="nav-actions">
+    <a href="https://xltranate.github.io/Nautical/index.html" class="nav-box">Home</a>
+    <a href="https://xltranate.github.io/Nautical/games.html" class="nav-box">Games</a>
   </div>
 </nav>
 
-<div class="apps-wrap">
-  <a class="app-link" href="https://xltranate.github.io/Nautical/apps/searchengine">
-    <div class="app">
-      <h2>Search Engine</h2>
-      <p>Private & sorta fast browsing</p>
-    </div>
+<header class="hero">
+  <h2 class="hero-title">Nautical</h2>
+  <p class="hero-subtitle">Submerged Entertainment</p>
+</header>
+
+<div class="content-wrap">
+  <a class="glass-card opener-card" href="https://xltranate.github.io/Nautical/apps/aboutblankopener/">
+    <span class="badge">Stealth</span>
+    <h2>Blank Opener</h2>
+    <p>Launch Nautical in a clean about:blank tab to keep your browsing history clear and discreet.</p>
   </a>
-  <a class="app-link" href="https://xltranate.github.io/Nautical/apps/codeeditor">
-    <div class="app">
-      <h2>Code editor</h2>
-      <p>View and Edit Code</p>
-    </div>
+
+  <a class="glass-card" href="https://xltranate.github.io/Nautical/apps/searchengine">
+    <h2>Search Engine</h2>
+    <p>Private & high-speed browsing optimized for the modern web environment.</p>
   </a>
-  <a class="app-link" href="https://xltranate.github.io/Nautical/apps/movies">
-    <div class="app">
-      <h2>Movies</h2>
-      <p>Stream & discover</p>
-    </div>
+
+  <a class="glass-card" href="https://xltranate.github.io/Nautical/apps/codeeditor">
+    <h2>Code Editor</h2>
+    <p>A sleek, lightweight environment to view, edit, and test scripts on the fly.</p>
+  </a>
+
+  <a class="glass-card" href="https://xltranate.github.io/Nautical/apps/movies">
+    <h2>Cinema</h2>
+    <p>Stream and discover the latest trending media in high definition quality.</p>
   </a>
 </div>
+
+<div class="floor-container" id="floor"><div class="sand-dunes"></div></div>
 
 <div class="bubbles-wrap">
   <canvas id="bubbles"></canvas>
 </div>
 
 <script>
-/* FIXED BUBBLES */
+/* STARFISH GENERATOR */
+const floor = document.getElementById('floor');
+const colors = ['#e9b384', '#ff7f50', '#ffcc33', '#ff6b6b', '#4ecdc4'];
+for(let i=0; i<8; i++) {
+  const star = document.createElement('div');
+  star.className = 'starfish';
+  star.style.bottom = `${15 + Math.random() * 15}px`; 
+  star.style.left = `${Math.random() * 95}%`;
+  star.style.backgroundColor = colors[i % colors.length];
+  star.style.animationDelay = `${i * 0.8}s`;
+  floor.appendChild(star);
+}
+
+/* HIGH-FIDELITY BUBBLES */
 (function () {
   const canvas = document.getElementById('bubbles');
   const ctx = canvas.getContext('2d');
@@ -165,61 +272,50 @@
   let bubbles = [];
 
   function resize() {
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  resize();
   window.addEventListener('resize', resize);
+  resize();
 
   function createBubble() {
-    const rect = canvas.getBoundingClientRect();
-    const r = 6 + Math.random() * 18;
+    const r = 4 + Math.random() * 14;
     bubbles.push({
-      x: Math.random() * rect.width,
-      y: rect.height + r,
+      x: Math.random() * window.innerWidth,
+      y: window.innerHeight + r + 20,
       r,
-      speed: 30 + Math.random() * 40,
-      drift: (Math.random() - .5) * 30,
-      alpha: .6 + Math.random() * .4,
-      life: 1,
-      wobble: .5 + Math.random()
+      speed: 25 + Math.random() * 35,
+      drift: (Math.random() - 0.5) * 20,
+      alpha: 0.3 + Math.random() * 0.4,
+      wobble: 0.5 + Math.random()
     });
-    if (bubbles.length > 150) bubbles.shift();
   }
 
-  setInterval(() => {
-    let n = Math.random() < .8 ? 2 : 3;
-    while (n--) createBubble();
-  }, 260);
+  setInterval(createBubble, 300);
 
   let last = performance.now();
   function draw(now) {
     const dt = (now - last) / 1000;
     last = now;
-    const rect = canvas.getBoundingClientRect();
-    ctx.clearRect(0,0,rect.width,rect.height);
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-    for (let i=bubbles.length-1;i>=0;i--) {
+    for (let i = bubbles.length - 1; i >= 0; i--) {
       const b = bubbles[i];
       b.y -= b.speed * dt;
-      b.x += Math.sin(now * 0.001 * b.wobble) * b.drift * dt;
-      b.life -= dt * .07;
+      b.x += Math.sin(now * 0.001 * b.wobble) * (b.drift * dt);
 
-      ctx.globalAlpha = Math.max(0, b.alpha * b.life);
       ctx.beginPath();
-      const g = ctx.createRadialGradient(b.x,b.y,b.r*.2,b.x,b.y,b.r);
-      g.addColorStop(0,'rgba(255,255,255,.9)');
-      g.addColorStop(.5,'rgba(180,240,255,.4)');
-      g.addColorStop(1,'rgba(160,220,235,.08)');
+      const g = ctx.createRadialGradient(b.x, b.y, b.r * 0.2, b.x, b.y, b.r);
+      g.addColorStop(0, `rgba(255, 255, 255, ${b.alpha})`);
+      g.addColorStop(1, `rgba(160, 220, 235, 0)`);
+      
       ctx.fillStyle = g;
-      ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
       ctx.fill();
-      ctx.globalAlpha = 1;
 
-      if (b.y + b.r < -20 || b.life <= 0) bubbles.splice(i,1);
+      if (b.y + b.r < -50) bubbles.splice(i, 1);
     }
     requestAnimationFrame(draw);
   }
