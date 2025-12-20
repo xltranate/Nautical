@@ -195,86 +195,597 @@ const featuredGames = [
     { name: "Basket Random", link: "basketrandom.html", desc: "A surreal, physics-driven basketball duel where every goal is a surprise." },
     { name: "Stickman Hook", link: "stickmanhook.html", desc: "A fluid test of timing and gravity. Swing with precision to reach the exit." }
 ];
-
-const games = [
-    { name: "1v1.LOL", link: "1v1.html", desc: "Competitive third-person building and shooting simulator." },
-    { name: "2048", link: "2048.html", desc: "The ultimate mathematical tile-sliding puzzle." },
-    { name: "A Small World Cup", link: "asmallworldcup.html", desc: "Fast-paced ragdoll soccer with explosive physics." },
-    { name: "Bacon May Die", link: "baconmaydie.html", desc: "Aggressive brawler featuring a very capable pig." },
-    { name: "Bad Monday Simulator", link: "badmondaysimulator.html", desc: "A surreal and challenging 'bad day' experience." },
-    { name: "Baldi's Basics", link: "baldibasics.html", desc: "Surreal educational horror in a 90s aesthetic." },
-    { name: "Baseball Bros", link: "baseballbros.html", desc: "Competitive baseball with stylized characters." },
-    { name: "Bendy", link: "bendy.html", desc: "Atmospheric horror inside a haunted animation studio." },
-    { name: "Bitlife", link: "bitlife.html", desc: "Deep life simulation from birth to the afterlife." },
-    { name: "Block Blast", link: "blockblast.html", desc: "Modernized brick-clearing puzzle with vibrant effects." },
-    { name: "Bloons TD", link: "bloonstd.html", desc: "Strategic defense against waves of colorful invaders." },
-    { name: "Boxing Random", link: "boxingrandom.html", desc: "Unpredictable boxing matches driven by physics." },
-    { name: "Breakout", link: "breakout.html", desc: "Arcade classic brick-shattering experience." },
-    { name: "Buckshot Roulette", link: "buckshotroulette.html", desc: "High-stakes psychological game of survival." },
-    { name: "Burrito Bison", link: "burritobison.html", desc: "Launch yourself at gummy bears for ultimate revenge." },
-    { name: "Candy Crush", link: "candycrush.html", desc: "The iconic match-three puzzle world-traveler." },
-    { name: "City Defense", link: "citydefense.html", desc: "Strategic management and defense of urban zones." },
-    { name: "Class of 09", link: "classof09.html", desc: "Dark comedy visual novel centered on high school life." },
-    { name: "Color Match", link: "colormatch.html", desc: "Test your artistic perception with color blending." },
-    { name: "Cookie Clicker", link: "cookieclicker.html", desc: "The legendary incremental baking empire simulator." },
-    { name: "Crazy Cattle 3D", link: "crazycattle3d.html", desc: "Bizarre 3D livestock combat and exploration." },
-    { name: "Crossy Road", link: "crossyroad.html", desc: "Endless hopping through traffic and obstacles." },
-    { name: "Cut the Rope", link: "cuttherope.html", desc: "Physics puzzles to feed a hungry green monster." },
-    { name: "Don't You Lecture Me", link: "dontyoulectureme.html", desc: "Experimental platformer based on classic memes." },
-    { name: "DOOM", link: "doom.html", desc: "The foundational first-person shooter experience." },
-    { name: "Drift Boss", link: "driftboss.html", desc: "Precise drifting action through narrow pathways." },
-    { name: "Google Feud", link: "feud.html", desc: "Predict what the internet is searching for." },
-    { name: "FNAF", link: "fnaf.html", desc: "Survival horror in a haunted animatronic pizzeria." },
-    { name: "FNF", link: "fnf.html", desc: "Rhythm-based rap battles and musical duels." },
-    { name: "Football Bros", link: "footballbros.html", desc: "Fast-paced American football competition." },
-    { name: "Fruit Ninja", link: "fruitninja.html", desc: "Precision fruit-slicing action with katana blades." },
-    { name: "Getting Over It", link: "getoverit.html", desc: "A psychological journey of climbing with a hammer." },
-    { name: "Gladihoppers", link: "gladihoppers.html", desc: "Physics gladiator combat in the ancient arena." },
-    { name: "Granny", link: "granny.html", desc: "Stealth horror: escape the house without being seen." },
-    { name: "Happy Wheels", link: "happywheels.html", desc: "Brutal and hilarious obstacle courses for commuters." },
-    { name: "Hollow Knight", link: "hollowknight.html", desc: "Beautifully atmospheric metroidvania exploration." },
-    { name: "House of Hazards", link: "houseofhazards.html", desc: "Sabotage your friends in this trap-filled home." },
-    { name: "Idle Breakout", link: "idlebreakout.html", desc: "The perfect fusion of brick-breaking and idle clicking." },
-    { name: "Jetpack Joyride", link: "jetpackjoyride.html", desc: "Fly through a secret lab using experimental tech." },
-    { name: "Learn to Fly", link: "learntofly1.html", desc: "Help a penguin achieve flight through research." },
-    { name: "Learn to Fly 3", link: "learntofly3.html", desc: "Reach the stars in a custom-built ship." },
-    { name: "Learn to Fly Idle", link: "learntoflyidle.html", desc: "Automatic progress in the penguin flight project." },
-    { name: "Little Alchemy", link: "littlealchemy.html", desc: "Creative elemental combination simulation." },
-    { name: "Super Mario", link: "mario.html", desc: "The original platformer that defined gaming." },
-    { name: "Minecraft", link: "minecraft.html", desc: "Infinite voxel creative and survival sandbox." },
-    { name: "Moto X3M", link: "moto.html", desc: "Extreme stunt racing across dangerous tracks." },
-    { name: "Omori", link: "omori.html", desc: "A surreal psychological horror RPG experience." },
-    { name: "Osu!", link: "osu.html", desc: "High-intensity rhythm game based on timing." },
-    { name: "OVO", link: "ovo.html", desc: "Minimalist parkour platforming with fluid movement." },
-    { name: "Papa's Pizzeria", link: "papapizzeria.html", desc: "Classic time-management and culinary strategy." },
-    { name: "PaRappa", link: "papparappa.html", desc: "The pioneer of the rhythm-game genre." },
-    { name: "Pokemon Emerald", link: "pokemonemerald.html", desc: "The classic monster-collecting GBA journey." },
-    { name: "PVZ", link: "pvz.html", desc: "Flora-based defense against a zombie invasion." },
-    { name: "Ragdoll Archers", link: "ragdollarchers.html", desc: "Archery duels powered by unpredictable physics." },
-    { name: "Retro Bowl", link: "retrobowl.html", desc: "Stylized management and play of American football." },
-    { name: "Riddle School", link: "riddleschool.html", desc: "Escape the classroom using your wits alone." },
-    { name: "Schoolboy Runaway", link: "schoolboyrunaway.html", desc: "Sneak out of the house in this stealth puzzle." },
-    { name: "Slime Rancher", link: "slimerancher.html", desc: "Wrangle colorful slimes on a distant planet." },
-    { name: "Slope", link: "slope.html", desc: "High-speed descent through a geometric abyss." },
-    { name: "Slope 2", link: "slope2.html", desc: "Evolved neon descent with new obstacles." },
-    { name: "SM64", link: "sm64.html", desc: "The gold standard of 3D platforming adventures." },
-    { name: "Smashy Road", link: "smashyroad.html", desc: "Infinite voxel-based police chase survival." },
-    { name: "Snowbattle.io", link: "snowbattleio.html", desc: "Multiplayer snow-rolling arena combat." },
-    { name: "Snow Rider 3D", link: "snowrider3d.html", desc: "Downhill sledding through winter landscapes." },
-    { name: "Soccer Random", link: "soccerrandom.html", desc: "Soccer matches where anything can happen." },
-    { name: "Solar Smash", link: "solarsmash.html", desc: "Interstellar weapon testing on celestial bodies." },
-    { name: "Sort the Court", link: "sortthecourt.html", desc: "A simple yes-no kingdom management sim." },
-    { name: "Spelunky", link: "spelunky.html", desc: "Classic procedurally generated cave exploration." },
-    { name: "Stick With It", link: "stickwithit.html", desc: "Challenging climb using sticky mechanics." },
-    { name: "Suika", link: "suika.html", desc: "Addictive fruit-merging physics challenge." },
-    { name: "Tag", link: "tag.html", desc: "Digital adaptation of the classic playground game." },
-    { name: "Temple Run", link: "templerun.html", desc: "Endless escape from ancient jungle guardians." },
-    { name: "The Binding of Isaac", link: "thebindingofisaac.html", desc: "Dark roguelike exploration of a deep basement." },
-    { name: "Time Shooter SWAT", link: "timeshooterswat.html", desc: "Time manipulation tactical combat simulator." },
-    { name: "Vex 5", link: "vex5.html", desc: "Lethal stickman parkour with razor-sharp traps." },
-    { name: "World Box", link: "worldbox.html", desc: "God-simulator with deep civilization evolution." },
-    { name: "Worlds Hardest Game", link: "worldshardestgame.html", desc: "The ultimate test of precision and patience." },
-    { name: "Zelda", link: "zelda.html", desc: "Legendary adventure quest in the kingdom of Hyrule." }
+   const games = [
+  {
+    name: "1v1.LOL",
+    link: "1v1.html",
+    desc: "Competitive third-person building and shooting simulator."
+  },
+  {
+    name: "2048",
+    link: "2048.html",
+    desc: "The ultimate mathematical tile-sliding puzzle."
+  },
+  {
+    name: "A Small World Cup",
+    link: "asmallworldcup.html",
+    desc: "Fast-paced ragdoll soccer with explosive physics."
+  },
+  {
+    name: "Bacon May Die",
+    link: "baconmaydie.html",
+    desc: "Aggressive brawler featuring a very capable pig."
+  },
+  {
+    name: "Bad Monday Simulator",
+    link: "badmondaysimulator.html",
+    desc: "A surreal and challenging 'bad day' experience."
+  },
+  {
+    name: "Baldi's Basics",
+    link: "baldibasics.html",
+    desc: "Surreal educational horror in a 90s aesthetic."
+  },
+  {
+    name: "Baseball Bros",
+    link: "baseballbros.html",
+    desc: "Competitive baseball with stylized characters."
+  },
+  {
+    name: "Bendy",
+    link: "bendy.html",
+    desc: "Atmospheric horror inside a haunted animation studio."
+  },
+  {
+    name: "Bitlife",
+    link: "bitlife.html",
+    desc: "Deep life simulation from birth to the afterlife."
+  },
+  {
+    name: "Block Blast",
+    link: "blockblast.html",
+    desc: "Modernized brick-clearing puzzle with vibrant effects."
+  },
+  {
+    name: "Bloons TD",
+    link: "bloonstd.html",
+    desc: "Strategic defense against waves of colorful invaders."
+  },
+  {
+    name: "Boxing Random",
+    link: "boxingrandom.html",
+    desc: "Unpredictable boxing matches driven by physics."
+  },
+  {
+    name: "Breakout",
+    link: "breakout.html",
+    desc: "Arcade classic brick-shattering experience."
+  },
+  {
+    name: "Buckshot Roulette",
+    link: "buckshotroulette.html",
+    desc: "High-stakes psychological game of survival."
+  },
+  {
+    name: "Burrito Bison",
+    link: "burritobison.html",
+    desc: "Launch yourself at gummy bears for ultimate revenge."
+  },
+  {
+    name: "Candy Crush",
+    link: "candycrush.html",
+    desc: "The iconic match-three puzzle world-traveler."
+  },
+  {
+    name: "City Defense",
+    link: "citydefense.html",
+    desc: "Strategic management and defense of urban zones."
+  },
+  {
+    name: "Class of 09",
+    link: "classof09.html",
+    desc: "Dark comedy visual novel centered on high school life."
+  },
+  {
+    name: "Color Match",
+    link: "colormatch.html",
+    desc: "Test your artistic perception with color blending."
+  },
+  {
+    name: "Cookie Clicker",
+    link: "cookieclicker.html",
+    desc: "The legendary incremental baking empire simulator."
+  },
+  {
+    name: "Crazy Cattle 3D",
+    link: "crazycattle3d.html",
+    desc: "Bizarre 3D livestock combat and exploration."
+  },
+  {
+    name: "Crossy Road",
+    link: "crossyroad.html",
+    desc: "Endless hopping through traffic and obstacles."
+  },
+  {
+    name: "Cut the Rope",
+    link: "cuttherope.html",
+    desc: "Physics puzzles to feed a hungry green monster."
+  },
+  {
+    name: "Don't You Lecture Me",
+    link: "dontyoulectureme.html",
+    desc: "Experimental platformer based on classic memes."
+  },
+  {
+    name: "DOOM",
+    link: "doom.html",
+    desc: "The foundational first-person shooter experience."
+  },
+  {
+    name: "Drift Boss",
+    link: "driftboss.html",
+    desc: "Precise drifting action through narrow pathways."
+  },
+  {
+    name: "Google Feud",
+    link: "feud.html",
+    desc: "Predict what the internet is searching for."
+  },
+  {
+    name: "FNAF",
+    link: "fnaf.html",
+    desc: "Survival horror in a haunted animatronic pizzeria."
+  },
+  {
+    name: "FNF",
+    link: "fnf.html",
+    desc: "Rhythm-based rap battles and musical duels."
+  },
+  {
+    name: "Football Bros",
+    link: "footballbros.html",
+    desc: "Fast-paced American football competition."
+  },
+  {
+    name: "Fruit Ninja",
+    link: "fruitninja.html",
+    desc: "Precision fruit-slicing action with katana blades."
+  },
+  {
+    name: "Getting Over It",
+    link: "getoverit.html",
+    desc: "A psychological journey of climbing with a hammer."
+  },
+  {
+    name: "Gladihoppers",
+    link: "gladihoppers.html",
+    desc: "Physics gladiator combat in the ancient arena."
+  },
+  {
+    name: "Granny",
+    link: "granny.html",
+    desc: "Stealth horror: escape the house without being seen."
+  },
+  {
+    name: "Happy Wheels",
+    link: "happywheels.html",
+    desc: "Brutal and hilarious obstacle courses for commuters."
+  },
+  {
+    name: "Hollow Knight",
+    link: "hollowknight.html",
+    desc: "Beautifully atmospheric metroidvania exploration."
+  },
+  {
+    name: "House of Hazards",
+    link: "houseofhazards.html",
+    desc: "Sabotage your friends in this trap-filled home."
+  },
+  {
+    name: "Idle Breakout",
+    link: "idlebreakout.html",
+    desc: "The perfect fusion of brick-breaking and idle clicking."
+  },
+  {
+    name: "Jetpack Joyride",
+    link: "jetpackjoyride.html",
+    desc: "Fly through a secret lab using experimental tech."
+  },
+  {
+    name: "Learn to Fly",
+    link: "learntofly1.html",
+    desc: "Help a penguin achieve flight through research."
+  },
+  {
+    name: "Learn to Fly 3",
+    link: "learntofly3.html",
+    desc: "Reach the stars in a custom-built ship."
+  },
+  {
+    name: "Learn to Fly Idle",
+    link: "learntoflyidle.html",
+    desc: "Automatic progress in the penguin flight project."
+  },
+  {
+    name: "Little Alchemy",
+    link: "littlealchemy.html",
+    desc: "Creative elemental combination simulation."
+  },
+  {
+    name: "Super Mario",
+    link: "mario.html",
+    desc: "The original platformer that defined gaming."
+  },
+  {
+    name: "Minecraft",
+    link: "minecraft.html",
+    desc: "Infinite voxel creative and survival sandbox."
+  },
+  {
+    name: "Moto X3M",
+    link: "moto.html",
+    desc: "Extreme stunt racing across dangerous tracks."
+  },
+  {
+    name: "Omori",
+    link: "omori.html",
+    desc: "A surreal psychological horror RPG experience."
+  },
+  {
+    name: "Osu!",
+    link: "osu.html",
+    desc: "High-intensity rhythm game based on timing."
+  },
+  {
+    name: "OVO",
+    link: "ovo.html",
+    desc: "Minimalist parkour platforming with fluid movement."
+  },
+  {
+    name: "Papa's Pizzeria",
+    link: "papapizzeria.html",
+    desc: "Classic time-management and culinary strategy."
+  },
+  {
+    name: "PaRappa",
+    link: "papparappa.html",
+    desc: "The pioneer of the rhythm-game genre."
+  },
+  {
+    name: "Pokemon Emerald",
+    link: "pokemonemerald.html",
+    desc: "The classic monster-collecting GBA journey."
+  },
+  {
+    name: "PVZ",
+    link: "pvz.html",
+    desc: "Flora-based defense against a zombie invasion."
+  },
+  {
+    name: "Ragdoll Archers",
+    link: "ragdollarchers.html",
+    desc: "Archery duels powered by unpredictable physics."
+  },
+  {
+    name: "Retro Bowl",
+    link: "retrobowl.html",
+    desc: "Stylized management and play of American football."
+  },
+  {
+    name: "Riddle School",
+    link: "riddleschool.html",
+    desc: "Escape the classroom using your wits alone."
+  },
+  {
+    name: "Schoolboy Runaway",
+    link: "schoolboyrunaway.html",
+    desc: "Sneak out of the house in this stealth puzzle."
+  },
+  {
+    name: "Slime Rancher",
+    link: "slimerancher.html",
+    desc: "Wrangle colorful slimes on a distant planet."
+  },
+  {
+    name: "Slope",
+    link: "slope.html",
+    desc: "High-speed descent through a geometric abyss."
+  },
+  {
+    name: "Slope 2",
+    link: "slope2.html",
+    desc: "Evolved neon descent with new obstacles."
+  },
+  {
+    name: "SM64",
+    link: "sm64.html",
+    desc: "The gold standard of 3D platforming adventures."
+  },
+  {
+    name: "Smashy Road",
+    link: "smashyroad.html",
+    desc: "Infinite voxel-based police chase survival."
+  },
+  {
+    name: "Snowbattle.io",
+    link: "snowbattleio.html",
+    desc: "Multiplayer snow-rolling arena combat."
+  },
+  {
+    name: "Snow Rider 3D",
+    link: "snowrider3d.html",
+    desc: "Downhill sledding through winter landscapes."
+  },
+  {
+    name: "Soccer Random",
+    link: "soccerrandom.html",
+    desc: "Soccer matches where anything can happen."
+  },
+  {
+    name: "Solar Smash",
+    link: "solarsmash.html",
+    desc: "Interstellar weapon testing on celestial bodies."
+  },
+  {
+    name: "Sort the Court",
+    link: "sortthecourt.html",
+    desc: "A simple yes-no kingdom management sim."
+  },
+  {
+    name: "Spelunky",
+    link: "spelunky.html",
+    desc: "Classic procedurally generated cave exploration."
+  },
+  {
+    name: "Stick With It",
+    link: "stickwithit.html",
+    desc: "Challenging climb using sticky mechanics."
+  },
+  {
+    name: "Suika",
+    link: "suika.html",
+    desc: "Addictive fruit-merging physics challenge."
+  },
+  {
+    name: "Tag",
+    link: "tag.html",
+    desc: "Digital adaptation of the classic playground game."
+  },
+  {
+    name: "Temple Run",
+    link: "templerun.html",
+    desc: "Endless escape from ancient jungle guardians."
+  },
+  {
+    name: "The Binding of Isaac",
+    link: "thebindingofisaac.html",
+    desc: "Dark roguelike exploration of a deep basement."
+  },
+  {
+    name: "Time Shooter SWAT",
+    link: "timeshooterswat.html",
+    desc: "Time manipulation tactical combat simulator."
+  },
+  {
+    name: "Vex 5",
+    link: "vex5.html",
+    desc: "Lethal stickman parkour with razor-sharp traps."
+  },
+  {
+    name: "World Box",
+    link: "worldbox.html",
+    desc: "God-simulator with deep civilization evolution."
+  },
+  {
+    name: "Worlds Hardest Game",
+    link: "worldshardestgame.html",
+    desc: "The ultimate test of precision and patience."
+  },
+  {
+    name: "Zelda",
+    link: "zelda.html",
+    desc: "Legendary adventure quest in the kingdom of Hyrule."
+  },
+  {
+    name: "Angry Birds",
+    link: "Angry Birds.html",
+    desc: "The classic physics-based puzzle game where you use a slingshot to launch birds at pigs."
+  },
+  {
+    name: "Basketball Stars",
+    link: "Basketball Stars.html",
+    desc: "A fast-paced 1-on-1 basketball game. Dribble, shoot, and outscore your opponent."
+  },
+  {
+    name: "Bouncemasters",
+    link: "Bouncemasters.html",
+    desc: "Launch a penguin as far as possible! Upgrade your gear and bounce off obstacles."
+  },
+  {
+    name: "Bowmasters",
+    link: "Bowmasters.html",
+    desc: "Aim and shoot in this competitive archery game with multiple characters and physics."
+  },
+  {
+    name: "BuildNow.gg",
+    link: "BuildNow.gg.html",
+    desc: "A competitive online building and shooting game. Practice construction and combat."
+  },
+  {
+    name: "Dadish",
+    link: "Dadish.html",
+    desc: "He’s a radish and also a dad. Help Dadish find his missing children in this platformer."
+  },
+  {
+    name: "Doge Miner",
+    link: "Doge Miner.html",
+    desc: "The Dogecoin mining simulator. Click to mine, hire help, and reach the moon!"
+  },
+  {
+    name: "Duck Life",
+    link: "Duck Life.html",
+    desc: "The original game! Train your duck in running, swimming, and flying to win the big race."
+  },
+  {
+    name: "Duck Life 2: World Champion",
+    link: "Duck Life 2.html",
+    desc: "The sequel to the original training game. Travel the world to be the best."
+  },
+  {
+    name: "Duck Life 3: Evolution",
+    link: "Duck Life 3.html",
+    desc: "Train your duck in different skills and watch them evolve as you compete in races."
+  },
+  {
+    name: "Duck Life 5: Treasure Hunt",
+    link: "Duck Life 5.html",
+    desc: "Explore caves and find treasure in the fifth installment of the duck training series."
+  },
+  {
+    name: "Fears to Fathom: Home Alone",
+    link: "Fears to Fathom_ Home Alone.html",
+    desc: "An episodic psychological horror game where you play as a teenager home alone."
+  },
+  {
+    name: "Flappy Dunk",
+    link: "Flappy Dunk.html",
+    desc: "Tap to flap the ball through as many hoops as possible. A challenging arcade twist."
+  },
+  {
+    name: "Hill Climb Racing Lite",
+    link: "Hill Climb Racing Lite.html",
+    desc: "Drive uphill in this physics-based game. Upgrade your vehicle to reach new heights."
+  },
+  {
+    name: "Hotline Miami",
+    link: "Hotline Miami.html",
+    desc: "A high-octane action game with raw brutality, gunplay, and close combat."
+  },
+  {
+    name: "Idle Mining Empire",
+    link: "Idle Mining Empire.html",
+    desc: "Grow your mining business and become a billionaire tycoon in this idle game."
+  },
+  {
+    name: "Magic Tiles 3",
+    link: "Magic Tiles 3.html",
+    desc: "Tap the black tiles to the rhythm of the music. Don't hit the white tiles!"
+  },
+  {
+    name: "Melon Playground",
+    link: "Melon Playground.html",
+    desc: "A creative sandbox simulation game where you can experiment with various items."
+  },
+  {
+    name: "Offroad Mountain Bike",
+    link: "Offroad Mountain Bike.html",
+    desc: "Navigate difficult mountain terrains on your bike. Test your balance and speed."
+  },
+  {
+    name: "Oneshot Legacy",
+    link: "Oneshot 063014.html",
+    desc: "A surreal top-down puzzle/adventure game with unique gameplay capabilities."
+  },
+  {
+    name: "R.E.P.O.",
+    link: "R.E.P.O.html",
+    desc: "A high-stakes first-person game where you must retrieve valuable items under pressure."
+  },
+  {
+    name: "Recoil",
+    link: "Recoil.html",
+    desc: "A clever puzzle-platformer where you move using the recoil of your weapons."
+  },
+  {
+    name: "Run 3",
+    link: "Run 3.html",
+    desc: "The legendary endless runner. Run through space tunnels and avoid falling into the void."
+  },
+  {
+    name: "Sandtris",
+    link: "Sandtris.html",
+    desc: "A satisfying twist on Tetris where blocks turn into sand when they land."
+  },
+  {
+    name: "Shipo.io",
+    link: "Shipo.io.html",
+    desc: "A naval combat IO game. Collect treasure, upgrade your ship, and sink enemies."
+  },
+  {
+    name: "Super Smash Flash",
+    link: "Super Smash Flash.html",
+    desc: "The classic fan-made fighting game featuring your favorite characters."
+  },
+  {
+    name: "The Impossible Quiz",
+    link: "The Impossible Quiz.html",
+    desc: "A notoriously difficult quiz full of trick questions and insane logic."
+  },
+  {
+    name: "Tiny Fishing",
+    link: "Tiny Fishing.html",
+    desc: "Cast your line, catch fish, and upgrade your gear to reach deeper waters."
+  },
+  {
+    name: "Tomb Of The Mask",
+    link: "Tomb Of The Mask.html",
+    desc: "Fast-paced arcade action in an infinite procedurally generated vertical labyrinth."
+  },
+  {
+    name: "Undertale Yellow",
+    link: "Undertale Yellow.html",
+    desc: "A fan-made prequel to Undertale. Explore new areas in the Underground."
+  },
+  {
+    name: "Basket Random",
+    link: "basketrandom.html",
+    desc: "Chaotic physics-based basketball where every match is unpredictable."
+  },
+  {
+    name: "Raft",
+    link: "raft.html",
+    desc: "Survive at sea by gathering debris and expanding your floating raft."
+  },
+  {
+    name: "RBD",
+    link: "rbd.html",
+    desc: "Fast-paced arcade action with simple controls and intense gameplay."
+  },
+  {
+    name: "Slither.io",
+    link: "slitherio.html",
+    desc: "Multiplayer snake game where size means survival."
+  },
+  {
+    name: "Smash Karts",
+    link: "smashkarts.html",
+    desc: "Multiplayer kart racing with weapons and explosive combat."
+  },
+  {
+    name: "Soundboard",
+    link: "soundboard.html",
+    desc: "Play and experiment with a collection of fun and meme sound effects."
+  },
+  {
+    name: "Stickman Golf",
+    link: "stickmangolf.html",
+    desc: "Precision golf platforming with stickman physics."
+  },
+  {
+    name: "Stickman Hook",
+    link: "stickmanhook.html",
+    desc: "Swing through levels using grappling-hook momentum mechanics."
+  },
+  {
+    name: "Supreme Duelist",
+    link: "supremeduelist.html",
+    desc: "Physics-based stickman duels with ridiculous weapons."
+  },
+  {
+    name: "That's Not My Neighbor",
+    link: "thatsnotmyneighbor.html",
+    desc: "Suspenseful horror game where you must identify impostors."
+  }
 ];
 
 function createCard(g, isFeatured) {
