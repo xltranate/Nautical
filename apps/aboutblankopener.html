@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="https://iili.io/fcbfGHX.png">
+  <title>Nautical | Stealth Launch</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@200;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --nav-height: 70px;
+      --accent: #0ea5a6;
+      --accent-light: #2bd8c9;
+      --glass-border: rgba(255, 255, 255, 0.15);
+    }
+
+    * { box-sizing: border-box; scroll-behavior: smooth; }
+    
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 10% 10%, #061e28 0%, #031926 60%);
+      color: #e6f7f7;
+      overflow: hidden; /* Kept clean for the opener */
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0; width: 100%;
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      background: rgba(3, 25, 38, 0.95);
+      backdrop-filter: blur(15px);
+      border-bottom: 1px solid var(--glass-border);
+      z-index: 1000;
+    }
+
+    .brand-link { text-decoration: none; display: flex; align-items: center; gap: 12px; }
+    .logo { width: 34px; height: 34px; border-radius: 6px; overflow: hidden; box-shadow: 0 0 15px rgba(14, 165, 166, 0.4); }
+    .logo img { width: 100%; height: 100%; object-fit: cover; }
+    .brand-link h1 { font-family: 'Playfair Display', serif; margin: 0; font-size: 20px; letter-spacing: 2px; color: #fff; }
+
+    /* Main Container */
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 100;
+      padding: 20px;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(40px, 7vw, 70px);
+      margin: 0;
+      background: linear-gradient(180deg, #fff 0%, #a0f0e8 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      margin-top: 5px;
+      color: var(--accent-light);
+      font-weight: 200;
+      font-size: 12px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-bottom: 40px;
+    }
+
+    /* Launcher UI */
+    .glass-box {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(25px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--glass-border);
+      padding: 15px 20px;
+      border-radius: 12px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    input:focus {
+      border-color: var(--accent-light);
+      box-shadow: 0 0 15px rgba(14, 165, 166, 0.2);
+    }
+
+    .launch-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .launch-btn:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(43, 216, 201, 0.4);
+    }
+
+    /* Background Elements */
+    .bubbles-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 5; }
+    canvas { width: 100%; height: 100%; }
+    
+    .floor-container {
+      position: fixed;
+      bottom: 0; left: 0; width: 100%;
+      height: 40px;
+      z-index: 50;
+      pointer-events: none;
+    }
+    .sand-dunes {
+      position: absolute;
+      bottom: 0; width: 100%; height: 100%;
+      background: linear-gradient(to top, #0f0f05 0%, #1e1c0c 100%);
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="brand-link">
+      <div class="logo"><img src="https://iili.io/faD5fqB.png" alt="Logo"></div>
+      <h1>NAUTICAL</h1>
+    </div>
+  </nav>
+
+  <main class="hero">
+    <h2 class="title">Stealth Portal</h2>
+    <p class="subtitle">About:Blank Cloaker</p>
+
+    <div class="glass-box">
+      <div class="input-group">
+        <input type="text" id="urlInput" placeholder="Enter URL (e.g., https://google.com)" />
+        <button class="launch-btn" onclick="launchSite()">Launch Navigation</button>
+      </div>
+      <p style="font-size: 10px; margin-top: 20px; opacity: 0.5; letter-spacing: 1px;">
+        ENSURE URL INCLUDES HTTPS://
+      </p>
+    </div>
+  </main>
+
+  <div class="floor-container"><div class="sand-dunes"></div></div>
+  <div class="bubbles-wrap"><canvas id="bubbles"></canvas></div>
+
+  <script>
+    function launchSite() {
+      let url = document.getElementById('urlInput').value;
+      
+      if (!url) return alert("Please enter a URL");
+      
+      // Basic URL fixing
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+      }
+
+      const win = window.open();
+      if (!win) {
+        alert("Pop-up blocked! Please allow pop-ups for this site.");
+        return;
+      }
+
+      win.document.body.style.margin = '0';
+      win.document.body.style.height = '100vh';
+      
+      const iframe = win.document.createElement('iframe');
+      iframe.style.border = 'none';
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.margin = '0';
+      iframe.src = url;
+      
+      win.document.body.appendChild(iframe);
+    }
+
+    // Reuse the Nautical bubble animation
+    (function(){
+      const canvas = document.getElementById('bubbles');
+      const ctx = canvas.getContext('2d');
+      let bobs = [];
+      function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+      window.onresize = resize; resize();
+
+      function create(){
+        if(bobs.length > 40) return;
+        bobs.push({ 
+          x: Math.random() * canvas.width, 
+          y: canvas.height + 50, 
+          r: 2 + Math.random() * 6, 
+          s: 0.4 + Math.random() * 0.9,
+          o: 0.1 + Math.random() * 0.25
+        });
+      }
+      setInterval(create, 400);
+
+      function draw(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        bobs.forEach((b, i) => {
+          b.y -= b.s;
+          ctx.beginPath();
+          ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${b.o})`;
+          ctx.fill();
+          if(b.y < -50) bobs.splice(i, 1);
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+  </script>
+</body>
+</html>
