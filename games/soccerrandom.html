@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Game Fixed</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rz-6-5-z/bsrandm@main/style.css">
+    <script src="https://cdn.jsdelivr.net/gh/rz-6-5-z/y5@main/scripts/c3runtime.js"></script>
+
+    <style>
+        /* 1. Force the page to be full-screen and hide scrollbars */
+        html, body {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 2. Target the Canvas and any potential container */
+        canvas, #c3canvasdiv {
+            margin: auto !important;
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* This is the ultimate centering trick */
+            outline: none;
+            user-select: none;
+        }
+
+        /* 3. Ensure the Construct 3 wrapper doesn't push it to the left */
+        #fb-root {
+            display: none;
+        }
+    </style>
+
+    <script>
+        // Stop the window from scrolling when using arrow keys
+        window.addEventListener("keydown", function(e) {
+            if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                e.preventDefault();
+            }
+        }, false);
+    </script>
+</head>
+
+<body>
+    <div id="fb-root"></div>
+    
+    <script src="https://cdn.jsdelivr.net/gh/rz-6-5-z/y5@main/box2d.wasm.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/rz-6-5-z/y5@main/scripts/supportcheck.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/rz-6-5-z/y5@main/scripts/offlineclient.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/rz-6-5-z/y5@main/scripts/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/rz-6-5-z/y5@main/scripts/register-sw.js"></script>
+
+    <canvas id="canvas" width="816" height="520"></canvas>
+</body>
+</html>
