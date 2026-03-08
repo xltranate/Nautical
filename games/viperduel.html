@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viper Duel</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #F5F0E8;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Score bar */
+#score-bar {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  width: 800px;
+  padding: 4px 0;
+}
+
+.plabel {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #555;
+}
+.dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.dot.p1 { background: #4285F4; }
+.dot.p2 { background: #EA4335; }
+#game-title-mid {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: #aaa;
+  letter-spacing: 4px;
+}
+
+/* Canvas */
+#gc {
+  display: block;
+  border-radius: 6px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+}
+
+/* Controls bar */
+#ctrl-bar {
+  display: none;
+  justify-content: space-between;
+  width: 800px;
+  padding: 3px 0;
+  font-size: 11px;
+  color: #aaa;
+  letter-spacing: 0.5px;
+}
+.key {
+  display: inline-block;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 9px;
+  font-family: 'Press Start 2P', monospace;
+  color: #888;
+}
+
+/* Overlays */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(245,240,232,0.95);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  z-index: 10;
+}
+.overlay.hidden { display: none; }
+
+.big-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 32px;
+  color: #222;
+  letter-spacing: 2px;
+}
+.big-title span.b { color: #4285F4; }
+.big-title span.r { color: #EA4335; }
+
+.sub {
+  font-size: 13px;
+  color: #999;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-top: -14px;
+}
+
+/* Buttons */
+.btn {
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  color: #333;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  padding: 14px 24px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.1s;
+  width: 220px;
+  text-align: center;
+}
+.btn:hover { border-color: #4285F4; color: #4285F4; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(66,133,244,0.15); }
+.btn.danger:hover { border-color: #EA4335; color: #EA4335; box-shadow: 0 3px 10px rgba(234,67,53,0.15); }
+
+.btn-row { display: flex; gap: 10px; }
+.btn-col { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+
+/* Difficulty */
+.diff-row { display: flex; gap: 8px; }
+.diff-btn {
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  color: #888;
+  transition: all 0.1s;
+}
+.diff-btn.easy.sel,   .diff-btn.easy:hover   { border-color: #34A853; color: #34A853; background: #f0faf3; }
+.diff-btn.medium.sel, .diff-btn.medium:hover { border-color: #FBBC04; color: #c8950a; background: #fdfaf0; }
+.diff-btn.hard.sel,   .diff-btn.hard:hover   { border-color: #EA4335; color: #EA4335; background: #fdf0f0; }
+
+.section-lbl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: #bbb;
+  letter-spacing: 2px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+#diff-desc {
+  font-size: 13px;
+  color: #999;
+  text-align: center;
+  max-width: 300px;
+  line-height: 1.6;
+}
+
+.back-btn {
+  position: absolute;
+  top: 16px; left: 16px;
+  background: none;
+  border: none;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: #bbb;
+  cursor: pointer;
+  padding: 6px;
+  transition: color 0.1s;
+}
+.back-btn:hover { color: #555; }
+
+/* Result screen */
+.win-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 22px;
+  text-align: center;
+}
+.win-text.p1   { color: #4285F4; }
+.win-text.p2   { color: #EA4335; }
+.win-text.draw { color: #999; }
+
+.win-sub { font-size: 12px; color: #aaa; letter-spacing: 3px; margin-top: -14px; }
+
+.stat-box { display: flex; align-items: center; gap: 12px; }
+.stat-col { text-align: center; }
+.stat-num { font-family: 'Press Start 2P', monospace; font-size: 20px; display: block; margin-bottom: 4px; }
+.stat-num.p1 { color: #4285F4; }
+.stat-num.p2 { color: #EA4335; }
+.stat-lbl { font-size: 10px; color: #bbb; letter-spacing: 1px; }
+.stat-div { color: #ddd; font-size: 24px; padding: 0 4px; }
+
+/* Pause */
+#pause-panel {
+  position: absolute; inset: 0;
+  background: rgba(245,240,232,0.85);
+  border-radius: 6px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px; z-index: 8;
+}
+#pause-panel.hidden { display: none; }
+#pause-panel .pp {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 20px; color: #aaa; letter-spacing: 5px;
+}
+#pause-panel .ph { font-size: 11px; color: #bbb; letter-spacing: 2px; }
+
+/* Countdown */
+#countdown-panel {
+  position: absolute; inset: 0;
+  background: rgba(245,240,232,0.88);
+  border-radius: 6px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 8px; z-index: 9;
+}
+#countdown-panel.hidden { display: none; }
+#countdown-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 72px;
+  transition: transform 0.12s;
+}
+#countdown-lbl { font-size: 11px; color: #bbb; letter-spacing: 4px; }
+
+/* Snake preview */
+.snake-preview { display: flex; align-items: center; gap: 24px; }
+.seg-row { display: flex; gap: 2px; }
+.pseg { width: 14px; height: 14px; border-radius: 3px; }
+.vs { font-family: 'Press Start 2P', monospace; font-size: 12px; color: #ccc; }
+</style>
+</head>
+<body>
+<div id="wrapper">
+  <div id="score-bar">
+    <div class="plabel"><div class="dot p1"></div><span id="p1-lbl">P1 — WASD</span></div>
+    <div id="game-title-mid">VIPER DUEL</div>
+    <div class="plabel"><span id="p2-lbl">P2 — ARROWS</span><div class="dot p2"></div></div>
+  </div>
+
+  <div style="position:relative;">
+    <canvas id="gc" width="800" height="520"></canvas>
+
+    <!-- MAIN MENU -->
+    <div id="menu-ov" class="overlay">
+      <div class="big-title"><span class="b">VIPER</span> <span class="r">DUEL</span></div>
+      <div class="sub">Trail Combat</div>
+      <div class="snake-preview">
+        <div class="seg-row">
+          <div class="pseg" style="background:#1a73e8;border-radius:5px;"></div>
+          <div class="pseg" style="background:#1a73e8;"></div>
+          <div class="pseg" style="background:#4285F4;"></div>
+          <div class="pseg" style="background:#81b3f8;border-radius:5px;"></div>
+        </div>
+        <div class="vs">VS</div>
+        <div class="seg-row">
+          <div class="pseg" style="background:#f88080;border-radius:5px;"></div>
+          <div class="pseg" style="background:#EA4335;"></div>
+          <div class="pseg" style="background:#c62828;"></div>
+          <div class="pseg" style="background:#c62828;border-radius:5px;"></div>
+        </div>
+      </div>
+      <div class="btn-col">
+        <button class="btn" onclick="go2P()">2 PLAYERS</button>
+        <button class="btn" onclick="goBotMenu()">VS BOT</button>
+      </div>
+      <div style="font-size:12px;color:#bbb;text-align:center;line-height:2;letter-spacing:1px;">
+        Leave a trail &middot; Don't cross any path &middot; Last one alive wins
+      </div>
+    </div>
+
+    <!-- BOT DIFFICULTY -->
+    <div id="bot-ov" class="overlay hidden">
+      <button class="back-btn" onclick="showMenu()">&#9664; BACK</button>
+      <div class="big-title" style="font-size:20px;">VS BOT</div>
+      <div>
+        <div class="section-lbl">DIFFICULTY</div>
+        <div class="diff-row">
+          <button class="diff-btn easy"        onclick="setDiff('easy')">EASY</button>
+          <button class="diff-btn medium sel"  onclick="setDiff('medium')">MEDIUM</button>
+          <button class="diff-btn hard"        onclick="setDiff('hard')">HARD</button>
+        </div>
+      </div>
+      <div id="diff-desc">Bot uses flood-fill to find open space, but slips up sometimes</div>
+      <button class="btn" onclick="goBotGame()">PLAY</button>
+    </div>
+
+    <!-- GAME OVER -->
+    <div id="over-ov" class="overlay hidden">
+      <div id="win-text"  class="win-text"></div>
+      <div id="win-sub"   class="win-sub"></div>
+      <div class="stat-box">
+        <div class="stat-col">
+          <span class="stat-num p1" id="p1-score">0</span>
+          <span class="stat-lbl">PLAYER 1</span>
+        </div>
+        <div class="stat-div">|</div>
+        <div class="stat-col">
+          <span class="stat-num p2" id="p2-score">0</span>
+          <span class="stat-lbl" id="p2-score-lbl">PLAYER 2</span>
+        </div>
+      </div>
+      <div style="font-size:11px;color:#bbb;margin-top:-12px;letter-spacing:1px;">tiles claimed</div>
+      <div class="btn-row">
+        <button class="btn" style="width:160px;font-size:8px;" onclick="rematch()">REMATCH</button>
+        <button class="btn danger" style="width:160px;font-size:8px;" onclick="showMenu()">MENU</button>
+      </div>
+    </div>
+
+    <!-- PAUSE -->
+    <div id="pause-panel" class="hidden">
+      <div class="pp">PAUSED</div>
+      <div class="ph">press ESC to resume</div>
+    </div>
+
+    <!-- COUNTDOWN -->
+    <div id="countdown-panel" class="hidden">
+      <div id="countdown-num">3</div>
+      <div id="countdown-lbl">GET READY</div>
+    </div>
+  </div>
+
+  <div id="ctrl-bar">
+    <div style="color:#4285F4;"><span class="key">W</span> <span class="key">A</span> <span class="key">S</span> <span class="key">D</span> &nbsp; Player 1</div>
+    <div><span class="key">ESC</span> pause</div>
+    <div style="color:#EA4335;" id="p2-ctrl">Player 2 &nbsp; <span class="key">&#8593;</span> <span class="key">&#8592;</span> <span class="key">&#8595;</span> <span class="key">&#8594;</span></div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+//  VIPER DUEL
+// ─────────────────────────────────────────────
+
+const canvas = document.getElementById('gc');
+const ctx    = canvas.getContext('2d');
+
+const TILE = 20, COLS = 40, ROWS = 26;
+const TICK_MS = 110;
+
+const DIR = {
+  UP:    { x:0,  y:-1 },
+  DOWN:  { x:0,  y:1  },
+  LEFT:  { x:-1, y:0  },
+  RIGHT: { x:1,  y:0  },
+};
+const DIRS = [DIR.UP, DIR.DOWN, DIR.LEFT, DIR.RIGHT];
+
+const C = {
+  bg:     '#FFFEF9',
+  grid:   'rgba(0,0,0,0.04)',
+  p1body: '#4285F4',
+  p1dark: '#1a73e8',
+  p1lite: '#81b3f8',
+  p2body: '#EA4335',
+  p2dark: '#c62828',
+  p2lite: '#f28b82',
+};
+
+let mode = '2p', difficulty = 'medium';
+let grid = [];
+let p1, p2;
+let running = false, paused = false;
+let tickTimer = null, rafHandle = null;
+let flashFrames = 0, flashColor = null;
+
+// ─── Snake factory ───
+function mkSnake(x, y, dir, id) {
+  return { x, y, dir: {...dir}, nextDir: {...dir}, id, trail: [{x,y}], alive: true };
+}
+
+function initGame() {
+  grid = Array.from({ length: ROWS }, () => new Array(COLS).fill(0));
+  const my = Math.floor(ROWS / 2);
+  p1 = mkSnake(5,        my, DIR.RIGHT, 1);
+  p2 = mkSnake(COLS - 6, my, DIR.LEFT,  2);
+  grid[p1.y][p1.x] = 1;
+  grid[p2.y][p2.x] = 2;
+  running = true;
+  paused  = false;
+  flashFrames = 0;
+}
+
+function blocked(x, y) {
+  return x < 0 || x >= COLS || y < 0 || y >= ROWS || grid[y][x] !== 0;
+}
+function rev(a, b) { return a.x === -b.x && a.y === -b.y; }
+
+// ─── Tick ───
+function tick() {
+  if (!running || paused) return;
+
+  if (!rev(p1.nextDir, p1.dir)) p1.dir = {...p1.nextDir};
+  if (!rev(p2.nextDir, p2.dir)) p2.dir = {...p2.nextDir};
+
+  if (mode === 'bot' && p2.alive) botMove();
+
+  const n1 = { x: p1.x + p1.dir.x, y: p1.y + p1.dir.y };
+  const n2 = { x: p2.x + p2.dir.x, y: p2.y + p2.dir.y };
+
+  let d1 = p1.alive && blocked(n1.x, n1.y);
+  let d2 = p2.alive && blocked(n2.x, n2.y);
+  if (p1.alive && p2.alive && n1.x === n2.x && n1.y === n2.y) { d1 = true; d2 = true; }
+
+  if (!d1) { p1.x = n1.x; p1.y = n1.y; grid[p1.y][p1.x] = 1; p1.trail.push({x:p1.x,y:p1.y}); }
+  else       { p1.alive = false; }
+
+  if (!d2) { p2.x = n2.x; p2.y = n2.y; grid[p2.y][p2.x] = 2; p2.trail.push({x:p2.x,y:p2.y}); }
+  else       { p2.alive = false; }
+
+  if (!p1.alive || !p2.alive) {
+    running = false;
+    flashColor  = (!p1.alive && !p2.alive) ? '#888888'
+                : (!p1.alive ? C.p2body : C.p1body);
+    flashFrames = 10;
+    if (tickTimer) { clearInterval(tickTimer); tickTimer = null; }
+    setTimeout(showGameOver, 750);
+  }
+}
+
+// ─────────────────────────────────────────────
+//  BOT AI
+// ─────────────────────────────────────────────
+
+// BFS flood fill — counts reachable empty cells from (sx,sy).
+// grid[sy][sx] must be 0 when called (not blocked).
+function flood(sx, sy, limit) {
+  if (sx < 0 || sx >= COLS || sy < 0 || sy >= ROWS) return 0;
+  if (grid[sy][sx] !== 0) return 0;
+  const visited = new Uint8Array(COLS * ROWS);
+  visited[sy * COLS + sx] = 1;
+  const queue = [sy * COLS + sx];
+  let head = 0, count = 0;
+  while (head < queue.length && count < limit) {
+    const k = queue[head++];
+    const cx = k % COLS, cy = (k / COLS) | 0;
+    count++;
+    for (const d of DIRS) {
+      const nx = cx + d.x, ny = cy + d.y;
+      if (nx < 0 || nx >= COLS || ny < 0 || ny >= ROWS) continue;
+      const nk = ny * COLS + nx;
+      if (visited[nk] || grid[ny][nx] !== 0) continue;
+      visited[nk] = 1;
+      queue.push(nk);
+    }
+  }
+  return count;
+}
+
+// How many of the 4 neighbors of (x,y) are open (empty + in-bounds)
+function openNeighbors(x, y) {
+  let n = 0;
+  for (const d of DIRS) {
+    const nx = x+d.x, ny = y+d.y;
+    if (nx >= 0 && nx < COLS && ny >= 0 && ny < ROWS && grid[ny][nx] === 0) n++;
+  }
+  return n;
+}
+
+function botMove() {
+  const valid = DIRS.filter(d => {
+    if (rev(d, p2.dir)) return false;
+    const nx = p2.x+d.x, ny = p2.y+d.y;
+    return nx >= 0 && nx < COLS && ny >= 0 && ny < ROWS && grid[ny][nx] === 0;
+  });
+  if (!valid.length) return;
+  if (difficulty === 'easy')        easyBot(valid);
+  else if (difficulty === 'medium') mediumBot(valid);
+  else                              hardBot(valid);
+}
+
+function easyBot(valid) {
+  // Avoid single-cell dead ends, but otherwise wanders randomly
+  const safe = valid.filter(d => flood(p2.x+d.x, p2.y+d.y, 5) >= 4);
+  const pool = safe.length ? safe : valid;
+  const straight = pool.find(d => d.x===p2.dir.x && d.y===p2.dir.y);
+  if (straight && Math.random() < 0.45) { p2.nextDir = straight; return; }
+  p2.nextDir = pool[Math.floor(Math.random()*pool.length)];
+}
+
+function mediumBot(valid) {
+  // Flood fill: pick the most open direction.
+  // Also apply a wall-proximity penalty so it doesn't walk into corners.
+  let best = valid[0], bestScore = -Infinity;
+  for (const d of valid) {
+    const nx = p2.x+d.x, ny = p2.y+d.y;
+    const space = flood(nx, ny, COLS*ROWS);
+    // Bonus for landing on cells with more open neighbors (avoids hugging walls)
+    const openN = openNeighbors(nx, ny);
+    const score = space + openN * 20;
+    if (score > bestScore) { bestScore = score; best = d; }
+  }
+  // 12% chance to take a random-but-safe detour so it feels human
+  if (Math.random() < 0.12) {
+    const minOk = bestScore * 0.45;
+    const decent = valid.filter(d => {
+      const nx = p2.x+d.x, ny = p2.y+d.y;
+      return flood(nx, ny, COLS*ROWS) + openNeighbors(nx, ny)*20 >= minOk;
+    });
+    p2.nextDir = decent.length ? decent[Math.floor(Math.random()*decent.length)] : best;
+  } else {
+    p2.nextDir = best;
+  }
+}
+
+function hardBot(valid) {
+  // Voronoi heuristic: maximise own space, penalise opponent's future space.
+  //
+  // KEY FIX: call flood(nx,ny) BEFORE writing to grid[ny][nx].
+  // grid[ny][nx] is 0 here, so flood correctly counts it + all reachable cells.
+  // Then temporarily set it to 2 only when measuring the *opponent's* space.
+  const p1next = { x: p1.x+p1.dir.x, y: p1.y+p1.dir.y };
+
+  let best = valid[0], bestScore = -Infinity;
+  for (const d of valid) {
+    const nx = p2.x+d.x, ny = p2.y+d.y;
+
+    // My reachable space — grid[ny][nx] is still 0, flood works correctly
+    const mySpace = flood(nx, ny, COLS*ROWS);
+
+    // Opponent's space after I occupy nx,ny
+    grid[ny][nx] = 2; // temporarily claim
+    let oppSpace = 0;
+    const p1nx = p1next.x, p1ny = p1next.y;
+    if (p1nx>=0 && p1nx<COLS && p1ny>=0 && p1ny<ROWS && grid[p1ny][p1nx]===0) {
+      oppSpace = flood(p1nx, p1ny, COLS*ROWS);
+    }
+    grid[ny][nx] = 0; // restore
+
+    const openN = openNeighbors(nx, ny);
+    const score = mySpace*2 - oppSpace + openN*12;
+    if (score > bestScore) { bestScore = score; best = d; }
+  }
+
+  // 5% noise so hard is beatable
+  if (Math.random() < 0.05) {
+    const decent = valid.filter(d => flood(p2.x+d.x, p2.y+d.y, 150) > 10);
+    p2.nextDir = decent.length ? decent[Math.floor(Math.random()*decent.length)] : best;
+  } else {
+    p2.nextDir = best;
+  }
+}
+
+// ─────────────────────────────────────────────
+//  RENDERING
+// ─────────────────────────────────────────────
+
+function render() {
+  if (flashFrames > 0) {
+    ctx.fillStyle = flashColor;
+    ctx.globalAlpha = (flashFrames / 10) * 0.25;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.globalAlpha = 1;
+    flashFrames--;
+  }
+  drawBG();
+  drawTrails();
+  if (p1 && p1.alive) drawHead(p1);
+  if (p2 && p2.alive) drawHead(p2);
+  drawHUD();
+  rafHandle = requestAnimationFrame(render);
+}
+
+function drawBG() {
+  ctx.fillStyle = C.bg;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = C.grid;
+  ctx.lineWidth = 0.5;
+  for (let c = 0; c <= COLS; c++) {
+    ctx.beginPath(); ctx.moveTo(c*TILE, 0); ctx.lineTo(c*TILE, canvas.height); ctx.stroke();
+  }
+  for (let r = 0; r <= ROWS; r++) {
+    ctx.beginPath(); ctx.moveTo(0, r*TILE); ctx.lineTo(canvas.width, r*TILE); ctx.stroke();
+  }
+}
+
+function drawTrails() {
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const cell = grid[r][c];
+      if (!cell) continue;
+      const sn = cell === 1 ? p1 : p2;
+      if (sn && sn.alive && c === sn.x && r === sn.y) continue; // drawn as head
+      const top    = r > 0      && grid[r-1][c] === cell;
+      const bottom = r < ROWS-1 && grid[r+1][c] === cell;
+      const left   = c > 0      && grid[r][c-1] === cell;
+      const right  = c < COLS-1 && grid[r][c+1] === cell;
+      drawSeg(c*TILE, r*TILE, top, bottom, left, right, cell === 1);
+    }
+  }
+}
+
+function drawSeg(x, y, top, bottom, left, right, isP1) {
+  const pad = 2.5, rad = 4;
+  const body = isP1 ? C.p1body : C.p2body;
+
+  ctx.fillStyle = body;
+  rrect(x+pad, y+pad, TILE-pad*2, TILE-pad*2, rad); ctx.fill();
+  if (top)    ctx.fillRect(x+pad, y,            TILE-pad*2, pad+0.5);
+  if (bottom) ctx.fillRect(x+pad, y+TILE-pad,   TILE-pad*2, pad+0.5);
+  if (left)   ctx.fillRect(x,     y+pad,         pad+0.5,   TILE-pad*2);
+  if (right)  ctx.fillRect(x+TILE-pad, y+pad,    pad+0.5,   TILE-pad*2);
+
+  ctx.fillStyle = 'rgba(255,255,255,0.22)';
+  rrect(x+pad+2, y+pad+2, (TILE-pad*2)*0.45, (TILE-pad*2)*0.34, rad-2); ctx.fill();
+}
+
+function drawHead(sn) {
+  const x = sn.x*TILE, y = sn.y*TILE;
+  const dark = sn.id===1 ? C.p1dark : C.p2dark;
+  const body = sn.id===1 ? C.p1body : C.p2body;
+
+  // Neck bridge
+  const bx = sn.x-sn.dir.x, by = sn.y-sn.dir.y;
+  if (bx>=0&&bx<COLS&&by>=0&&by<ROWS&&grid[by][bx]===sn.id) {
+    ctx.fillStyle = body;
+    const g = 2.5;
+    if      (sn.dir.x===1)  ctx.fillRect(x,            y+g,  TILE/2, TILE-g*2);
+    else if (sn.dir.x===-1) ctx.fillRect(x+TILE/2,     y+g,  TILE/2, TILE-g*2);
+    else if (sn.dir.y===1)  ctx.fillRect(x+g,           y,    TILE-g*2, TILE/2);
+    else                     ctx.fillRect(x+g,           y+TILE/2, TILE-g*2, TILE/2);
+  }
+
+  ctx.fillStyle = dark;
+  rrect(x+1, y+1, TILE-2, TILE-2, 6); ctx.fill();
+
+  ctx.fillStyle = 'rgba(255,255,255,0.28)';
+  rrect(x+3.5, y+3, (TILE-2)*0.5, (TILE-2)*0.34, 4); ctx.fill();
+
+  // Eyes
+  const cx = x+TILE/2, cy = y+TILE/2, eo=3.6, ef=2.4;
+  let e1, e2;
+  if      (sn.dir.x===1)  { e1={x:cx+ef,y:cy-eo}; e2={x:cx+ef,y:cy+eo}; }
+  else if (sn.dir.x===-1) { e1={x:cx-ef,y:cy-eo}; e2={x:cx-ef,y:cy+eo}; }
+  else if (sn.dir.y===-1) { e1={x:cx-eo,y:cy-ef}; e2={x:cx+eo,y:cy-ef}; }
+  else                     { e1={x:cx-eo,y:cy+ef}; e2={x:cx+eo,y:cy+ef}; }
+
+  ctx.fillStyle='white';  circ(e1.x,e1.y,2.8); circ(e2.x,e2.y,2.8);
+  ctx.fillStyle='#111';   circ(e1.x,e1.y,1.6); circ(e2.x,e2.y,1.6);
+  ctx.fillStyle='white';  circ(e1.x+0.6,e1.y-0.6,0.6); circ(e2.x+0.6,e2.y-0.6,0.6);
+
+  drawTongue(sn, cx, cy, x, y);
+}
+
+function drawTongue(sn, cx, cy, ox, oy) {
+  const out = Math.floor(Date.now()/220) % 3 < 2;
+  if (!out) return;
+  ctx.strokeStyle = sn.id===1 ? '#FF8C94' : '#FFB347';
+  ctx.lineWidth=1; ctx.lineCap='round';
+  const len=5, spread=2.5;
+  let tx=cx, ty=cy, dx=0, dy=0;
+  if      (sn.dir.x===1)  { tx=ox+TILE-0.5; dx=1;  }
+  else if (sn.dir.x===-1) { tx=ox+0.5;      dx=-1; }
+  else if (sn.dir.y===-1) { ty=oy+0.5;      dy=-1; }
+  else                     { ty=oy+TILE-0.5; dy=1;  }
+  const mx=tx+dx*len*0.5, my=ty+dy*len*0.5;
+  ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(mx,my); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(mx,my); ctx.lineTo(mx+dx*len*0.5-dy*spread, my+dy*len*0.5-dx*spread); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(mx,my); ctx.lineTo(mx+dx*len*0.5+dy*spread, my+dy*len*0.5+dx*spread); ctx.stroke();
+}
+
+function drawHUD() {
+  if (!p1) return;
+  const total=COLS*ROWS, bH=3, bY=canvas.height-4, half=canvas.width/2;
+  ctx.fillStyle='rgba(66,133,244,0.12)'; ctx.fillRect(0,bY,half,bH);
+  ctx.fillStyle=C.p1body; ctx.fillRect(0,bY,(p1.trail.length/total)*half,bH);
+  ctx.fillStyle='rgba(234,67,53,0.12)'; ctx.fillRect(half,bY,half,bH);
+  const w2=(p2.trail.length/total)*half;
+  ctx.fillStyle=C.p2body; ctx.fillRect(canvas.width-w2,bY,w2,bH);
+  if (running||flashFrames>0) {
+    ctx.font='9px "Press Start 2P"';
+    ctx.textAlign='left';  ctx.fillStyle='rgba(66,133,244,0.4)'; ctx.fillText(p1.trail.length,6,canvas.height-9);
+    ctx.textAlign='right'; ctx.fillStyle='rgba(234,67,53,0.4)';  ctx.fillText(p2.trail.length,canvas.width-6,canvas.height-9);
+  }
+}
+
+function rrect(x,y,w,h,r) {
+  if(w<=0||h<=0)return;
+  r=Math.min(r,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+function circ(x,y,r){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();}
+
+// ─────────────────────────────────────────────
+//  INPUT
+// ─────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
+  if (e.key==='Escape'&&(running||paused)) { togglePause(); return; }
+  if (!running||paused) return;
+  switch(e.key.toLowerCase()) {
+    case 'w': p1.nextDir=DIR.UP;    break;
+    case 's': p1.nextDir=DIR.DOWN;  break;
+    case 'a': p1.nextDir=DIR.LEFT;  break;
+    case 'd': p1.nextDir=DIR.RIGHT; break;
+  }
+  if (mode==='2p') {
+    switch(e.key) {
+      case 'ArrowUp':    p2.nextDir=DIR.UP;    break;
+      case 'ArrowDown':  p2.nextDir=DIR.DOWN;  break;
+      case 'ArrowLeft':  p2.nextDir=DIR.LEFT;  break;
+      case 'ArrowRight': p2.nextDir=DIR.RIGHT; break;
+    }
+  }
+});
+
+// ─────────────────────────────────────────────
+//  GAME FLOW
+// ─────────────────────────────────────────────
+function togglePause() {
+  paused=!paused;
+  document.getElementById('pause-panel').classList.toggle('hidden',!paused);
+}
+
+function startGame() {
+  ['menu-ov','bot-ov','over-ov'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  document.getElementById('score-bar').style.display='flex';
+  document.getElementById('ctrl-bar').style.display='flex';
+  document.getElementById('p1-lbl').textContent='P1 — WASD';
+  if (mode==='bot') {
+    const dl=difficulty[0].toUpperCase()+difficulty.slice(1);
+    document.getElementById('p2-lbl').textContent=`Bot [${dl}]`;
+    document.getElementById('p2-ctrl').innerHTML=`<span style="color:#EA4335;">Bot [${dl}]</span>`;
+  } else {
+    document.getElementById('p2-lbl').textContent='P2 — Arrows';
+    document.getElementById('p2-ctrl').innerHTML=`Player 2 &nbsp;<span class="key">&#8593;</span><span class="key">&#8592;</span><span class="key">&#8595;</span><span class="key">&#8594;</span>`;
+  }
+  doCountdown(()=>{
+    initGame();
+    if(tickTimer) clearInterval(tickTimer);
+    tickTimer=setInterval(tick,TICK_MS);
+    if(rafHandle) cancelAnimationFrame(rafHandle);
+    render();
+  });
+}
+
+function doCountdown(cb) {
+  const panel=document.getElementById('countdown-panel');
+  const num=document.getElementById('countdown-num');
+  const lbl=document.getElementById('countdown-lbl');
+  const colors=['#4285F4','#FBBC04','#34A853'];
+  let count=3;
+  panel.classList.remove('hidden');
+  ctx.fillStyle=C.bg; ctx.fillRect(0,0,canvas.width,canvas.height); drawBG();
+  function step() {
+    if(count>0) {
+      num.textContent=count; num.style.color=colors[3-count];
+      lbl.textContent=count>1?'GET READY':'STEADY...';
+      num.style.transform='scale(1.2)';
+      setTimeout(()=>{num.style.transform='scale(1)';},120);
+      count--; setTimeout(step,700);
+    } else {
+      num.textContent='GO!'; num.style.color='#34A853'; lbl.textContent='';
+      num.style.transform='scale(1.4)';
+      setTimeout(()=>{panel.classList.add('hidden');num.style.transform='scale(1)';cb();},500);
+    }
+  }
+  step();
+}
+
+function showGameOver() {
+  const wt=document.getElementById('win-text'), ws=document.getElementById('win-sub');
+  document.getElementById('p2-score-lbl').textContent=mode==='bot'?'BOT':'PLAYER 2';
+  const both=!p1.alive&&!p2.alive;
+  if (both) { wt.textContent='Draw!'; wt.className='win-text draw'; ws.textContent='both crashed at once'; }
+  else if (!p2.alive) { wt.textContent='Player 1 Wins'; wt.className='win-text p1'; ws.textContent=mode==='bot'?'nice, you beat the bot':'blue viper wins'; }
+  else { wt.textContent=mode==='bot'?'Bot Wins':'Player 2 Wins'; wt.className='win-text p2'; ws.textContent=mode==='bot'?'the bot got you':'red viper wins'; }
+  document.getElementById('p1-score').textContent=p1.trail.length;
+  document.getElementById('p2-score').textContent=p2.trail.length;
+  document.getElementById('over-ov').classList.remove('hidden');
+}
+
+function rematch() {
+  document.getElementById('over-ov').classList.add('hidden');
+  doCountdown(()=>{ initGame(); if(tickTimer)clearInterval(tickTimer); tickTimer=setInterval(tick,TICK_MS); });
+}
+
+function showMenu() {
+  running=false; paused=false;
+  if(tickTimer){clearInterval(tickTimer);tickTimer=null;}
+  if(rafHandle){cancelAnimationFrame(rafHandle);rafHandle=null;}
+  document.getElementById('menu-ov').classList.remove('hidden');
+  ['bot-ov','over-ov','pause-panel','countdown-panel'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  document.getElementById('score-bar').style.display='none';
+  document.getElementById('ctrl-bar').style.display='none';
+  ctx.fillStyle=C.bg; ctx.fillRect(0,0,canvas.width,canvas.height); drawBG();
+}
+
+function go2P()      { mode='2p';  startGame(); }
+function goBotMenu() { document.getElementById('menu-ov').classList.add('hidden'); document.getElementById('bot-ov').classList.remove('hidden'); updateDiffDesc(); }
+function goBotGame() { mode='bot'; startGame(); }
+
+function setDiff(d) {
+  difficulty=d;
+  document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('sel'));
+  document.querySelector(`.diff-btn.${d}`).classList.add('sel');
+  updateDiffDesc();
+}
+function updateDiffDesc() {
+  const t={ easy:'Mostly wanders around — makes dumb decisions', medium:'Uses flood-fill to find open space, but slips up sometimes', hard:'Calculates territory control and tries to cut you off' };
+  document.getElementById('diff-desc').textContent=t[difficulty];
+}
+
+// Idle draw
+ctx.fillStyle=C.bg; ctx.fillRect(0,0,canvas.width,canvas.height); drawBG();
+</script>
+</body>
+</html>
