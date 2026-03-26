@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Geometry Dash Fullscreen</title>
+    <style>
+        /* Remove all default browser padding/margins */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Prevents double scrollbars */
+            background-color: #000; /* Black background while loading */
+        }
+
+        /* Force the iframe to occupy 100% of the viewport */
+        #iframehtml5 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <iframe 
+        id="iframehtml5" 
+        src="https://ozgames.io/geometry-dash.embed" 
+        title="Geometry Dash Lite"
+        scrolling="no" 
+        allowfullscreen="true" 
+        allow="autoplay; fullscreen; keyboard-quotas">
+    </iframe>
+
+</body>
+</html>
