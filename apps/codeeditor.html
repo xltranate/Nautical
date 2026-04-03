@@ -1,106 +1,200 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Nautical Code Editor</title>
- <link rel="icon" type="image/png" href="https://iili.io/fcbfGHX.png">
-  
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nautical | HTML Engine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #0ea5a6;
+      --accent-light: #2bd8c9;
+      --glass-bg: rgba(6, 30, 40, 0.95);
+      --border: rgba(255, 255, 255, 0.1);
+    }
 
-<style>
-:root {
-  --ocean-dark: #061a23;
-  --ocean-mid: #0b2d3a;
-  --ocean-light: #0f4c5c;
-  --foam: #e6f7ff;
-  --gold: #cfa44a;
-}
+    * { box-sizing: border-box; }
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      background: #01080b; color: white;
+      font-family: 'Inter', sans-serif; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
 
-* { box-sizing: border-box; }
-html, body {
-  margin: 0;
-  height: 100%;
-  font-family: Inter, sans-serif;
-  background: radial-gradient(circle at top, #0f4c5c 0%, #061a23 70%);
-  color: var(--foam);
-  overflow: hidden;
-}
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: linear-gradient(120deg, rgba(255,255,255,0.04) 25%, transparent 25%),
-                    linear-gradient(300deg, rgba(255,255,255,0.04) 25%, transparent 25%);
-  background-size: 80px 80px;
-  opacity: 0.4;
-  pointer-events: none;
-}
-header {
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  background: linear-gradient(to bottom, rgba(6,26,35,0.95), rgba(6,26,35,0.75));
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-header h1 { font-family: "Playfair Display", serif; font-size: 22px; margin: 0; }
-header span { color: var(--gold); }
-button {
-  background: linear-gradient(to bottom, #1b6b7a, #0f4c5c);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: var(--foam);
-  padding: 8px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-}
-main { display: grid; grid-template-columns: 1fr 1fr; height: calc(100% - 64px); }
-.editor { display: flex; flex-direction: column; }
-.panel-title { padding: 8px 12px; font-weight: 600; background: rgba(0,0,0,0.35); border-bottom: 1px solid rgba(255,255,255,0.08); }
-textarea { flex: 1; width: 100%; resize: none; border: none; outline: none; background: linear-gradient(to bottom, #03131a, #061a23); color: #d7f3ff; font-family: Consolas, monospace; font-size: 14px; padding: 12px; }
-.preview { display: flex; flex-direction: column; }
-iframe { flex: 1; border: none; background: white; }
-.fullscreen { position: fixed; inset: 0; z-index: 999; }
-@media (max-width: 900px) { main { grid-template-columns: 1fr; } }
-</style>
+    canvas { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+
+    .app-wrapper {
+      position: relative; z-index: 10;
+      display: flex; flex: 1; padding: 15px; gap: 15px;
+    }
+
+    .sidebar {
+      width: 65px; background: var(--glass-bg);
+      border: 1px solid var(--border); border-radius: 12px;
+      display: flex; flex-direction: column; align-items: center; padding: 20px 0; gap: 20px;
+    }
+
+    .play-btn {
+      width: 45px; height: 45px; border-radius: 50%;
+      background: var(--accent); color: #020d14;
+      border: none; cursor: pointer; font-size: 20px;
+      box-shadow: 0 0 20px rgba(14, 165, 166, 0.4); transition: 0.3s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .play-btn:hover { transform: scale(1.1); filter: brightness(1.2); }
+
+    .editor-container {
+      flex: 1; display: flex; flex-direction: column;
+      background: var(--glass-bg); border: 1px solid var(--border);
+      border-radius: 12px; backdrop-filter: blur(20px); overflow: hidden;
+    }
+
+    .toolbar {
+      padding: 12px 20px; background: rgba(0,0,0,0.4);
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .left-tools { display: flex; align-items: center; gap: 15px; }
+    .file-label { font-size: 11px; font-weight: 800; letter-spacing: 2px; color: var(--accent-light); }
+    
+    .iframe-btn {
+      background: transparent; border: 1px solid var(--accent);
+      color: var(--accent-light); font-size: 9px; font-weight: 800; padding: 5px 10px;
+      border-radius: 4px; cursor: pointer; text-transform: uppercase;
+    }
+    .iframe-btn:hover { background: var(--accent); color: #01080b; }
+
+    #code-input {
+      flex: 1; width: 100%; background: transparent;
+      border: none; color: #d1d5db; font-family: 'Fira Code', monospace;
+      font-size: 14px; padding: 25px; resize: none; outline: none;
+      line-height: 1.7;
+    }
+
+    #preview-overlay { position: fixed; inset: 0; background: #000; z-index: 1000; display: none; }
+    #preview-frame { border: none; width: 100%; height: 100%; }
+
+    #copy-toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      background: var(--accent-light); color: #000;
+      padding: 10px 20px; border-radius: 5px; font-weight: 800; font-size: 11px;
+      opacity: 0; pointer-events: none; transition: 0.3s; z-index: 2000;
+    }
+  </style>
 </head>
 <body>
-<header>
-  <h1>Nautical <span>Editor</span></h1>
-  <div><button onclick="toggleFullscreen()">Fullscreen Preview</button></div>
-</header>
-<main>
-  <div class="editor">
-    <div class="panel-title">HTML</div>
-    <textarea id="htmlCode">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-  &lt;title&gt;Nautical Live&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;h1&gt;⚓ Ahoy, Nautical!&lt;/h1&gt;
-&lt;/body&gt;
-&lt;/html&gt;</textarea>
-  </div>
-  <div class="preview">
-    <div class="panel-title">Live Preview</div>
-    <iframe id="preview" sandbox="allow-scripts allow-same-origin"></iframe>
-  </div>
-</main>
+
+<div id="copy-toast">FULL HTML FILE COPIED</div>
+<canvas id="bubbles"></canvas>
+
+<div class="app-wrapper">
+  <aside class="sidebar">
+    <button class="play-btn" onclick="runProject()">▶</button>
+  </aside>
+
+  <main class="editor-container">
+    <div class="toolbar">
+      <div class="left-tools">
+        <div class="file-label">INDEX.HTML</div>
+        <button class="iframe-btn" onclick="copyFullIframeFile()">[ iframe code ]</button>
+      </div>
+      <div style="font-size: 10px; opacity: 0.4;">NAUTICAL v5.2</div>
+    </div>
+
+    <textarea id="code-input" spellcheck="false">
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { 
+      background: #020d14; color: #2bd8c9; 
+      display: flex; flex-direction: column; justify-content: center; align-items: center; 
+      height: 100vh; margin: 0; overflow: hidden; font-family: sans-serif;
+    }
+    .pulse {
+      width: 100px; height: 100px; background: #0ea5a6;
+      border-radius: 50%; animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(14, 165, 166, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 40px rgba(14, 165, 166, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(14, 165, 166, 0); }
+    }
+    h1 { margin-top: 50px; font-size: 14px; letter-spacing: 5px; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+  <div class="pulse"></div>
+  <h1>Nautical Live</h1>
+</body>
+</html></textarea>
+  </main>
+</div>
+
+<div id="preview-overlay">
+  <iframe id="preview-frame"></iframe>
+</div>
+
 <script>
-const htmlInput = document.getElementById('htmlCode');
-const iframe = document.getElementById('preview');
+  // Dispenses a FULL valid HTML document containing the iframe.
+  function copyFullIframeFile() {
+    const fullHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nautical Embed</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000; }
+        iframe { width: 100%; height: 100%; border: none; }
+    </style>
+</head>
+<body>
+    <iframe src="INSERT_YOUR_URL_HERE" allowfullscreen sandbox="allow-scripts allow-same-origin"></iframe>
+</body>
+</html>`;
+    
+    navigator.clipboard.writeText(fullHtml).then(() => {
+      const toast = document.getElementById('copy-toast');
+      toast.style.opacity = '1';
+      setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+    });
+  }
 
-function buildPreview() {
-  const content = htmlInput.value.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-  iframe.srcdoc = content;
-}
+  function runProject() {
+    const code = document.getElementById('code-input').value;
+    const overlay = document.getElementById('preview-overlay');
+    const frame = document.getElementById('preview-frame');
+    overlay.style.display = 'block';
+    const doc = frame.contentWindow.document;
+    doc.open();
+    doc.write(code);
+    doc.close();
+    if (overlay.requestFullscreen) overlay.requestFullscreen();
+  }
 
-htmlInput.addEventListener('input', buildPreview);
-function toggleFullscreen() { iframe.classList.toggle('fullscreen'); }
-buildPreview();
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) document.getElementById('preview-overlay').style.display = 'none';
+  });
+
+  const canvas = document.getElementById('bubbles');
+  const ctx = canvas.getContext('2d');
+  let bobs = [];
+  function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  window.onresize = resize; resize();
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    if(bobs.length < 20) bobs.push({ x: Math.random() * canvas.width, y: canvas.height + 10, r: Math.random() * 2, s: Math.random() + 0.3 });
+    bobs.forEach((b, i) => {
+      b.y -= b.s;
+      ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+      ctx.fillStyle = "rgba(43, 216, 201, 0.1)"; ctx.fill();
+      if(b.y < -10) bobs.splice(i, 1);
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
 </script>
 </body>
 </html>
