@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Push Your Luck - Fullscreen</title>
+    <style>
+        /* Removes all spacing and scrollbars from the main page */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            cursor: crosshair; /* Visual hint that clicking will lock cursor */
+        }
+
+        /* Forces the game to fill every pixel of the screen */
+        #game-iframe {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+
+    <iframe 
+        id="game-iframe" 
+        src="https://yp3d.com/tanks3d/" 
+        allow="autoplay; fullscreen; pointer-lock" 
+        allowfullscreen="true"
+        webkitallowfullscreen="true" 
+        mozallowfullscreen="true"
+        sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms">
+    </iframe>
+
+    <script>
+        const iframe = document.getElementById('game-iframe');
+
+        // Request pointer lock on click
+        document.body.addEventListener('click', () => {
+            // Attempt to lock the pointer on the body or the iframe
+            // Note: Some browsers require the lock to be requested on the element containing the iframe
+            document.body.requestPointerLock = document.body.requestPointerLock || 
+                                             document.body.mozRequestPointerLock || 
+                                             document.body.webkitRequestPointerLock;
+            
+            document.body.requestPointerLock();
+        });
+
+        // Optional: Log status for debugging
+        document.addEventListener('pointerlockchange', () => {
+            if (document.pointerLockElement === document.body) {
+                console.log('Pointer Locked');
+            } else {
+                console.log('Pointer Released');
+            }
+        }, false);
+    </script>
+
+</body>
+</html>
