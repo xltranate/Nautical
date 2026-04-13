@@ -2,66 +2,120 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Push Your Luck - Fullscreen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gartic Loader</title>
     <style>
-        /* Removes all spacing and scrollbars from the main page */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
+            background-color: #121212;
+            font-family: Arial, sans-serif;
             overflow: hidden;
-            background-color: #000;
-            cursor: crosshair; /* Visual hint that clicking will lock cursor */
         }
 
-        /* Forces the game to fill every pixel of the screen */
-        #game-iframe {
+        /* Full-screen menu setup */
+        #ui-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+            background: #1a1a1a;
+            color: white;
+            z-index: 20;
+            position: relative;
+        }
+
+        .card {
+            background: #252525;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        input {
+            padding: 12px;
+            width: 260px;
+            border: none;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 12px 24px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 5px;
+            transition: 0.2s;
+        }
+
+        .btn-main { background: #5865F2; color: white; width: 100%; }
+        .btn-join { background: #28a745; color: white; width: 100%; }
+        button:hover { opacity: 0.8; }
+
+        /* The Game Iframe - Hidden by default */
+        #game-frame {
+            display: none; 
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
             border: none;
-            z-index: 9999;
+            z-index: 10;
         }
     </style>
 </head>
 <body>
 
-    <iframe 
-        id="game-iframe" 
-        src="https://garticphone.com/" 
-        allow="autoplay; fullscreen; pointer-lock" 
-        allowfullscreen="true"
-        webkitallowfullscreen="true" 
-        mozallowfullscreen="true"
-        sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms">
-    </iframe>
+    <div id="ui-wrapper">
+        <div class="card">
+            <h1 style="color: #f9d71c; margin-bottom: 30px;">Gartic Phone</h1>
+            
+            <button class="btn-main" onclick="runGame('https://garticphone.com/en')">
+                Start New Game
+            </button>
+
+            <div style="margin: 20px 0; color: #666;">— OR —</div>
+
+            <input type="text" id="invite-url" placeholder="Paste invite link here...">
+            <button class="btn-join" onclick="runInvite()">
+                Join Invite
+            </button>
+        </div>
+    </div>
+
+    <iframe id="game-frame" src=""></iframe>
 
     <script>
-        const iframe = document.getElementById('game-iframe');
+        const ui = document.getElementById('ui-wrapper');
+        const game = document.getElementById('game-frame');
+        const input = document.getElementById('invite-url');
 
-        // Request pointer lock on click
-        document.body.addEventListener('click', () => {
-            // Attempt to lock the pointer on the body or the iframe
-            // Note: Some browsers require the lock to be requested on the element containing the iframe
-            document.body.requestPointerLock = document.body.requestPointerLock || 
-                                             document.body.mozRequestPointerLock || 
-                                             document.body.webkitRequestPointerLock;
+        function runGame(url) {
+            // 1. Swap the Source
+            game.src = url;
             
-            document.body.requestPointerLock();
-        });
+            // 2. Hide Menu and Show Game
+            ui.style.display = 'none';
+            game.style.display = 'block';
+        }
 
-        // Optional: Log status for debugging
-        document.addEventListener('pointerlockchange', () => {
-            if (document.pointerLockElement === document.body) {
-                console.log('Pointer Locked');
+        function runInvite() {
+            const link = input.value.trim();
+            if (link !== "") {
+                runGame(link);
             } else {
-                console.log('Pointer Released');
+                alert("Please paste a link first!");
             }
-        }, false);
+        }
     </script>
 
 </body>
