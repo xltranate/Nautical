@@ -6,1483 +6,2382 @@
 <title>Re:Zero — Return by Death</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English+SC&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:        #06060a;
-  --surface:   #0e0e16;
-  --surface2:  #14141f;
-  --border:    #2a2a3a;
-  --text:      #d8d4c8;
-  --muted:     #7a7585;
-  --purple:    #9b6ef3;
-  --purple-dim:#4d3580;
-  --red:       #c0392b;
-  --red-bright:#e74c3c;
-  --gold:      #c9a44e;
-  --cyan:      #4fc3d8;
-  --white:     #f0eff5;
-  --glow-p:    rgba(155,110,243,0.35);
-  --glow-r:    rgba(192,57,43,0.4);
+:root{
+  --bg:#04040c;--surface:#0c0c18;--surface2:#10101e;--border:#252535;
+  --text:#ccc8bc;--muted:#6a6478;--purple:#9060e8;--purple-dim:#3a1e70;
+  --red:#c0392b;--red2:#e74c3c;--gold:#c8a040;--cyan:#3abbd0;--white:#eeecf4;
+  --gp:rgba(144,96,232,.35);--gr:rgba(192,57,43,.4);
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;}
+body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--text);}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── BACKGROUND SVG ─────────────────────────── */
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;}
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Crimson Pro', Georgia, serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
+/* ── FLOATING PARTICLES ─────────────────────── */
+.ptcl{position:fixed;border-radius:50%;pointer-events:none;z-index:1;
+  animation:ptcl-rise linear infinite;}
+@keyframes ptcl-rise{
+  0%{transform:translateY(100vh) scale(0);opacity:0;}
+  8%{opacity:.7;}90%{opacity:.25;}
+  100%{transform:translateY(-8vh) scale(1.2);opacity:0;}}
 
-/* ─── PARTICLE BACKGROUND ─── */
-#particles {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-.particle {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0;
-  animation: float-particle linear infinite;
-}
-@keyframes float-particle {
-  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
-  10%  { opacity: 0.6; }
-  90%  { opacity: 0.3; }
-  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-}
+/* ── SCREENS ─────────────────────────────────── */
+#title-screen,#victory-screen{
+  position:fixed;inset:0;z-index:300;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:22px;
+  background:linear-gradient(160deg,#020209 0%,#06040e 60%,#020209 100%);}
+#title-screen.gone{opacity:0;pointer-events:none;transition:opacity .9s;}
+#victory-screen{display:none;}
+#victory-screen.show{display:flex;}
 
-/* ─── SCREEN CONTAINER ─── */
-#screen {
-  position: relative;
-  z-index: 1;
-  width: min(960px, 98vw);
-  height: min(700px, 96vh);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.04),
-    0 0 60px rgba(0,0,0,0.8),
-    inset 0 1px 0 rgba(255,255,255,0.06);
-  overflow: hidden;
-}
+#t-logo{font-family:'Cinzel Decorative',serif;font-size:clamp(1.6rem,4.5vw,3rem);
+  color:var(--white);text-align:center;line-height:1.25;
+  text-shadow:0 0 60px var(--gp),0 0 20px rgba(255,255,255,.08);}
+#t-logo em{font-style:normal;color:var(--purple);}
+#t-sub{font-family:'IM Fell English SC',serif;letter-spacing:.28em;font-size:.82rem;
+  color:var(--muted);text-transform:uppercase;}
+#t-quote{font-style:italic;color:var(--muted);font-size:1rem;max-width:420px;
+  text-align:center;line-height:1.7;border-left:2px solid var(--purple-dim);
+  padding-left:16px;}
+.cta-btn{background:transparent;border:1px solid var(--purple);color:var(--purple);
+  font-family:'IM Fell English SC',serif;font-size:.95rem;letter-spacing:.18em;
+  padding:13px 38px;cursor:pointer;transition:all .25s;text-transform:uppercase;}
+.cta-btn:hover{background:var(--purple);color:var(--white);box-shadow:0 0 28px var(--gp);}
 
-/* ─── TITLE BAR ─── */
-#title-bar {
-  padding: 10px 24px;
-  background: linear-gradient(90deg, #0a0a12 0%, #0e0e1a 50%, #0a0a12 100%);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-}
-#game-title {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
-  color: var(--muted);
-  text-transform: uppercase;
-}
-#game-title span { color: var(--purple); }
+#v-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.4rem,3.5vw,2.4rem);
+  color:var(--gold);text-align:center;text-shadow:0 0 40px rgba(200,160,64,.5);line-height:1.4;}
+#v-body{font-style:italic;color:var(--text);font-size:1.05rem;max-width:480px;
+  text-align:center;line-height:1.75;}
+#v-stats{font-family:'IM Fell English SC',serif;color:var(--muted);font-size:.88rem;
+  letter-spacing:.07em;text-align:center;line-height:2.2;}
+#v-stats span{color:var(--purple);}
 
-/* ─── HUD ─── */
-#hud {
-  display: flex;
-  gap: 20px;
-  font-family: 'IM Fell English SC', serif;
-  font-size: 0.8rem;
-  letter-spacing: 0.05em;
-}
-.hud-item { display: flex; align-items: center; gap: 6px; }
-.hud-label { color: var(--muted); }
-.hud-val { min-width: 20px; text-align: center; font-weight: 600; }
-#scent-val { color: var(--purple); }
-#death-val { color: var(--red); }
-#arc-val   { color: var(--gold); }
+/* ── GAME SCREEN ─────────────────────────────── */
+#screen{
+  position:relative;z-index:2;
+  width:min(980px,98vw);height:min(710px,96vh);
+  margin:auto;
+  background:rgba(10,10,20,.88);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:4px;
+  display:flex;flex-direction:column;
+  box-shadow:0 0 0 1px rgba(255,255,255,.03),0 0 80px rgba(0,0,0,.9),
+    inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter:blur(12px);
+  overflow:hidden;
+  /* center on page */
+  position:fixed;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);}
 
-/* ─── MAIN BODY ─── */
-#main {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 1fr 220px;
-  grid-template-rows: 1fr auto;
-  overflow: hidden;
-  min-height: 0;
-}
+/* ── TITLE BAR ───────────────────────────────── */
+#tbar{
+  padding:9px 22px;flex-shrink:0;
+  background:linear-gradient(90deg,#08080f,#0e0e1c,#08080f);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;}
+#tbar-title{font-family:'Cinzel Decorative',serif;font-size:.72rem;
+  letter-spacing:.2em;color:var(--muted);text-transform:uppercase;}
+#tbar-title em{font-style:normal;color:var(--purple);}
+#hud{display:flex;gap:18px;font-family:'IM Fell English SC',serif;font-size:.78rem;letter-spacing:.05em;}
+.hi{display:flex;align-items:center;gap:5px;}
+.hl{color:var(--muted);}
+.hv{font-weight:700;min-width:18px;text-align:center;}
+#hv-arc{color:var(--gold);}
+#hv-deaths{color:var(--red2);}
 
-/* ─── NARRATIVE PANEL ─── */
-#narrative-panel {
-  grid-column: 1;
-  grid-row: 1 / 3;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid var(--border);
-  overflow: hidden;
-}
+/* ── MAIN LAYOUT ─────────────────────────────── */
+#main{flex:1;display:grid;grid-template-columns:1fr 210px;grid-template-rows:1fr auto;
+  overflow:hidden;min-height:0;}
 
-#output-wrapper {
-  flex: 1;
-  overflow-y: auto;
-  padding: 28px 32px 16px;
-  scroll-behavior: smooth;
-}
-#output-wrapper::-webkit-scrollbar { width: 4px; }
-#output-wrapper::-webkit-scrollbar-track { background: transparent; }
-#output-wrapper::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+/* ── NARRATIVE PANEL ─────────────────────────── */
+#narr{grid-column:1;grid-row:1/3;display:flex;flex-direction:column;
+  border-right:1px solid var(--border);overflow:hidden;}
+#out-wrap{flex:1;overflow-y:auto;padding:24px 28px 12px;scroll-behavior:smooth;}
+#out-wrap::-webkit-scrollbar{width:3px;}
+#out-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+#arc-lbl{font-family:'IM Fell English SC',serif;font-size:.7rem;letter-spacing:.28em;
+  color:var(--purple-dim);text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;
+  border-bottom:1px solid var(--border);}
+.msg{font-size:1.02rem;line-height:1.78;margin-bottom:10px;
+  opacity:0;transform:translateY(5px);animation:min .35s ease forwards;}
+.msg+.msg{animation-delay:.08s;}
+@keyframes min{to{opacity:1;transform:none;}}
+.nar{color:var(--muted);font-style:italic;}
+.dlg{color:var(--white);}
+.dth{color:var(--red2);font-weight:600;letter-spacing:.04em;}
+.suc{color:var(--gold);font-weight:600;}
+.mem{color:var(--cyan);font-style:italic;}
+.sys{color:var(--purple);font-family:'IM Fell English SC',serif;letter-spacing:.07em;}
 
-#arc-header {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: 0.65rem;
-  letter-spacing: 0.3em;
-  color: var(--purple-dim);
-  text-transform: uppercase;
-  margin-bottom: 14px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--border);
-}
+/* ── CHOICES PANEL ───────────────────────────── */
+#choices{grid-column:1;padding:12px 28px 16px;display:flex;flex-direction:column;
+  gap:7px;border-top:1px solid var(--border);
+  background:linear-gradient(0deg,rgba(8,8,18,.95),transparent);}
+.cb{background:transparent;border:1px solid var(--border);color:var(--text);
+  font-family:'Crimson Pro',serif;font-size:.98rem;padding:9px 14px;
+  text-align:left;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.cb::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;
+  background:var(--purple-dim);transition:width .2s;z-index:0;}
+.cb:hover::before{width:100%;}
+.cb:hover{border-color:var(--purple);color:var(--white);}
+.cb span{position:relative;z-index:1;}
+.cpfx{color:var(--purple);font-family:'IM Fell English SC',serif;
+  margin-right:8px;font-size:.82rem;}
+.cb.mem-btn{border-color:rgba(58,187,208,.45);}
+.cb.mem-btn .cpfx{color:var(--cyan);}
 
-.msg {
-  font-size: 1.05rem;
-  line-height: 1.75;
-  margin-bottom: 12px;
-  opacity: 0;
-  transform: translateY(6px);
-  animation: msg-in 0.4s ease forwards;
-}
-@keyframes msg-in {
-  to { opacity: 1; transform: translateY(0); }
-}
-.msg + .msg { animation-delay: 0.1s; }
+/* ── CHARACTER SIDEBAR ───────────────────────── */
+#sidebar{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;
+  align-items:center;padding:22px 14px 16px;gap:12px;overflow:hidden;}
+#portrait-wrap{
+  width:128px;height:152px;position:relative;flex-shrink:0;
+  border:1px solid var(--border);border-radius:4px;overflow:hidden;
+  transition:border-color .5s,box-shadow .5s;}
+#portrait-wrap svg{width:100%;height:100%;display:block;}
+#cname{font-family:'IM Fell English SC',serif;font-size:.83rem;letter-spacing:.08em;
+  color:var(--gold);text-align:center;}
+#ctitle{font-family:'Crimson Pro',serif;font-size:.76rem;color:var(--muted);
+  text-align:center;font-style:italic;}
+#arc-prog{width:100%;margin-top:auto;}
+.pl{font-family:'IM Fell English SC',serif;font-size:.7rem;letter-spacing:.1em;
+  color:var(--muted);text-align:center;margin-bottom:5px;}
+.arc-pips{display:flex;justify-content:center;gap:5px;}
+.apip{width:9px;height:9px;border-radius:50%;border:1px solid var(--border);
+  background:var(--surface);transition:all .4s;}
+.apip.done{background:var(--gold);border-color:var(--gold);}
+.apip.cur{background:var(--purple);border-color:var(--purple);
+  box-shadow:0 0 8px var(--gp);}
 
-.narrative  { color: var(--muted); font-style: italic; }
-.dialogue   { color: var(--white); }
-.death-msg  { color: var(--red-bright); font-weight: 600; font-style: normal; letter-spacing: 0.05em; }
-.success-msg{ color: var(--gold); font-weight: 600; }
-.knowledge  { color: var(--cyan); font-style: italic; }
-.system-msg { color: var(--purple); font-style: normal; font-family: 'IM Fell English SC', serif; letter-spacing: 0.06em; }
-
-/* ─── CHOICES ─── */
-#choices-panel {
-  grid-column: 1;
-  padding: 16px 32px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  border-top: 1px solid var(--border);
-  background: linear-gradient(0deg, var(--surface2) 0%, transparent 100%);
-}
-
-.choice-btn {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-family: 'Crimson Pro', serif;
-  font-size: 1rem;
-  padding: 10px 16px;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.2s;
-  position: relative;
-  overflow: hidden;
-  letter-spacing: 0.02em;
-}
-.choice-btn::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 0;
-  background: var(--purple-dim);
-  transition: width 0.2s;
-  z-index: 0;
-}
-.choice-btn:hover::before { width: 100%; }
-.choice-btn:hover { border-color: var(--purple); color: var(--white); }
-.choice-btn span { position: relative; z-index: 1; }
-.choice-btn .choice-prefix {
-  color: var(--purple);
-  font-family: 'IM Fell English SC', serif;
-  margin-right: 8px;
-  font-size: 0.85rem;
-}
-.choice-knowledge { border-color: var(--cyan) !important; }
-.choice-knowledge .choice-prefix { color: var(--cyan); }
-
-/* ─── CHARACTER SIDEBAR ─── */
-#char-sidebar {
-  grid-column: 2;
-  grid-row: 1 / 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 28px 16px 20px;
-  gap: 16px;
-}
-
-#char-portrait {
-  width: 130px;
-  height: 130px;
-  border-radius: 8px;
-  border: 2px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3.5rem;
-  transition: all 0.5s ease;
-  position: relative;
-  overflow: hidden;
-}
-#char-portrait::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%);
-  pointer-events: none;
-}
-
-#char-name {
-  font-family: 'IM Fell English SC', serif;
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-align: center;
-  color: var(--gold);
-}
-#char-title {
-  font-family: 'Crimson Pro', serif;
-  font-size: 0.78rem;
-  color: var(--muted);
-  text-align: center;
-  font-style: italic;
-}
-
-/* Scent meter */
-#scent-meter {
-  width: 100%;
-  margin-top: auto;
-}
-.meter-label {
-  font-family: 'IM Fell English SC', serif;
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  margin-bottom: 6px;
-  text-align: center;
-}
-.meter-pips {
-  display: flex;
-  gap: 5px;
-  justify-content: center;
-}
-.pip {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  transition: all 0.3s;
-}
-.pip.active { background: var(--purple); border-color: var(--purple); box-shadow: 0 0 8px var(--glow-p); }
-.pip.danger { background: var(--red); border-color: var(--red); box-shadow: 0 0 8px var(--glow-r); }
-
-/* Arc progress */
-#arc-progress {
-  width: 100%;
-}
-.arc-dots {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 6px;
-}
-.arc-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  transition: all 0.4s;
-}
-.arc-dot.done  { background: var(--gold); border-color: var(--gold); }
-.arc-dot.current { background: var(--purple); border-color: var(--purple); box-shadow: 0 0 6px var(--glow-p); }
-
-/* death flash overlay */
-#death-overlay {
-  position: fixed;
-  inset: 0;
-  background: var(--red);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 100;
-  transition: opacity 0.15s;
-}
-#death-overlay.flash { animation: death-flash 0.6s ease forwards; }
-@keyframes death-flash {
-  0%   { opacity: 0; }
-  20%  { opacity: 0.4; }
-  100% { opacity: 0; }
-}
-
-/* ─── TITLE SCREEN ─── */
-#title-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg);
-  gap: 28px;
-  transition: opacity 0.8s;
-}
-#title-screen.fade-out { opacity: 0; pointer-events: none; }
-
-#title-logo {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: clamp(1.8rem, 5vw, 3.2rem);
-  color: var(--white);
-  text-align: center;
-  line-height: 1.2;
-  text-shadow: 0 0 40px var(--glow-p);
-}
-#title-logo span { color: var(--purple); }
-#title-sub {
-  font-family: 'IM Fell English SC', serif;
-  letter-spacing: 0.25em;
-  font-size: 0.9rem;
-  color: var(--muted);
-  text-transform: uppercase;
-}
-#title-tagline {
-  font-family: 'Crimson Pro', serif;
-  font-style: italic;
-  color: var(--muted);
-  font-size: 1.05rem;
-  max-width: 420px;
-  text-align: center;
-  line-height: 1.6;
-}
-#start-btn {
-  background: transparent;
-  border: 1px solid var(--purple);
-  color: var(--purple);
-  font-family: 'IM Fell English SC', serif;
-  font-size: 1rem;
-  letter-spacing: 0.18em;
-  padding: 14px 40px;
-  cursor: pointer;
-  transition: all 0.25s;
-  text-transform: uppercase;
-}
-#start-btn:hover { background: var(--purple); color: var(--white); box-shadow: 0 0 20px var(--glow-p); }
-
-/* ─── VICTORY SCREEN ─── */
-#victory-screen {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 150;
-  background: var(--bg);
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  animation: msg-in 1s ease forwards;
-}
-#victory-screen.show { display: flex; }
-#victory-title {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: clamp(1.6rem, 4vw, 2.8rem);
-  color: var(--gold);
-  text-align: center;
-  text-shadow: 0 0 40px rgba(201,164,78,0.5);
-  line-height: 1.3;
-}
-#victory-body {
-  font-family: 'Crimson Pro', serif;
-  font-style: italic;
-  color: var(--text);
-  font-size: 1.1rem;
-  max-width: 500px;
-  text-align: center;
-  line-height: 1.7;
-}
-#victory-stats {
-  font-family: 'IM Fell English SC', serif;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  font-size: 0.9rem;
-  text-align: center;
-  line-height: 2;
-}
-#victory-stats span { color: var(--purple); }
-#restart-btn {
-  background: transparent;
-  border: 1px solid var(--gold);
-  color: var(--gold);
-  font-family: 'IM Fell English SC', serif;
-  font-size: 0.95rem;
-  letter-spacing: 0.15em;
-  padding: 12px 36px;
-  cursor: pointer;
-  transition: all 0.25s;
-  text-transform: uppercase;
-}
-#restart-btn:hover { background: var(--gold); color: var(--bg); }
-
-/* scrollbar firefox */
-* { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+/* ── DEATH FLASH ─────────────────────────────── */
+#dov{position:fixed;inset:0;pointer-events:none;z-index:200;opacity:0;}
+#dov.flash{animation:dflash .7s ease forwards;}
+@keyframes dflash{0%{background:var(--red);opacity:0;}18%{opacity:.45;}100%{opacity:0;background:var(--red);}}
 </style>
 </head>
 <body>
 
-<div id="particles"></div>
-<div id="death-overlay"></div>
+<!-- ═══════════════════════════════════════════
+     ILLUSTRATED SVG BACKGROUND
+════════════════════════════════════════════ -->
+<svg id="bg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice"
+  xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#000007"/>
+    <stop offset="55%" stop-color="#05050f"/>
+    <stop offset="100%" stop-color="#0a071a"/>
+  </linearGradient>
+  <radialGradient id="mhalo" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#e8e0c8" stop-opacity=".18"/>
+    <stop offset="100%" stop-color="#e8e0c8" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="phaze" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#30126a" stop-opacity=".22"/>
+    <stop offset="100%" stop-color="#30126a" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="bhaze" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#100830" stop-opacity=".4"/>
+    <stop offset="100%" stop-color="#100830" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="sf"><feGaussianBlur stdDeviation="1.2"/></filter>
+  <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="mist"><feGaussianBlur stdDeviation="8"/></filter>
+</defs>
+<!-- Sky base -->
+<rect width="1920" height="1080" fill="url(#sky)"/>
+<!-- Atmospheric hazes -->
+<ellipse cx="380" cy="280" rx="620" ry="380" fill="url(#phaze)"/>
+<ellipse cx="960" cy="700" rx="800" ry="500" fill="url(#bhaze)"/>
+<!-- Moon halo -->
+<ellipse cx="1580" cy="175" rx="190" ry="190" fill="url(#mhalo)" filter="url(#mist)"/>
+<!-- Moon body -->
+<circle cx="1580" cy="175" r="68" fill="#f2ecd8"/>
+<!-- Crescent shadow -->
+<circle cx="1608" cy="160" r="62" fill="#000007"/>
+<!-- Moon surface detail -->
+<circle cx="1562" cy="190" r="8" fill="#ede7d0" opacity=".4"/>
+<circle cx="1578" cy="165" r="5" fill="#ede7d0" opacity=".3"/>
+<!-- Stars layer 1 – bright -->
+<g fill="white" filter="url(#sf)">
+  <circle cx="85" cy="38" r="1.4" opacity=".9"/><circle cx="195" cy="65" r="1.1" opacity=".8"/>
+  <circle cx="290" cy="25" r="1.6" opacity=".95"/><circle cx="420" cy="48" r="1" opacity=".7"/>
+  <circle cx="510" cy="18" r="1.3" opacity=".85"/><circle cx="630" cy="55" r="1.5" opacity=".9"/>
+  <circle cx="700" cy="30" r="1" opacity=".75"/><circle cx="810" cy="42" r="1.2" opacity=".8"/>
+  <circle cx="880" cy="15" r="1.6" opacity=".95"/><circle cx="980" cy="58" r="1" opacity=".7"/>
+  <circle cx="1050" cy="28" r="1.3" opacity=".85"/><circle cx="1140" cy="50" r="1.1" opacity=".8"/>
+  <circle cx="1240" cy="20" r="1.5" opacity=".9"/><circle cx="1330" cy="62" r="1" opacity=".7"/>
+  <circle cx="1420" cy="35" r="1.4" opacity=".88"/><circle cx="1500" cy="80" r="1.2" opacity=".75"/>
+  <circle cx="1650" cy="55" r="1" opacity=".8"/><circle cx="1720" cy="22" r="1.5" opacity=".9"/>
+  <circle cx="1800" cy="48" r="1.1" opacity=".82"/><circle cx="1870" cy="30" r="1.3" opacity=".88"/>
+</g>
+<!-- Stars layer 2 – dim -->
+<g fill="white" opacity=".5">
+  <circle cx="140" cy="88" r=".8"/><circle cx="255" cy="102" r=".7"/>
+  <circle cx="365" cy="75" r=".9"/><circle cx="455" cy="112" r=".7"/>
+  <circle cx="545" cy="85" r=".8"/><circle cx="665" cy="98" r=".9"/>
+  <circle cx="755" cy="72" r=".7"/><circle cx="845" cy="105" r=".8"/>
+  <circle cx="935" cy="88" r=".9"/><circle cx="1025" cy="68" r=".7"/>
+  <circle cx="1115" cy="95" r=".8"/><circle cx="1205" cy="78" r=".9"/>
+  <circle cx="1295" cy="105" r=".7"/><circle cx="1385" cy="82" r=".8"/>
+  <circle cx="1475" cy="110" r=".9"/><circle cx="1565" cy="240" r=".7"/>
+  <circle cx="1655" cy="98" r=".8"/><circle cx="1745" cy="75" r=".9"/>
+  <circle cx="1835" cy="108" r=".7"/><circle cx="120" cy="140" r=".8"/>
+  <circle cx="348" cy="155" r=".7"/><circle cx="592" cy="135" r=".9"/>
+  <circle cx="748" cy="160" r=".7"/><circle cx="912" cy="142" r=".8"/>
+  <circle cx="1068" cy="165" r=".9"/><circle cx="1224" cy="148" r=".7"/>
+  <circle cx="1380" cy="172" r=".8"/><circle cx="1536" cy="155" r=".9"/>
+  <circle cx="1692" cy="145" r=".7"/><circle cx="1848" cy="162" r=".8"/>
+</g>
+<!-- Shooting star -->
+<line x1="200" y1="80" x2="320" y2="130" stroke="white" stroke-width="1.2"
+  opacity=".35" stroke-dasharray="40 20">
+  <animate attributeName="opacity" values="0;.35;0" dur="6s" begin="3s" repeatCount="indefinite"/>
+</line>
+<!-- Distant mountains – far layer (lightest) -->
+<path d="M0 700 L140 560 L260 640 L380 520 L500 610 L620 490 L740 575 
+  L860 455 L980 545 L1100 440 L1220 530 L1340 430 L1460 510 L1580 420 
+  L1700 490 L1820 445 L1920 470 L1920 1080 L0 1080Z" fill="#08060f" opacity=".65"/>
+<!-- Mid mountains -->
+<path d="M0 780 L120 660 L240 730 L360 620 L480 690 L600 600 L720 665 
+  L840 580 L960 640 L1080 570 L1200 625 L1320 570 L1440 620 L1560 565 
+  L1680 605 L1800 580 L1920 600 L1920 1080 L0 1080Z" fill="#06050e"/>
+<!-- Forest silhouette - left -->
+<g fill="#04030c">
+  <path d="M0 820 L30 760 L45 780 L60 740 L80 770 L95 730 L115 765 L130 725 L150 760 L165 720 L185 758 L200 718 L215 755 L230 715 L250 752 L265 712 L285 750 L300 840 L0 840Z"/>
+  <path d="M280 830 L310 770 L325 790 L340 755 L360 782 L375 742 L395 778 L410 738 L430 775 L445 735 L460 772 L475 735 L490 770 L505 840Z"/>
+</g>
+<!-- Forest silhouette - right -->
+<g fill="#04030c">
+  <path d="M1630 840 L1645 800 L1660 818 L1678 782 L1695 808 L1712 768 L1730 805 L1748 765 L1765 800 L1782 760 L1800 795 L1818 758 L1835 795 L1852 760 L1870 798 L1888 762 L1905 800 L1920 790 L1920 840Z"/>
+  <path d="M1490 838 L1508 795 L1525 815 L1542 778 L1560 808 L1578 770 L1595 805 L1613 768 L1630 800 L1630 840Z"/>
+</g>
+<!-- Roswaal Castle silhouette -->
+<g fill="#030210">
+  <!-- Ground base -->
+  <rect x="780" y="660" width="360" height="260"/>
+  <!-- Left wing -->
+  <rect x="680" y="700" width="110" height="200"/>
+  <!-- Right wing -->
+  <rect x="1130" y="700" width="110" height="200"/>
+  <!-- Main central tower -->
+  <rect x="870" y="520" width="180" height="220"/>
+  <!-- Center spire -->
+  <polygon points="870,520 960,420 1050,520"/>
+  <!-- Left tower -->
+  <rect x="770" y="570" width="95" height="160"/>
+  <polygon points="770,570 817,500 862,570"/>
+  <!-- Right tower -->
+  <rect x="1055" y="570" width="95" height="160"/>
+  <polygon points="1055,570 1102,500 1150,570"/>
+  <!-- Far left turret -->
+  <rect x="690" y="620" width="60" height="120"/>
+  <polygon points="690,620 720,565 750,620"/>
+  <!-- Far right turret -->
+  <rect x="1170" y="620" width="60" height="120"/>
+  <polygon points="1170,620 1200,565 1230,620"/>
+  <!-- Battlements main wall -->
+  <rect x="780" y="650" width="22" height="22"/>
+  <rect x="814" y="650" width="22" height="22"/>
+  <rect x="848" y="650" width="22" height="22"/>
+  <rect x="1050" y="650" width="22" height="22"/>
+  <rect x="1084" y="650" width="22" height="22"/>
+  <rect x="1118" y="650" width="22" height="22"/>
+  <!-- Lit windows (purple glow) -->
+  <rect x="900" y="558" width="18" height="28" rx="2" fill="#2a0d50" opacity=".9"/>
+  <rect x="940" y="558" width="18" height="28" rx="2" fill="#1e0838" opacity=".7"/>
+  <rect x="980" y="558" width="18" height="28" rx="2" fill="#2a0d50" opacity=".9"/>
+  <!-- Window glow halos -->
+  <rect x="898" y="556" width="22" height="32" rx="3" fill="none" stroke="#4a1890" stroke-width="2" opacity=".4"/>
+  <rect x="978" y="556" width="22" height="32" rx="3" fill="none" stroke="#4a1890" stroke-width="2" opacity=".4"/>
+  <!-- Ground floor windows -->
+  <rect x="820" y="720" width="25" height="38" rx="2" fill="#1e0838" opacity=".6"/>
+  <rect x="860" y="720" width="25" height="38" rx="2" fill="#2a0d50" opacity=".7"/>
+  <rect x="900" y="720" width="25" height="38" rx="2" fill="#1e0838" opacity=".6"/>
+  <rect x="940" y="720" width="25" height="38" rx="2" fill="#2a0d50" opacity=".7"/>
+  <rect x="980" y="720" width="25" height="38" rx="2" fill="#1e0838" opacity=".6"/>
+  <rect x="1020" y="720" width="25" height="38" rx="2" fill="#2a0d50" opacity=".7"/>
+  <rect x="1060" y="720" width="25" height="38" rx="2" fill="#1e0838" opacity=".6"/>
+  <!-- Gate -->
+  <path d="M940 920 L940 820 Q960 790 980 820 L980 920Z" fill="#020110"/>
+  <!-- Gate arch detail -->
+  <path d="M938 820 Q960 786 982 820" stroke="#1a0838" stroke-width="2" fill="none" opacity=".6"/>
+</g>
+<!-- Ground mist -->
+<path d="M0 920 Q480 880 960 900 Q1440 880 1920 920 L1920 1080 L0 1080Z"
+  fill="#070510" opacity=".85" filter="url(#mist)"/>
+<!-- Foreground ground -->
+<rect x="0" y="940" width="1920" height="140" fill="#040310"/>
+<!-- Path to castle -->
+<path d="M960 940 Q980 900 960 860 Q940 900 960 940Z" fill="#06041a" opacity=".5"/>
 
-<!-- TITLE SCREEN -->
+<!-- Ambient glowing orbs -->
+<circle cx="750" cy="620" r="30" fill="#200850" opacity=".15" filter="url(#mist)"/>
+<circle cx="1170" cy="640" r="25" fill="#200850" opacity=".12" filter="url(#mist)"/>
+<!-- Butterflies/petals floating (subtle) -->
+<g opacity=".18" fill="#8060d0">
+  <ellipse cx="600" cy="500" rx="6" ry="3" transform="rotate(-20,600,500)">
+    <animate attributeName="cy" values="500;480;500" dur="4s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="1300" cy="450" rx="5" ry="2.5" transform="rotate(15,1300,450)">
+    <animate attributeName="cy" values="450;430;450" dur="5s" begin="1s" repeatCount="indefinite"/>
+  </ellipse>
+</g>
+</svg>
+
+<!-- Floating particles -->
+<div id="ptcls"></div>
+<!-- Death flash -->
+<div id="dov"></div>
+
+<!-- ═══════════════════════════════════════════
+     TITLE SCREEN
+════════════════════════════════════════════ -->
 <div id="title-screen">
-  <div id="title-logo">Re:<span>Zero</span><br>Starting Life in Another World</div>
-  <div id="title-sub">Return by Death — A Text Adventure</div>
-  <div id="title-tagline">"I don't have any special abilities. I can only go back in time when I die. So I'll keep dying, as many times as it takes."</div>
-  <button id="start-btn" onclick="startGame()">Begin Your Story</button>
+  <div id="t-logo">Re:<em>Zero</em><br>Starting Life in Another World</div>
+  <div id="t-sub">Return by Death — Interactive Story</div>
+  <div id="t-quote">"I have no special talents. I have no magic. All I can do is die over and over, and keep standing up."</div>
+  <button class="cta-btn" onclick="startGame()">Begin Your Story</button>
 </div>
 
-<!-- VICTORY SCREEN -->
+<!-- ═══════════════════════════════════════════
+     VICTORY SCREEN
+════════════════════════════════════════════ -->
 <div id="victory-screen">
-  <div id="victory-title">✦ You Loved Yourself Again ✦<br><small style="font-size:0.55em; color:var(--muted); letter-spacing:0.1em">ALL FIVE ARCS CLEARED</small></div>
-  <div id="victory-body">From a helpless stranger in a foreign capital to the hero of Pristella — every death carved away the person who couldn't believe in himself. What remains is someone worthy of the people who believed in him all along.</div>
-  <div id="victory-stats">
-    Total Deaths: <span id="v-deaths">0</span><br>
-    Witch's Scent at End: <span id="v-scent">0</span> / 5<br>
-    Knowledge Gained Across Loops: <span id="v-knowledge">0</span>
+  <div id="v-title">✦ You Loved Yourself Again ✦<br>
+    <small style="font-family:'IM Fell English SC',serif;font-size:.45em;color:var(--muted);letter-spacing:.15em;">
+      ALL FIVE ARCS CLEARED</small></div>
+  <div id="v-body">From a helpless stranger in a foreign capital to the hero who saved Pristella — every death, every humiliation, every moment of despair carved away the person who couldn't believe in himself. What remains is someone worthy of those who believed in him all along.</div>
+  <div id="v-stats">
+    Total Deaths: <span id="vd">0</span><br>
+    Loops Survived: <span id="vk">0</span>
   </div>
-  <button id="restart-btn" onclick="location.reload()">Return to Zero</button>
+  <button class="cta-btn" onclick="location.reload()">Return to Zero</button>
 </div>
 
-<!-- GAME SCREEN -->
+<!-- ═══════════════════════════════════════════
+     GAME SCREEN
+════════════════════════════════════════════ -->
 <div id="screen">
-  <!-- Title Bar -->
-  <div id="title-bar">
-    <div id="game-title">Re:<span>Zero</span> — Return by Death</div>
+  <div id="tbar">
+    <div id="tbar-title">Re:<em>Zero</em> — Return by Death</div>
     <div id="hud">
-      <div class="hud-item"><span class="hud-label">Arc</span><span class="hud-val" id="arc-val">—</span></div>
-      <div class="hud-item"><span class="hud-label">Scent</span><span class="hud-val" id="scent-val">0</span></div>
-      <div class="hud-item"><span class="hud-label">Deaths</span><span class="hud-val" id="death-val">0</span></div>
+      <div class="hi"><span class="hl">Arc</span><span class="hv" id="hv-arc">—</span></div>
+      <div class="hi"><span class="hl">Deaths</span><span class="hv" id="hv-deaths">0</span></div>
     </div>
   </div>
-
-  <!-- Main Content -->
   <div id="main">
-    <!-- Narrative + Choices -->
-    <div id="narrative-panel">
-      <div id="output-wrapper">
-        <div id="arc-header">Prologue</div>
+    <div id="narr">
+      <div id="out-wrap">
+        <div id="arc-lbl">Prologue</div>
         <div id="output"></div>
       </div>
-      <div id="choices-panel"></div>
+      <div id="choices"></div>
     </div>
-
-    <!-- Character Sidebar -->
-    <div id="char-sidebar">
-      <div id="char-portrait" style="background:#111;color:#333;">●</div>
-      <div id="char-name">—</div>
-      <div id="char-title">—</div>
-
-      <div id="scent-meter">
-        <div class="meter-label">Witch's Scent</div>
-        <div class="meter-pips" id="pip-row"></div>
-      </div>
-
-      <div id="arc-progress">
-        <div class="meter-label">Arc Progress</div>
-        <div class="arc-dots" id="arc-dots"></div>
+    <div id="sidebar">
+      <div id="portrait-wrap"></div>
+      <div id="cname">—</div>
+      <div id="ctitle">—</div>
+      <div id="arc-prog">
+        <div class="pl">Arc Progress</div>
+        <div class="arc-pips" id="ap"></div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-/* =========================================================
-   GAME STATE
-   ========================================================= */
+/* ═══════════════════════════════════════
+   CHARACTER SVG PORTRAITS
+═══════════════════════════════════════ */
+const P = {
+none: `<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<rect width="110" height="140" fill="#08080f"/>
+<circle cx="55" cy="65" r="28" fill="#12121e" stroke="#1e1e30" stroke-width="1.5"/>
+<text x="55" y="72" text-anchor="middle" font-size="22" fill="#2a2a3a" font-family="serif">?</text>
+</svg>`,
+
+subaru:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bg_s" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#0a1428"/><stop offset="100%" stop-color="#060c1e"/></linearGradient></defs>
+<rect width="110" height="140" fill="url(#bg_s)"/>
+<!-- Body tracksuit -->
+<rect x="12" y="108" width="86" height="38" rx="4" fill="#1848b8"/>
+<rect x="42" y="100" width="26" height="14" fill="#f2b880"/>
+<!-- White collar stripe -->
+<rect x="38" y="108" width="34" height="6" rx="2" fill="#e8e8f0"/>
+<!-- Head -->
+<ellipse cx="55" cy="76" rx="27" ry="30" fill="#f2b880"/>
+<!-- Ear -->
+<ellipse cx="28" cy="80" rx="5" ry="7" fill="#f2b880"/>
+<ellipse cx="82" cy="80" rx="5" ry="7" fill="#f2b880"/>
+<!-- Hair back (dark) -->
+<ellipse cx="55" cy="57" rx="30" ry="20" fill="#181818"/>
+<!-- Hair sides -->
+<path d="M25 72 Q20 60 28 48 Q35 38 55 36 Q75 36 82 48 Q88 60 85 72" fill="#181818"/>
+<!-- Hair top messy spikes -->
+<path d="M32 54 Q38 42 50 46 Q55 36 65 42 Q72 36 76 48 Q82 44 84 54" fill="#181818"/>
+<!-- Fringe tufts on forehead -->
+<path d="M36 66 Q42 55 50 62" fill="#181818"/>
+<path d="M46 64 Q54 53 62 60" fill="#181818"/>
+<path d="M60 65 Q67 55 73 62" fill="#181818"/>
+<!-- Eyes -->
+<ellipse cx="44" cy="78" rx="6" ry="7" fill="white"/>
+<ellipse cx="66" cy="78" rx="6" ry="7" fill="white"/>
+<ellipse cx="44" cy="79" rx="4" ry="4.5" fill="#1a3575"/>
+<ellipse cx="66" cy="79" rx="4" ry="4.5" fill="#1a3575"/>
+<ellipse cx="43" cy="78" rx="1.8" ry="2" fill="#060e28"/>
+<ellipse cx="65" cy="78" rx="1.8" ry="2" fill="#060e28"/>
+<circle cx="45.5" cy="76.5" r=".9" fill="white" opacity=".7"/>
+<circle cx="67.5" cy="76.5" r=".9" fill="white" opacity=".7"/>
+<!-- Eyebrows -->
+<path d="M38 70 Q44 67 50 70" stroke="#181818" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<path d="M60 70 Q66 67 72 70" stroke="#181818" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<!-- Mouth – determined -->
+<path d="M47 91 Q55 96 63 91" stroke="#c07050" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<!-- Tracksuit stripe -->
+<rect x="12" y="118" width="8" height="28" rx="2" fill="#0e2d80" opacity=".8"/>
+<rect x="90" y="118" width="8" height="28" rx="2" fill="#0e2d80" opacity=".8"/>
+</svg>`,
+
+emilia:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bg_e" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#160a2a"/><stop offset="100%" stop-color="#0c0618"/></linearGradient></defs>
+<rect width="110" height="140" fill="url(#bg_e)"/>
+<!-- Body – purple dress -->
+<path d="M15 140 L18 110 Q30 105 55 106 Q80 105 92 110 L95 140Z" fill="#7a3ab0"/>
+<!-- Dress detail -->
+<path d="M30 110 Q55 102 80 110" stroke="#9b50d0" stroke-width="1.5" fill="none"/>
+<!-- Neck -->
+<rect x="44" y="100" width="22" height="12" fill="#f5e0d0"/>
+<!-- Head -->
+<ellipse cx="55" cy="74" rx="27" ry="30" fill="#f5e0d0"/>
+<!-- Elf ears -->
+<path d="M28 74 Q18 68 22 60 Q26 54 30 62Z" fill="#f5e0d0"/>
+<path d="M82 74 Q92 68 88 60 Q84 54 80 62Z" fill="#f5e0d0"/>
+<path d="M28 74 Q20 68 23 61" stroke="#e0c5b0" stroke-width="1" fill="none"/>
+<path d="M82 74 Q90 68 87 61" stroke="#e0c5b0" stroke-width="1" fill="none"/>
+<!-- Hair long silver – back -->
+<path d="M22 78 Q15 100 18 135 L30 135 Q28 105 30 85Z" fill="#dde0e8"/>
+<path d="M88 78 Q95 100 92 135 L80 135 Q82 105 80 85Z" fill="#dde0e8"/>
+<!-- Hair top -->
+<path d="M28 68 Q32 40 55 34 Q78 40 82 68 Q78 52 55 50 Q32 52 28 68Z" fill="#e8eaf2"/>
+<!-- Hair sides framing face -->
+<path d="M28 70 Q24 78 26 90" stroke="#dde0e8" stroke-width="6" fill="none" stroke-linecap="round"/>
+<path d="M82 70 Q86 78 84 90" stroke="#dde0e8" stroke-width="6" fill="none" stroke-linecap="round"/>
+<!-- Hair flower accessory -->
+<circle cx="38" cy="58" r="5" fill="#c8a0c8"/>
+<circle cx="38" cy="58" r="3" fill="#e8d0e8"/>
+<!-- Eyes – violet -->
+<ellipse cx="44" cy="76" rx="6.5" ry="7.5" fill="white"/>
+<ellipse cx="66" cy="76" rx="6.5" ry="7.5" fill="white"/>
+<ellipse cx="44" cy="77" rx="4.5" ry="5.5" fill="#7020a0"/>
+<ellipse cx="66" cy="77" rx="4.5" ry="5.5" fill="#7020a0"/>
+<ellipse cx="43" cy="76" rx="2" ry="2.5" fill="#28003a"/>
+<ellipse cx="65" cy="76" rx="2" ry="2.5" fill="#28003a"/>
+<circle cx="46" cy="74" r="1" fill="white" opacity=".8"/>
+<circle cx="68" cy="74" r="1" fill="white" opacity=".8"/>
+<!-- Eyebrows -->
+<path d="M37 68 Q44 65 50 68" stroke="#c8b0a0" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<path d="M60 68 Q66 65 73 68" stroke="#c8b0a0" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<!-- Mouth – gentle smile -->
+<path d="M47 90 Q55 95 63 90" stroke="#d09080" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+</svg>`,
+
+rem:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bg_r" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#041420"/><stop offset="100%" stop-color="#020a14"/></linearGradient></defs>
+<rect width="110" height="140" fill="url(#bg_r)"/>
+<!-- Maid body -->
+<path d="M15 140 L18 108 Q30 103 55 104 Q80 103 92 108 L95 140Z" fill="#1c3d68"/>
+<!-- White apron -->
+<path d="M38 110 L38 140 L72 140 L72 110 Q55 106 38 110Z" fill="#e8eaf0"/>
+<!-- Blue dress trim -->
+<path d="M18 114 Q55 108 92 114" stroke="#4a80b0" stroke-width="2" fill="none"/>
+<!-- Neck -->
+<rect x="44" y="98" width="22" height="12" fill="#f5e0d0"/>
+<!-- Head -->
+<ellipse cx="55" cy="74" rx="27" ry="30" fill="#f5e0d0"/>
+<!-- Ear -->
+<ellipse cx="28" cy="78" rx="5" ry="6" fill="#f5e0d0"/>
+<ellipse cx="82" cy="78" rx="5" ry="6" fill="#f5e0d0"/>
+<!-- Hair – blue bob -->
+<path d="M28 72 Q26 52 38 38 Q55 28 72 38 Q84 52 82 72 Q78 58 55 55 Q32 58 28 72Z" fill="#2860b8"/>
+<!-- Left side longer bob -->
+<path d="M28 72 Q24 90 28 108 L38 108 Q36 88 36 72Z" fill="#2860b8"/>
+<!-- Right side shorter -->
+<path d="M82 72 Q86 82 84 95 L76 95 Q76 82 74 72Z" fill="#2860b8"/>
+<!-- Bangs covering right eye -->
+<path d="M46 68 Q58 56 74 62 Q72 70 64 68 Q58 64 48 72Z" fill="#2860b8"/>
+<!-- White maid headband -->
+<rect x="28" y="56" width="54" height="8" rx="3" fill="white" opacity=".9"/>
+<!-- Headband bow -->
+<path d="M48 52 Q55 46 62 52 Q55 58 48 52Z" fill="white"/>
+<circle cx="55" cy="52" r="2.5" fill="#e0e4f0"/>
+<!-- Eyes – right mostly covered, left visible -->
+<ellipse cx="44" cy="78" rx="6" ry="7" fill="white"/>
+<ellipse cx="44" cy="79" rx="4" ry="4.8" fill="#1850a8"/>
+<ellipse cx="43" cy="78" rx="1.8" ry="2.2" fill="#08183a"/>
+<circle cx="45.5" cy="76.5" r=".9" fill="white" opacity=".8"/>
+<!-- Right eye barely visible under bangs -->
+<ellipse cx="66" cy="76" rx="3" ry="3" fill="#1850a8" opacity=".5"/>
+<!-- Eyebrow left -->
+<path d="M37 70 Q44 67 50 70" stroke="#1a3060" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<!-- Mouth – sweet -->
+<path d="M47 90 Q55 95 63 90" stroke="#d09080" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+</svg>`,
+
+ram:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bg_ram" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#1a0818"/><stop offset="100%" stop-color="#0e040e"/></linearGradient></defs>
+<rect width="110" height="140" fill="url(#bg_ram)"/>
+<!-- Maid body – same as Rem but pink tones -->
+<path d="M15 140 L18 108 Q30 103 55 104 Q80 103 92 108 L95 140Z" fill="#6a2a50"/>
+<path d="M38 110 L38 140 L72 140 L72 110 Q55 106 38 110Z" fill="#e8eaf0"/>
+<path d="M18 114 Q55 108 92 114" stroke="#c060a0" stroke-width="2" fill="none"/>
+<rect x="44" y="98" width="22" height="12" fill="#f5e0d0"/>
+<ellipse cx="55" cy="74" rx="27" ry="30" fill="#f5e0d0"/>
+<ellipse cx="28" cy="78" rx="5" ry="6" fill="#f5e0d0"/>
+<ellipse cx="82" cy="78" rx="5" ry="6" fill="#f5e0d0"/>
+<!-- Hair – pink, slightly different cut than Rem, right side longer -->
+<path d="M28 72 Q26 52 38 38 Q55 28 72 38 Q84 52 82 72 Q78 58 55 55 Q32 58 28 72Z" fill="#e860a0"/>
+<!-- Right side longer this time -->
+<path d="M82 72 Q86 90 84 108 L74 108 Q74 88 74 72Z" fill="#e860a0"/>
+<!-- Left side shorter -->
+<path d="M28 72 Q24 82 26 95 L34 95 Q34 82 36 72Z" fill="#e860a0"/>
+<!-- Bangs covering LEFT eye instead -->
+<path d="M36 68 Q46 56 60 63 Q54 70 46 68 Q42 64 36 72Z" fill="#e860a0"/>
+<!-- White headband -->
+<rect x="28" y="56" width="54" height="8" rx="3" fill="white" opacity=".9"/>
+<path d="M48 52 Q55 46 62 52 Q55 58 48 52Z" fill="white"/>
+<circle cx="55" cy="52" r="2.5" fill="#f0d0e0"/>
+<!-- Right eye visible, left covered -->
+<ellipse cx="66" cy="78" rx="6" ry="7" fill="white"/>
+<ellipse cx="66" cy="79" rx="4" ry="4.8" fill="#c03880"/>
+<ellipse cx="65" cy="78" rx="1.8" ry="2.2" fill="#3a0820"/>
+<circle cx="67.5" cy="76.5" r=".9" fill="white" opacity=".8"/>
+<ellipse cx="44" cy="76" rx="3" ry="3" fill="#c03880" opacity=".5"/>
+<path d="M60 70 Q66 67 73 70" stroke="#80205a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<!-- Expression – slightly stern -->
+<path d="M47 90 Q55 93 63 90" stroke="#d09080" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+</svg>`,
+
+felt:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bg_f" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#18100a"/><stop offset="100%" stop-color="#100808"/></linearGradient></defs>
+<rect width="110" height="140" fill="url(#bg_f)"/>
+<!-- Body – rough street clothes -->
+<path d="M18 140 L20 108 Q35 102 55 103 Q75 102 90 108 L92 140Z" fill="#5a3818"/>
+<!-- Vest/top -->
+<path d="M30 108 Q55 100 80 108 L80 130 Q55 132 30 130Z" fill="#8a5428"/>
+<!-- Neck -->
+<rect x="44" y="98" width="22" height="12" fill="#e8b070"/>
+<!-- Head – slightly smaller/younger -->
+<ellipse cx="55" cy="76" rx="25" ry="28" fill="#e8b070"/>
+<ellipse cx="30" cy="80" rx="4.5" ry="5.5" fill="#e8b070"/>
+<ellipse cx="80" cy="80" rx="4.5" ry="5.5" fill="#e8b070"/>
+<!-- Hair – wild messy blonde -->
+<path d="M30 74 Q28 52 40 38 Q55 26 70 38 Q82 52 80 74 Q76 56 55 54 Q34 56 30 74Z" fill="#d4a020"/>
+<!-- Messy tufts -->
+<path d="M28 60 Q24 48 32 42 Q38 38 44 44" fill="#d4a020"/>
+<path d="M82 60 Q86 48 78 42 Q72 38 66 44" fill="#d4a020"/>
+<path d="M38 40 Q46 30 55 32 Q64 30 72 40" fill="#e0b030" stroke="#d4a020" stroke-width="1"/>
+<path d="M30 62 Q26 50 34 44" fill="#e0b030"/>
+<path d="M80 62 Q84 50 76 44" fill="#e0b030"/>
+<!-- Side strands - messy -->
+<path d="M30 72 Q24 85 26 100" stroke="#d4a020" stroke-width="6" fill="none" stroke-linecap="round"/>
+<path d="M80 72 Q86 85 84 100" stroke="#d4a020" stroke-width="6" fill="none" stroke-linecap="round"/>
+<!-- Eyes – red/pink (she has red eyes) -->
+<ellipse cx="44" cy="78" rx="6" ry="7" fill="white"/>
+<ellipse cx="66" cy="78" rx="6" ry="7" fill="white"/>
+<ellipse cx="44" cy="79" rx="4" ry="4.8" fill="#d82030"/>
+<ellipse cx="66" cy="79" rx="4" ry="4.8" fill="#d82030"/>
+<ellipse cx="43" cy="78" rx="1.8" ry="2.2" fill="#600010"/>
+<ellipse cx="65" cy="78" rx="1.8" ry="2.2" fill="#600010"/>
+<circle cx="45.5" cy="76.5" r=".9" fill="white" opacity=".7"/>
+<circle cx="67.5" cy="76.5" r=".9" fill="white" opacity=".7"/>
+<!-- Eyebrows – raised/cheeky -->
+<path d="M37 69 Q44 65 50 68" stroke="#a07018" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<path d="M60 68 Q66 65 73 69" stroke="#a07018" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<!-- Mouth – sly grin -->
+<path d="M47 90 Q55 97 65 90 Q60 94 55 95 Q50 94 47 90Z" fill="#d08060" stroke="#c07050" stroke-width="1"/>
+</svg>`,
+
+rom:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bg_rom" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#0e0a06"/><stop offset="100%" stop-color="#080604"/></linearGradient></defs>
+<rect width="110" height="140" fill="url(#bg_rom)"/>
+<!-- Large body – giant frame -->
+<path d="M5 140 L10 100 Q28 90 55 92 Q82 90 100 100 L105 140Z" fill="#2a1e12"/>
+<path d="M10 106 Q55 96 100 106" stroke="#3a2a18" stroke-width="2" fill="none"/>
+<!-- Neck – thick -->
+<rect x="40" y="90" width="30" height="14" fill="#7a5030"/>
+<!-- Head – large round -->
+<ellipse cx="55" cy="68" rx="32" ry="32" fill="#7a5030"/>
+<ellipse cx="23" cy="72" rx="6" ry="7" fill="#7a5030"/>
+<ellipse cx="87" cy="72" rx="6" ry="7" fill="#7a5030"/>
+<!-- Bald head with fringe -->
+<ellipse cx="55" cy="48" rx="32" ry="16" fill="#5a3a1a"/>
+<!-- Hair fringe at back (grey) -->
+<path d="M23 64 Q18 72 20 84" stroke="#808090" stroke-width="6" fill="none" stroke-linecap="round"/>
+<path d="M87 64 Q92 72 90 84" stroke="#808090" stroke-width="6" fill="none" stroke-linecap="round"/>
+<!-- Eyepatch on left eye -->
+<ellipse cx="43" cy="68" rx="9" ry="8" fill="#181412"/>
+<path d="M34 64 Q43 60 52 64" stroke="#2a2018" stroke-width="2" fill="none"/>
+<!-- Right eye – small, sharp -->
+<ellipse cx="68" cy="68" rx="5.5" ry="6" fill="white"/>
+<ellipse cx="68" cy="69" rx="3.5" ry="4" fill="#3a2810"/>
+<ellipse cx="67.5" cy="68" rx="1.5" ry="1.8" fill="#120e08"/>
+<circle cx="69" cy="67" r=".8" fill="white" opacity=".6"/>
+<!-- Eyebrow right -->
+<path d="M62 61 Q68 58 74 61" stroke="#5a4020" stroke-width="2" fill="none" stroke-linecap="round"/>
+<!-- Nose (more prominent) -->
+<ellipse cx="55" cy="76" rx="4" ry="5" fill="#6a4025" opacity=".5"/>
+<!-- Mouth – neutral stern -->
+<path d="M45 85 Q55 83 65 85" stroke="#5a3820" stroke-width="2" fill="none" stroke-linecap="round"/>
+<!-- Beard stubble suggestion -->
+<path d="M40 86 Q55 92 70 86" stroke="#503820" stroke-width="3" fill="none" stroke-linecap="round" opacity=".5"/>
+</svg>`,
+
+julius:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bg_j" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#0a0818"/><stop offset="100%" stop-color="#060410"/></linearGradient></defs>
+<rect width="110" height="140" fill="url(#bg_j)"/>
+<!-- Knight uniform – royal blue/gold -->
+<path d="M12 140 L15 106 Q30 99 55 100 Q80 99 95 106 L98 140Z" fill="#1a2860"/>
+<!-- Gold trim/epaulettes -->
+<path d="M15 106 Q55 98 95 106" stroke="#c09030" stroke-width="2.5" fill="none"/>
+<path d="M15 114 L25 110 L25 140" fill="#c09030" opacity=".5"/>
+<path d="M95 114 L85 110 L85 140" fill="#c09030" opacity=".5"/>
+<!-- Epaulettes -->
+<ellipse cx="22" cy="108" rx="12" ry="6" fill="#c09030"/>
+<ellipse cx="88" cy="108" rx="12" ry="6" fill="#c09030"/>
+<!-- Medal/insignia -->
+<circle cx="55" cy="118" r="7" fill="#c09030"/>
+<circle cx="55" cy="118" r="4" fill="#e8c060"/>
+<!-- Neck -->
+<rect x="44" y="96" width="22" height="12" fill="#f0ddc0"/>
+<!-- Head -->
+<ellipse cx="55" cy="72" rx="26" ry="29" fill="#f0ddc0"/>
+<ellipse cx="29" cy="76" rx="5" ry="6" fill="#f0ddc0"/>
+<ellipse cx="81" cy="76" rx="5" ry="6" fill="#f0ddc0"/>
+<!-- Hair – violet/purple, neat and elegant -->
+<path d="M29 70 Q28 50 40 36 Q55 26 70 36 Q82 50 81 70 Q77 54 55 52 Q33 54 29 70Z" fill="#7040a0"/>
+<!-- Side hair neat -->
+<path d="M29 68 Q26 78 28 90 L36 90 Q35 78 34 68Z" fill="#7040a0"/>
+<path d="M81 68 Q84 78 82 90 L74 90 Q75 78 76 68Z" fill="#7040a0"/>
+<!-- Top hair slight wave -->
+<path d="M38 46 Q55 36 72 46 Q68 40 55 38 Q42 40 38 46Z" fill="#8050b8"/>
+<!-- Eyes – green (Julius has green eyes) -->
+<ellipse cx="44" cy="74" rx="6" ry="7" fill="white"/>
+<ellipse cx="66" cy="74" rx="6" ry="7" fill="white"/>
+<ellipse cx="44" cy="75" rx="4" ry="4.8" fill="#206040"/>
+<ellipse cx="66" cy="75" rx="4" ry="4.8" fill="#206040"/>
+<ellipse cx="43" cy="74" rx="1.8" ry="2.2" fill="#081820"/>
+<ellipse cx="65" cy="74" rx="1.8" ry="2.2" fill="#081820"/>
+<circle cx="45.5" cy="72.5" r=".9" fill="white" opacity=".8"/>
+<circle cx="67.5" cy="72.5" r=".9" fill="white" opacity=".8"/>
+<!-- Eyebrows – thin, elegant -->
+<path d="M37 66 Q44 63 50 66" stroke="#502080" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<path d="M60 66 Q66 63 73 66" stroke="#502080" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<!-- Mouth – composed, slight smirk -->
+<path d="M47 87 Q55 90 64 86" stroke="#c0a080" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+</svg>`,
+
+elsa:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bg_el" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#1a0006"/><stop offset="100%" stop-color="#0e0004"/></linearGradient></defs>
+<rect width="110" height="140" fill="url(#bg_el)"/>
+<!-- Dark revealing outfit -->
+<path d="M15 140 L20 102 Q35 94 55 95 Q75 94 90 102 L95 140Z" fill="#180810"/>
+<!-- Décolletage suggestion -->
+<path d="M38 102 Q55 90 72 102" stroke="#280818" stroke-width="2" fill="none"/>
+<!-- Neck -->
+<rect x="44" y="90" width="22" height="14" fill="#f0c8c0"/>
+<!-- Head -->
+<ellipse cx="55" cy="70" rx="27" ry="31" fill="#f0c8c0"/>
+<ellipse cx="28" cy="74" rx="5" ry="6" fill="#f0c8c0"/>
+<ellipse cx="82" cy="74" rx="5" ry="6" fill="#f0c8c0"/>
+<!-- Hair – black, long -->
+<path d="M28 68 Q26 46 40 34 Q55 24 70 34 Q84 46 82 68 Q78 50 55 48 Q32 50 28 68Z" fill="#100810"/>
+<!-- Long hair down sides -->
+<path d="M28 66 Q22 88 24 128 L36 128 Q34 90 34 68Z" fill="#100810"/>
+<path d="M82 66 Q88 88 86 128 L74 128 Q76 90 76 68Z" fill="#100810"/>
+<!-- Hair cascade -->
+<path d="M24 88 Q20 100 22 120" stroke="#100810" stroke-width="8" fill="none" stroke-linecap="round"/>
+<path d="M86 88 Q90 100 88 120" stroke="#100810" stroke-width="8" fill="none" stroke-linecap="round"/>
+<!-- Eyes – dark, unsettling -->
+<ellipse cx="44" cy="72" rx="6" ry="6.5" fill="white"/>
+<ellipse cx="66" cy="72" rx="6" ry="6.5" fill="white"/>
+<ellipse cx="44" cy="73" rx="4" ry="4.5" fill="#400010"/>
+<ellipse cx="66" cy="73" rx="4" ry="4.5" fill="#400010"/>
+<ellipse cx="43.5" cy="72" rx="1.8" ry="2" fill="#0a0004"/>
+<ellipse cx="65.5" cy="72" rx="1.8" ry="2" fill="#0a0004"/>
+<circle cx="45.5" cy="70.5" r=".9" fill="white" opacity=".6"/>
+<circle cx="67.5" cy="70.5" r=".9" fill="white" opacity=".6"/>
+<!-- Eyebrows – thin, low -->
+<path d="M37 64 Q44 62 50 64" stroke="#100810" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<path d="M60 64 Q66 62 73 64" stroke="#100810" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<!-- Smile – wide, unsettling -->
+<path d="M42 86 Q55 97 68 86 Q62 93 55 95 Q48 93 42 86Z" fill="#d06060" stroke="#a04040" stroke-width="1"/>
+</svg>`,
+
+betelgeuse:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bg_bet" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#0a0612"/><stop offset="100%" stop-color="#060408"/></linearGradient></defs>
+<rect width="110" height="140" fill="url(#bg_bet)"/>
+<!-- Dark robes -->
+<path d="M8 140 L12 100 Q28 88 55 90 Q82 88 98 100 L102 140Z" fill="#120a1a"/>
+<path d="M12 108 Q55 96 98 108" stroke="#1e1228" stroke-width="1.5" fill="none"/>
+<!-- Tattered robe edges -->
+<path d="M12 120 L8 140 M20 118 L14 140 M30 116 L26 140" stroke="#100818" stroke-width="3" fill="none" stroke-linecap="round" opacity=".6"/>
+<path d="M98 120 L102 140 M90 118 L96 140 M80 116 L84 140" stroke="#100818" stroke-width="3" fill="none" stroke-linecap="round" opacity=".6"/>
+<!-- Neck -->
+<rect x="44" y="88" width="22" height="12" fill="#d8ccc0"/>
+<!-- Head – pale, gaunt -->
+<ellipse cx="55" cy="68" rx="27" ry="30" fill="#d8ccc0"/>
+<ellipse cx="28" cy="72" rx="5" ry="6" fill="#d8ccc0"/>
+<ellipse cx="82" cy="72" rx="5" ry="6" fill="#d8ccc0"/>
+<!-- Hair – dark, wild, disheveled -->
+<path d="M28 66 Q24 44 40 32 Q55 22 70 32 Q86 44 82 66 Q78 46 55 44 Q32 46 28 66Z" fill="#1e1428"/>
+<!-- Wild strands everywhere -->
+<path d="M28 60 Q18 48 22 36" stroke="#1e1428" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M82 60 Q92 48 88 36" stroke="#1e1428" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M38 36 Q44 24 50 28" stroke="#1e1428" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M72 36 Q66 24 60 28" stroke="#1e1428" stroke-width="4" fill="none" stroke-linecap="round"/>
+<!-- Book (gospel) -->
+<rect x="70" y="96" width="28" height="36" rx="2" fill="#c8a060"/>
+<rect x="72" y="98" width="24" height="32" rx="1" fill="#e8c880"/>
+<path d="M84 104 L84 122 M76 108 L92 108 M76 112 L92 112 M76 116 L92 116" stroke="#a07040" stroke-width="1" fill="none"/>
+<!-- Eyes – WIDE, crazed (key feature) -->
+<ellipse cx="43" cy="70" rx="8" ry="9" fill="white"/>
+<ellipse cx="67" cy="70" rx="8" ry="9" fill="white"/>
+<ellipse cx="43" cy="71" rx="5.5" ry="6.5" fill="#180840"/>
+<ellipse cx="67" cy="71" rx="5.5" ry="6.5" fill="#180840"/>
+<ellipse cx="42.5" cy="70" rx="2.5" ry="3" fill="#060210"/>
+<ellipse cx="66.5" cy="70" rx="2.5" ry="3" fill="#060210"/>
+<circle cx="44.5" cy="68.5" r="1.2" fill="white" opacity=".9"/>
+<circle cx="68.5" cy="68.5" r="1.2" fill="white" opacity=".9"/>
+<!-- Blood vessel lines in eyes -->
+<path d="M36 66 Q40 68 43 66" stroke="#ff4040" stroke-width=".8" fill="none" opacity=".4"/>
+<path d="M74 66 Q70 68 67 66" stroke="#ff4040" stroke-width=".8" fill="none" opacity=".4"/>
+<!-- Eyebrows – furrowed intensely -->
+<path d="M35 60 Q43 56 50 60" stroke="#1e1428" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M60 60 Q67 56 75 60" stroke="#1e1428" stroke-width="2" fill="none" stroke-linecap="round"/>
+<!-- Mouth – strange grin -->
+<path d="M43 84 Q55 92 67 84 Q60 90 55 91 Q50 90 43 84Z" fill="#c07070" stroke="#903030" stroke-width="1"/>
+</svg>`,
+
+echidna:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bg_ec" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#0c0a04"/><stop offset="100%" stop-color="#080604"/></linearGradient></defs>
+<rect width="110" height="140" fill="url(#bg_ec)"/>
+<!-- Black ornate dress -->
+<path d="M10 140 L14 104 Q30 95 55 96 Q80 95 96 104 L100 140Z" fill="#0e0c10"/>
+<!-- Dress lace trim -->
+<path d="M14 108 Q55 100 96 108" stroke="#c8a040" stroke-width="1.5" fill="none"/>
+<path d="M18 116 Q55 108 92 116" stroke="#c8a040" stroke-width="1" fill="none" opacity=".5"/>
+<!-- Tea cup in hand -->
+<ellipse cx="82" cy="116" rx="14" ry="7" fill="#f5f0e0"/>
+<path d="M68 116 L68 122 Q82 128 96 122 L96 116" fill="#e8e0c0"/>
+<ellipse cx="82" cy="116" rx="14" ry="5" fill="#f8f4e8"/>
+<!-- Cup handle -->
+<path d="M96 114 Q104 116 96 122" stroke="#e0d8b0" stroke-width="2" fill="none"/>
+<!-- Steam from tea -->
+<path d="M78 114 Q76 108 78 103" stroke="#e0d8c0" stroke-width="1.5" fill="none" opacity=".4" stroke-linecap="round"/>
+<path d="M82 113 Q80 107 82 102" stroke="#e0d8c0" stroke-width="1.5" fill="none" opacity=".4" stroke-linecap="round"/>
+<path d="M86 114 Q84 108 86 103" stroke="#e0d8c0" stroke-width="1.5" fill="none" opacity=".4" stroke-linecap="round"/>
+<!-- Neck -->
+<rect x="44" y="92" width="22" height="12" fill="#f5ecd8"/>
+<!-- Head -->
+<ellipse cx="55" cy="68" rx="27" ry="30" fill="#f5ecd8"/>
+<ellipse cx="28" cy="72" rx="5" ry="6" fill="#f5ecd8"/>
+<ellipse cx="82" cy="72" rx="5" ry="6" fill="#f5ecd8"/>
+<!-- Hair – white/silver long -->
+<path d="M28 66 Q24 44 40 32 Q55 22 70 32 Q86 44 82 66 Q78 46 55 44 Q32 46 28 66Z" fill="#e8eaf8"/>
+<!-- Long flowing sides -->
+<path d="M28 64 Q22 86 24 128 L36 128 Q35 90 34 66Z" fill="#e8eaf8"/>
+<path d="M82 64 Q88 86 86 128 L74 128 Q75 90 76 66Z" fill="#e8eaf8"/>
+<!-- Hair decoration – rose accessory -->
+<circle cx="72" cy="44" r="7" fill="#a04060"/>
+<circle cx="72" cy="44" r="4" fill="#c05075"/>
+<circle cx="72" cy="44" r="2" fill="#e06080"/>
+<!-- Eyes – golden, knowing -->
+<ellipse cx="44" cy="70" rx="6" ry="7" fill="white"/>
+<ellipse cx="66" cy="70" rx="6" ry="7" fill="white"/>
+<ellipse cx="44" cy="71" rx="4" ry="4.8" fill="#c09020"/>
+<ellipse cx="66" cy="71" rx="4" ry="4.8" fill="#c09020"/>
+<ellipse cx="43.5" cy="70" rx="1.8" ry="2.2" fill="#402c04"/>
+<ellipse cx="65.5" cy="70" rx="1.8" ry="2.2" fill="#402c04"/>
+<circle cx="45.5" cy="68.5" r=".9" fill="white" opacity=".8"/>
+<circle cx="67.5" cy="68.5" r=".9" fill="white" opacity=".8"/>
+<!-- Eyebrows -->
+<path d="M37 62 Q44 59 50 62" stroke="#c8b080" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<path d="M60 62 Q66 59 73 62" stroke="#c8b080" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<!-- Smile – knowing, mysterious -->
+<path d="M46 84 Q55 90 64 84 Q60 88 55 90 Q50 88 46 84Z" fill="#d09080" stroke="#b07060" stroke-width="1"/>
+</svg>`,
+
+garfiel:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bg_g" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#14100a"/><stop offset="100%" stop-color="#0a0806"/></linearGradient></defs>
+<rect width="110" height="140" fill="url(#bg_g)"/>
+<!-- Rough clothes -->
+<path d="M10 140 L14 102 Q30 92 55 93 Q80 92 96 102 L100 140Z" fill="#3a2810"/>
+<path d="M14 110 Q55 100 96 110" stroke="#5a3e18" stroke-width="2" fill="none"/>
+<!-- Neck – tanned muscular -->
+<rect x="42" y="90" width="26" height="14" fill="#d09050"/>
+<!-- Head -->
+<ellipse cx="55" cy="70" rx="28" ry="30" fill="#d09050"/>
+<ellipse cx="27" cy="74" rx="5.5" ry="6.5" fill="#d09050"/>
+<ellipse cx="83" cy="74" rx="5.5" ry="6.5" fill="#d09050"/>
+<!-- Tiger ears (key feature!) -->
+<path d="M30 48 Q28 32 40 34 Q44 42 36 50Z" fill="#d09050"/>
+<path d="M32 48 Q30 34 40 36 Q43 42 38 50Z" fill="#c87840"/>
+<path d="M80 48 Q82 32 70 34 Q66 42 74 50Z" fill="#d09050"/>
+<path d="M78 48 Q80 34 70 36 Q67 42 72 50Z" fill="#c87840"/>
+<!-- Tiger ear inner markings -->
+<path d="M32 46 Q31 36 38 38 Q40 42 36 48Z" fill="#e89060" opacity=".5"/>
+<path d="M78 46 Q79 36 72 38 Q70 42 74 48Z" fill="#e89060" opacity=".5"/>
+<!-- Hair – wild golden/blonde -->
+<path d="M28 68 Q26 44 38 32 Q55 20 72 32 Q84 44 82 68 Q78 48 55 46 Q32 48 28 68Z" fill="#d4a820"/>
+<!-- Wild spiky strands -->
+<path d="M26 58 Q20 44 26 34" stroke="#d4a820" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M84 58 Q90 44 84 34" stroke="#d4a820" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M36 30 Q42 20 50 24" stroke="#d4a820" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M74 30 Q68 20 60 24" stroke="#d4a820" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M54 22 Q56 14 60 18" stroke="#e0b830" stroke-width="4" fill="none" stroke-linecap="round"/>
+<!-- Eyes – amber/golden -->
+<ellipse cx="44" cy="72" rx="6" ry="7" fill="white"/>
+<ellipse cx="66" cy="72" rx="6" ry="7" fill="white"/>
+<ellipse cx="44" cy="73" rx="4" ry="4.8" fill="#d08010"/>
+<ellipse cx="66" cy="73" rx="4" ry="4.8" fill="#d08010"/>
+<ellipse cx="43.5" cy="72" rx="1.8" ry="2.2" fill="#3a1c00"/>
+<ellipse cx="65.5" cy="72" rx="1.8" ry="2.2" fill="#3a1c00"/>
+<circle cx="45.5" cy="70.5" r=".9" fill="white" opacity=".7"/>
+<circle cx="67.5" cy="70.5" r=".9" fill="white" opacity=".7"/>
+<!-- Eyebrows – fierce -->
+<path d="M37 63 Q44 59 50 63" stroke="#a06010" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M60 63 Q66 59 73 63" stroke="#a06010" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<!-- Fanged grin -->
+<path d="M42 86 Q55 95 68 86 Q62 93 55 95 Q48 93 42 86Z" fill="#d08060"/>
+<!-- Visible fang -->
+<polygon points="50,86 53,92 56,86" fill="white"/>
+<polygon points="59,86 62,92 65,86" fill="white"/>
+</svg>`,
+
+beatrice:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bg_b" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#1a0828"/><stop offset="100%" stop-color="#0e0418"/></linearGradient></defs>
+<rect width="110" height="140" fill="url(#bg_b)"/>
+<!-- Ornate pink/white dress -->
+<path d="M8 140 L12 106 Q28 96 55 97 Q82 96 98 106 L102 140Z" fill="#d090b8"/>
+<!-- Dress layers/ruffles -->
+<path d="M12 112 Q55 104 98 112" stroke="#e8b0d0" stroke-width="2" fill="none"/>
+<path d="M12 120 Q55 112 98 120" stroke="#e8b0d0" stroke-width="1.5" fill="none" opacity=".7"/>
+<!-- White trim -->
+<path d="M12 106 Q55 98 98 106" stroke="white" stroke-width="1" fill="none" opacity=".8"/>
+<!-- Neck -->
+<rect x="44" y="92" width="22" height="14" fill="#fce8dc"/>
+<!-- Head – slightly smaller, young-looking -->
+<ellipse cx="55" cy="70" rx="26" ry="28" fill="#fce8dc"/>
+<ellipse cx="29" cy="74" rx="5" ry="6" fill="#fce8dc"/>
+<ellipse cx="81" cy="74" rx="5" ry="6" fill="#fce8dc"/>
+<!-- Hair – TWIN DRILL PIGTAILS (key feature) -->
+<!-- Base head hair -->
+<path d="M29 68 Q28 48 40 34 Q55 24 70 34 Q82 48 81 68 Q77 50 55 48 Q33 50 29 68Z" fill="#e8d060"/>
+<!-- Left drill pigtail -->
+<path d="M22 78 Q14 90 18 108 Q22 122 18 134" stroke="#e8d060" stroke-width="10" fill="none" stroke-linecap="round"/>
+<path d="M22 78 Q12 92 16 110 Q20 124 15 136" stroke="#d4bc40" stroke-width="7" fill="none" stroke-linecap="round" opacity=".7"/>
+<!-- Right drill pigtail -->
+<path d="M88 78 Q96 90 92 108 Q88 122 92 134" stroke="#e8d060" stroke-width="10" fill="none" stroke-linecap="round"/>
+<path d="M88 78 Q98 92 94 110 Q90 124 95 136" stroke="#d4bc40" stroke-width="7" fill="none" stroke-linecap="round" opacity=".7"/>
+<!-- Hair ribbons -->
+<circle cx="24" cy="80" r="6" fill="#e060a0"/>
+<circle cx="86" cy="80" r="6" fill="#e060a0"/>
+<!-- Eyes – big, blue (Beatrice has blue eyes) -->
+<ellipse cx="43" cy="72" rx="7" ry="8" fill="white"/>
+<ellipse cx="67" cy="72" rx="7" ry="8" fill="white"/>
+<ellipse cx="43" cy="73" rx="5" ry="5.8" fill="#3060c8"/>
+<ellipse cx="67" cy="73" rx="5" ry="5.8" fill="#3060c8"/>
+<ellipse cx="42.5" cy="72" rx="2.2" ry="2.6" fill="#0a1840"/>
+<ellipse cx="66.5" cy="72" rx="2.2" ry="2.6" fill="#0a1840"/>
+<circle cx="45" cy="70" r="1.2" fill="white" opacity=".9"/>
+<circle cx="69" cy="70" r="1.2" fill="white" opacity=".9"/>
+<!-- Eyebrows – slightly raised/pouty -->
+<path d="M36 63 Q43 60 49 63" stroke="#c0a020" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<path d="M61 63 Q67 60 74 63" stroke="#c0a020" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<!-- Mouth – slight pout -->
+<path d="M46 86 Q55 89 64 86" stroke="#d090a0" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<ellipse cx="55" cy="87" rx="3" ry="1.5" fill="#e0b0c0" opacity=".4"/>
+<!-- Book she often holds (bottom corner) -->
+<rect x="68" y="100" width="30" height="36" rx="2" fill="#d4b870"/>
+<rect x="70" y="102" width="26" height="32" rx="1" fill="#f0d890"/>
+</svg>`,
+
+whale:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="bg_w" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#08080e"/><stop offset="100%" stop-color="#050508"/></linearGradient>
+<radialGradient id="wg" cx="50%" cy="40%" r="50%">
+<stop offset="0%" stop-color="#c8d0e0" stop-opacity=".4"/>
+<stop offset="100%" stop-color="#c8d0e0" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="110" height="140" fill="url(#bg_w)"/>
+<!-- Mist background -->
+<ellipse cx="55" cy="55" rx="52" ry="52" fill="url(#wg)"/>
+<!-- Fog wisps -->
+<path d="M0 60 Q20 50 40 58 Q60 66 80 55 Q100 44 110 55" stroke="#a0a8b8" stroke-width="8" fill="none" opacity=".15"/>
+<path d="M0 80 Q25 68 50 76 Q75 84 110 72" stroke="#a0a8b8" stroke-width="8" fill="none" opacity=".12"/>
+<!-- Whale body (massive silhouette) -->
+<path d="M5 75 Q10 45 35 35 Q55 28 80 40 Q105 52 108 75 Q110 95 90 105 Q70 115 55 112 Q35 110 18 98 Q5 90 5 75Z" fill="#d0d8e8" opacity=".85"/>
+<!-- Whale eye – glowing, eerie -->
+<circle cx="38" cy="62" r="8" fill="#1a1a2a"/>
+<circle cx="38" cy="62" r="5" fill="#2a2a40"/>
+<circle cx="38" cy="62" r="3" fill="#e8e8ff"/>
+<circle cx="39.5" cy="60.5" r="1.2" fill="white" opacity=".9"/>
+<!-- Barnacles/texture dots -->
+<circle cx="58" cy="50" r="2" fill="#b0b8c8" opacity=".5"/>
+<circle cx="70" cy="55" r="1.5" fill="#b0b8c8" opacity=".4"/>
+<circle cx="78" cy="48" r="1.8" fill="#b0b8c8" opacity=".5"/>
+<circle cx="65" cy="42" r="1.2" fill="#b0b8c8" opacity=".4"/>
+<!-- Mouth gash -->
+<path d="M18 88 Q55 98 95 82" stroke="#a0a8b8" stroke-width="3" fill="none" opacity=".6"/>
+<!-- Tail fin (at bottom, partially visible) -->
+<path d="M5 105 Q10 118 25 120 Q18 108 5 105Z" fill="#c0c8d8" opacity=".7"/>
+<path d="M105 98 Q108 112 95 118 Q100 106 105 98Z" fill="#c0c8d8" opacity=".7"/>
+<!-- Fog trails -->
+<path d="M0 30 Q28 20 55 28 Q82 36 110 25" stroke="#c8d0e0" stroke-width="6" fill="none" opacity=".1"/>
+<!-- Scale indicator lines to show size -->
+<text x="55" y="132" text-anchor="middle" fill="#5a6070" font-size="9" font-family="serif" font-style="italic" opacity=".7">The Mist Whale</text>
+</svg>`,
+
+regulus:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bg_reg" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#081808"/><stop offset="100%" stop-color="#040c04"/></linearGradient></defs>
+<rect width="110" height="140" fill="url(#bg_reg)"/>
+<!-- Elaborate noble outfit – green/gold -->
+<path d="M10 140 L14 104 Q30 94 55 95 Q80 94 96 104 L100 140Z" fill="#1a3a1a"/>
+<path d="M14 110 Q55 100 96 110" stroke="#c09030" stroke-width="2.5" fill="none"/>
+<!-- Gold collar/trim -->
+<path d="M34 104 Q55 96 76 104" stroke="#d4a840" stroke-width="3" fill="none"/>
+<!-- Fancy lapel detail -->
+<path d="M25 108 L38 108 L38 126 L25 126Z" fill="#c09030" opacity=".5"/>
+<path d="M85 108 L72 108 L72 126 L85 126Z" fill="#c09030" opacity=".5"/>
+<!-- Multiple medals/pins -->
+<circle cx="45" cy="118" r="5" fill="#d4a840"/>
+<circle cx="55" cy="116" r="5" fill="#d4a840"/>
+<circle cx="65" cy="118" r="5" fill="#d4a840"/>
+<circle cx="45" cy="118" r="3" fill="#f0c850"/>
+<circle cx="55" cy="116" r="3" fill="#f0c850"/>
+<circle cx="65" cy="118" r="3" fill="#f0c850"/>
+<!-- Neck -->
+<rect x="44" y="90" width="22" height="14" fill="#f0e0c8"/>
+<!-- Head -->
+<ellipse cx="55" cy="68" rx="27" ry="30" fill="#f0e0c8"/>
+<ellipse cx="28" cy="72" rx="5" ry="6" fill="#f0e0c8"/>
+<ellipse cx="82" cy="72" rx="5" ry="6" fill="#f0e0c8"/>
+<!-- Hair – silver/white, neat and styled back -->
+<path d="M28 66 Q26 44 40 32 Q55 22 70 32 Q84 44 82 66 Q78 46 55 44 Q32 46 28 66Z" fill="#c8cad8"/>
+<!-- Slicked back side -->
+<path d="M28 64 Q24 74 26 86 L34 86 Q33 74 33 64Z" fill="#c8cad8"/>
+<path d="M82 64 Q86 74 84 86 L76 86 Q77 74 77 64Z" fill="#c8cad8"/>
+<!-- Eyes – blue, arrogant half-lidded look -->
+<ellipse cx="44" cy="70" rx="6" ry="6" fill="white"/>
+<ellipse cx="66" cy="70" rx="6" ry="6" fill="white"/>
+<!-- Heavy lidded – top eyelid line very low/thick -->
+<path d="M38 66 Q44 68 50 66" stroke="#2a2a3a" stroke-width="3" fill="none"/>
+<path d="M60 66 Q66 68 72 66" stroke="#2a2a3a" stroke-width="3" fill="none"/>
+<ellipse cx="44" cy="71" rx="4" ry="3.5" fill="#1848a0"/>
+<ellipse cx="66" cy="71" rx="4" ry="3.5" fill="#1848a0"/>
+<ellipse cx="43.5" cy="70.5" rx="1.8" ry="1.6" fill="#060e30"/>
+<ellipse cx="65.5" cy="70.5" rx="1.8" ry="1.6" fill="#060e30"/>
+<circle cx="45.5" cy="69.5" r=".8" fill="white" opacity=".7"/>
+<circle cx="67.5" cy="69.5" r=".8" fill="white" opacity=".7"/>
+<!-- Eyebrows – thin, condescending arch -->
+<path d="M37 63 Q44 59 50 62" stroke="#a0a0b0" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<path d="M60 62 Q66 59 73 63" stroke="#a0a0b0" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<!-- Smug mouth -->
+<path d="M46 85 Q55 88 65 83" stroke="#c0a080" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+</svg>`,
+
+sirius:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bg_sir" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#1a0800"/><stop offset="100%" stop-color="#0e0400"/></linearGradient></defs>
+<rect width="110" height="140" fill="url(#bg_sir)"/>
+<!-- Bandaged/wrapped body -->
+<path d="M8 140 L12 100 Q28 88 55 89 Q82 88 98 100 L102 140Z" fill="#2a1808"/>
+<!-- Bandage wrapping detail -->
+<path d="M12 108 Q55 96 98 108 M15 116 Q55 104 95 116 M18 124 Q55 112 92 124" stroke="#d4c8a0" stroke-width="2" fill="none" opacity=".6"/>
+<!-- Chain coming off body -->
+<path d="M88 100 Q98 108 96 120 Q94 130 88 136" stroke="#808090" stroke-width="3" fill="none" stroke-dasharray="4 3" stroke-linecap="round"/>
+<!-- Chain links -->
+<circle cx="96" cy="112" r="3.5" fill="none" stroke="#808090" stroke-width="1.5"/>
+<circle cx="92" cy="124" r="3.5" fill="none" stroke="#808090" stroke-width="1.5"/>
+<!-- Neck – bandaged -->
+<rect x="44" y="86" width="22" height="14" fill="#d4c8a0"/>
+<!-- Head -->
+<ellipse cx="55" cy="66" rx="27" ry="30" fill="#f0dcc8"/>
+<!-- Bandage wrapping on head too -->
+<rect x="28" y="62" width="54" height="10" rx="3" fill="#e8dcc0" opacity=".7"/>
+<!-- Hair – wild orange/red -->
+<path d="M28 66 Q24 42 40 30 Q55 20 70 30 Q86 42 82 66 Q78 46 55 44 Q32 46 28 66Z" fill="#d04820"/>
+<!-- Wild messy strands -->
+<path d="M26 56 Q18 40 22 28" stroke="#d04820" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M84 56 Q92 40 88 28" stroke="#d04820" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M38 28 Q44 16 52 20" stroke="#e06030" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M72 28 Q66 16 58 20" stroke="#e06030" stroke-width="4" fill="none" stroke-linecap="round"/>
+<!-- Bandage over one eye (right) -->
+<path d="M60 62 Q68 60 76 64" stroke="#e8dcc0" stroke-width="5" fill="none"/>
+<!-- Visible left eye – wild -->
+<ellipse cx="44" cy="70" rx="7" ry="8" fill="white"/>
+<ellipse cx="44" cy="71" rx="5" ry="5.8" fill="#d84020"/>
+<ellipse cx="43.5" cy="70" rx="2.2" ry="2.6" fill="#3a0806"/>
+<circle cx="45.5" cy="68.5" r="1.2" fill="white" opacity=".9"/>
+<!-- Right eye under bandage barely visible -->
+<ellipse cx="68" cy="68" rx="3" ry="2.5" fill="#d84020" opacity=".3"/>
+<!-- Mouth – unhinged wide smile -->
+<path d="M38 86 Q55 98 72 86 Q65 95 55 97 Q45 95 38 86Z" fill="#c06050" stroke="#903030" stroke-width="1"/>
+<!-- Eyebrow left only -->
+<path d="M36 61 Q44 57 50 60" stroke="#902010" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>`,
+
+lye:`<svg viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bg_lye" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#0a060e"/><stop offset="100%" stop-color="#060408"/></linearGradient></defs>
+<rect width="110" height="140" fill="url(#bg_lye)"/>
+<!-- Casual dark outfit -->
+<path d="M12 140 L16 104 Q32 94 55 95 Q78 94 94 104 L98 140Z" fill="#18102a"/>
+<path d="M16 112 Q55 102 94 112" stroke="#301848" stroke-width="1.5" fill="none"/>
+<!-- Neck -->
+<rect x="44" y="90" width="22" height="14" fill="#d0c0e0"/>
+<!-- Head – slightly pale, ethereal -->
+<ellipse cx="55" cy="68" rx="27" ry="30" fill="#d0c0e0"/>
+<ellipse cx="28" cy="72" rx="5" ry="6" fill="#d0c0e0"/>
+<ellipse cx="82" cy="72" rx="5" ry="6" fill="#d0c0e0"/>
+<!-- Hair – dark with purple sheen, somewhat long/shaggy -->
+<path d="M28 68 Q24 44 40 32 Q55 22 70 32 Q86 44 82 68 Q78 46 55 44 Q32 46 28 68Z" fill="#1e0a38"/>
+<!-- Messy strands -->
+<path d="M28 66 Q22 78 24 96 L34 96 Q33 80 33 66Z" fill="#1e0a38"/>
+<path d="M82 66 Q88 78 86 96 L76 96 Q77 80 77 66Z" fill="#1e0a38"/>
+<path d="M34 38 Q38 28 46 32" stroke="#1e0a38" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M76 38 Q72 28 64 32" stroke="#1e0a38" stroke-width="4" fill="none" stroke-linecap="round"/>
+<!-- Eyes – unsettling, wide, strange coloring -->
+<ellipse cx="44" cy="70" rx="7" ry="8.5" fill="white"/>
+<ellipse cx="66" cy="70" rx="7" ry="8.5" fill="white"/>
+<ellipse cx="44" cy="71" rx="5" ry="6" fill="#7030c0"/>
+<ellipse cx="66" cy="71" rx="5" ry="6" fill="#7030c0"/>
+<ellipse cx="43.5" cy="70" rx="2.2" ry="2.6" fill="#180430"/>
+<ellipse cx="65.5" cy="70" rx="2.2" ry="2.6" fill="#180430"/>
+<circle cx="45.5" cy="68" r="1.2" fill="white" opacity=".9"/>
+<circle cx="67.5" cy="68" r="1.2" fill="white" opacity=".9"/>
+<!-- Eyebrows -->
+<path d="M36 61 Q44 57 50 60" stroke="#1e0a38" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<path d="M60 60 Q66 57 74 61" stroke="#1e0a38" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<!-- THE defining feature – impossibly wide grin -->
+<path d="M30 86 Q55 106 80 86 Q72 100 55 104 Q38 100 30 86Z" fill="#c080f0" stroke="#8040c0" stroke-width="1.5"/>
+<!-- Teeth showing in the wide grin -->
+<path d="M38 90 L40 98 L44 90 M48 92 L50 100 L54 92 M58 92 L60 100 L64 92 M68 90 L70 98 L72 90" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".7"/>
+</svg>`
+};
+
+/* ═══════════════════════════════════════
+   CHARACTER DATA
+═══════════════════════════════════════ */
+const CHARS = {
+  none:      { name:'—',               title:'Narrator / Environment',      color:'#252535' },
+  subaru:    { name:'Subaru Natsuki',   title:'The Returning One',            color:'#3060d0' },
+  emilia:    { name:'Emilia',           title:'Half-Elf Candidate',           color:'#9040c8' },
+  rem:       { name:'Rem',              title:'Blue-Haired Maid',             color:'#2880c8' },
+  ram:       { name:'Ram',              title:'Pink-Haired Maid',             color:'#d060a0' },
+  felt:      { name:'Felt',             title:'Loot House Thief',             color:'#c04040' },
+  rom:       { name:'Old Man Rom',      title:'Underground Fence',            color:'#806040' },
+  julius:    { name:'Julius Euclius',   title:'Royal Knight, First Class',    color:'#6040a0' },
+  elsa:      { name:'Elsa Granhiert',   title:'The Bowel Hunter',             color:'#a02030' },
+  betelgeuse:{ name:'Betelgeuse',       title:'Archbishop of Sloth',          color:'#4820a0' },
+  echidna:   { name:'Echidna',          title:'Witch of Greed',               color:'#c8a040' },
+  garfiel:   { name:'Garfiel Tinzel',   title:'Guardian of the Sanctuary',    color:'#d08020' },
+  beatrice:  { name:'Beatrice',         title:'Great Spirit Betty',           color:'#c070e8' },
+  whale:     { name:'The White Whale',  title:'Demi-Beast of the Great Mist', color:'#8898b8' },
+  regulus:   { name:'Regulus Corneas',  title:'Archbishop of Greed',          color:'#40a850' },
+  sirius:    { name:'Sirius',           title:'Archbishop of Wrath',          color:'#e04820' },
+  lye:       { name:'Lye Batenkaitos',  title:'Archbishop of Gluttony',       color:'#9040e0' },
+};
+
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
 const GS = {
-  scent: 0,
-  deaths: 0,
-  arc: 1,
-  checkpoint: 'start',
+  deaths: 0, arc: 1, loops: 0, checkpoint: 'start',
   k: {
     // Arc 1
-    loot_house_trap: false,
+    thug_beaten: false, emilia_name: false,
+    felt_exists: false, rom_exists: false,
+    phone_value: false, elsa_ambush: false,
     // Arc 2
-    rem_suspicion: false,
+    rem_trust: false, mansion_layout: false,
+    julius_fought: false, julius_lesson: false,
+    curse_source: false,
     // Arc 3
-    whale_weakness: false,
-    isBroken: false,
-    trustRem: false,
+    emilia_rejected: false, rem_speech: false,
+    whale_alliance: false, whale_tactic: false,
+    betelgeuse_known: false,
     // Arc 4
-    trial_seen: false,
-    echidna_met: false,
-    garfiel_method: false,
-    roswaal_gospel: false,
+    echidna_met: false, trial_knowledge: false,
+    garfiel_mother: false, roswaal_exposed: false,
     // Arc 5
-    sirius_trick: false,
-    gluttony_name: false,
-    regulus_weakness: false,
-    beatrice_pact: false,
+    beatrice_pact: false, sirius_trick: false,
+    gluttony_name: false, regulus_timing: false,
   }
 };
 
-/* =========================================================
-   CHARACTER DATA
-   ========================================================= */
-const CHARS = {
-  none:      { name: '—',              title: 'Narrator',            emoji: '🌑', bg: '#111',    color: '#444' },
-  subaru:    { name: 'Subaru Natsuki', title: 'The Returning One',   emoji: '⚡', bg: '#0d1a3a', color: '#2255cc' },
-  emilia:    { name: 'Emilia',         title: 'Half-Elf Candidate',  emoji: '❄️', bg: '#1a0a2e', color: '#9b59b6' },
-  rem:       { name: 'Rem',            title: 'Blue-Haired Maid',    emoji: '💙', bg: '#031a24', color: '#4fc3d8' },
-  ram:       { name: 'Ram',            title: 'Pink-Haired Maid',    emoji: '🌸', bg: '#1a0a10', color: '#e991ac' },
-  elsa:      { name: 'Elsa Granhiert', title: 'The Bowel Hunter',    emoji: '🗡️', bg: '#1a0000', color: '#aa2222' },
-  priscilla: { name: 'Priscilla',      title: 'Royal Candidate',     emoji: '🔥', bg: '#1a0e00', color: '#d4762a' },
-  whale:     { name: 'The White Whale',title: 'Demi-Beast of Mist',  emoji: '🐋', bg: '#0f0f1a', color: '#aaaacc' },
-  echidna:   { name: 'Echidna',        title: 'Witch of Greed',      emoji: '☕', bg: '#0d0a00', color: '#c9a44e' },
-  garfiel:   { name: 'Garfiel Tinzel', title: 'Guardian of the Sanctuary', emoji: '🐯', bg: '#1a1000', color: '#cc8822' },
-  beatrice:  { name: 'Beatrice',       title: 'Great Spirit Betty',  emoji: '📚', bg: '#1a0a2e', color: '#cc88ff' },
-  regulus:   { name: 'Regulus Corneas',title: 'Archbishop of Greed', emoji: '👑', bg: '#0a1a0a', color: '#33aa55' },
-  sirius:    { name: 'Sirius',         title: 'Archbishop of Wrath', emoji: '⛓️', bg: '#1a0a00', color: '#ff6622' },
-  lye:       { name: 'Lye Batenkaitos',title: 'Archbishop of Gluttony',emoji:'😈',bg: '#0d0d0d', color: '#aa66ff' },
-};
-
-/* =========================================================
+/* ═══════════════════════════════════════
    DOM
-   ========================================================= */
-const $out    = document.getElementById('output');
-const $choices= document.getElementById('choices-panel');
-const $arcHdr = document.getElementById('arc-header');
-const $scentV = document.getElementById('scent-val');
-const $deathV = document.getElementById('death-val');
-const $arcV   = document.getElementById('arc-val');
-const $portrait= document.getElementById('char-portrait');
-const $charName= document.getElementById('char-name');
-const $charTitle=document.getElementById('char-title');
-const $pips   = document.getElementById('pip-row');
-const $arcDots= document.getElementById('arc-dots');
-const $deathOv= document.getElementById('death-overlay');
+═══════════════════════════════════════ */
+const $out   = document.getElementById('output');
+const $choices=document.getElementById('choices');
+const $lbl   = document.getElementById('arc-lbl');
+const $dv    = document.getElementById('hv-deaths');
+const $av    = document.getElementById('hv-arc');
+const $pw    = document.getElementById('portrait-wrap');
+const $cn    = document.getElementById('cname');
+const $ct    = document.getElementById('ctitle');
+const $ap    = document.getElementById('ap');
+const $dov   = document.getElementById('dov');
 
-/* =========================================================
+/* ═══════════════════════════════════════
    PARTICLES
-   ========================================================= */
-(function initParticles() {
-  const canvas = document.getElementById('particles');
-  for (let i = 0; i < 30; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    const size = Math.random() * 3 + 1;
-    const hue  = Math.random() > 0.5 ? '260' : '200';
-    p.style.cssText = `
-      width:${size}px; height:${size}px;
-      left:${Math.random()*100}%;
-      background: hsl(${hue},70%,60%);
-      animation-duration: ${8 + Math.random()*14}s;
-      animation-delay: ${Math.random()*10}s;
-    `;
-    canvas.appendChild(p);
+═══════════════════════════════════════ */
+(function(){
+  const c = document.getElementById('ptcls');
+  for(let i=0;i<28;i++){
+    const p=document.createElement('div'); p.className='ptcl';
+    const sz=Math.random()*2.5+1;
+    const hue=Math.random()>.55?255:200;
+    p.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;`+
+      `background:hsl(${hue},65%,65%);animation-duration:${10+Math.random()*18}s;`+
+      `animation-delay:${Math.random()*14}s;`;
+    c.appendChild(p);
   }
 })();
 
-/* =========================================================
-   TITLE
-   ========================================================= */
-function startGame() {
-  document.getElementById('title-screen').classList.add('fade-out');
-  setTimeout(() => {
-    document.getElementById('title-screen').style.display = 'none';
-    initUI();
-    loadScene('start');
-  }, 800);
-}
-
-/* =========================================================
+/* ═══════════════════════════════════════
    UI HELPERS
-   ========================================================= */
-function initUI() {
-  // pips
-  $pips.innerHTML = '';
-  for (let i = 0; i < 5; i++) {
-    const d = document.createElement('div');
-    d.className = 'pip';
-    d.id = `pip-${i}`;
-    $pips.appendChild(d);
-  }
-  // arc dots
-  $arcDots.innerHTML = '';
-  for (let i = 1; i <= 5; i++) {
-    const d = document.createElement('div');
-    d.className = 'arc-dot';
-    d.id = `arc-dot-${i}`;
-    $arcDots.appendChild(d);
-  }
-  updateHUD();
-}
-
-function updateHUD() {
-  $scentV.textContent = GS.scent;
-  $deathV.textContent = GS.deaths;
-  $arcV.textContent   = GS.arc;
-  // pips
-  for (let i = 0; i < 5; i++) {
-    const pip = document.getElementById(`pip-${i}`);
-    if (!pip) continue;
-    pip.className = 'pip';
-    if (i < GS.scent) pip.classList.add(GS.scent >= 4 ? 'danger' : 'active');
-  }
-  // arc dots
-  for (let i = 1; i <= 5; i++) {
-    const dot = document.getElementById(`arc-dot-${i}`);
-    if (!dot) continue;
-    dot.className = 'arc-dot';
-    if (i < GS.arc)  dot.classList.add('done');
-    if (i === GS.arc) dot.classList.add('current');
+═══════════════════════════════════════ */
+function initArcDots(){
+  $ap.innerHTML='';
+  for(let i=1;i<=5;i++){
+    const d=document.createElement('div');
+    d.className='apip'; d.id=`ap${i}`; $ap.appendChild(d);
   }
 }
 
-function setChar(key) {
-  const c = CHARS[key] || CHARS.none;
-  $portrait.textContent   = c.emoji;
-  $portrait.style.background = c.bg;
-  $portrait.style.border  = `2px solid ${c.color}`;
-  $portrait.style.boxShadow = `0 0 20px ${c.color}44`;
-  $charName.textContent   = c.name;
-  $charTitle.textContent  = c.title;
+function updateHUD(){
+  $dv.textContent=GS.deaths;
+  $av.textContent=GS.arc;
+  for(let i=1;i<=5;i++){
+    const d=document.getElementById(`ap${i}`);
+    if(!d)continue;
+    d.className='apip'+(i<GS.arc?' done':i===GS.arc?' cur':'');
+  }
 }
 
-function setArcHeader(txt) {
-  $arcHdr.textContent = txt;
+function setChar(k){
+  const c=CHARS[k]||CHARS.none;
+  $pw.innerHTML=P[k]||P.none;
+  $cn.textContent=c.name;
+  $ct.textContent=c.title;
+  $pw.style.borderColor=c.color;
+  $pw.style.boxShadow=`0 0 18px ${c.color}55`;
 }
 
-function clearOutput() { $out.innerHTML = ''; }
+function setLbl(t){ $lbl.textContent=t; }
 
-function print(html, cssClass = '') {
-  const d = document.createElement('div');
-  d.className = 'msg' + (cssClass ? ' ' + cssClass : '');
-  d.innerHTML = html;
+function clr(){ $out.innerHTML=''; }
+
+function pr(html,cls=''){
+  const d=document.createElement('div');
+  d.className='msg'+(cls?' '+cls:'');
+  d.innerHTML=html;
   $out.appendChild(d);
-  $out.closest('#output-wrapper').scrollTop = 99999;
+  document.getElementById('out-wrap').scrollTop=99999;
 }
 
-function showChoices(arr) {
-  $choices.innerHTML = '';
-  arr.forEach((c, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn' + (c.knowledge ? ' choice-knowledge' : '');
-    const prefix = c.knowledge ? '※' : String.fromCharCode(65 + i);
-    btn.innerHTML = `<span class="choice-prefix">${prefix}</span><span>${c.text}</span>`;
-    btn.onclick = () => { $choices.innerHTML = ''; c.action(); };
-    $choices.appendChild(btn);
+function cho(arr){
+  $choices.innerHTML='';
+  arr.forEach((c,i)=>{
+    const b=document.createElement('button');
+    b.className='cb'+(c.mem?' mem-btn':'');
+    const pfx=c.mem?'※':String.fromCharCode(65+i);
+    b.innerHTML=`<span class="cpfx">${pfx}</span><span>${c.text}</span>`;
+    b.onclick=()=>{ $choices.innerHTML=''; c.action(); };
+    $choices.appendChild(b);
   });
 }
 
-/* =========================================================
+/* ═══════════════════════════════════════
    DEATH
-   ========================================================= */
-function die(reason, scentAdd = 1) {
-  $choices.innerHTML = '';
+═══════════════════════════════════════ */
+function die(reason, gain=1){
+  $choices.innerHTML='';
   setChar('subaru');
-  $deathOv.classList.add('flash');
-  setTimeout(() => $deathOv.classList.remove('flash'), 700);
-
-  print(`<br>💀 <strong>YOU DIED</strong> — ${reason}`, 'death-msg');
-  GS.deaths++;
-  GS.scent = Math.min(GS.scent + scentAdd, 5);
-  updateHUD();
-
-  setTimeout(() => {
-    print('The darkness recedes. The Witch\'s laughter echoes.', 'narrative');
-    setTimeout(() => {
-      print('<strong>RETURN BY DEATH.</strong>', 'system-msg');
-      setTimeout(() => { clearOutput(); loadScene(GS.checkpoint); }, 1800);
-    }, 1400);
-  }, 1400);
+  $dov.classList.remove('flash');
+  void $dov.offsetWidth;
+  $dov.classList.add('flash');
+  pr(`<br>💀 <strong>DEATH</strong> — ${reason}`,'dth');
+  GS.deaths+=1; GS.loops+=gain; updateHUD();
+  setTimeout(()=>{
+    pr('Darkness. Cold. The Witch\'s distant laughter.','nar');
+    setTimeout(()=>{
+      pr('<strong>RETURN BY DEATH.</strong>','sys');
+      setTimeout(()=>{ clr(); load(GS.checkpoint); },1800);
+    },1400);
+  },1400);
 }
 
-/* =========================================================
+/* ═══════════════════════════════════════
+   SCENE LOADER
+═══════════════════════════════════════ */
+function load(id){
+  const s=SC[id];
+  if(!s){pr('(missing scene: '+id+')','dth');return;}
+  setChar(s.char||'none');
+  clr();
+  const txt=typeof s.text==='function'?s.text():s.text;
+  if(Array.isArray(txt)) txt.forEach(t=>Array.isArray(t)?pr(...t):pr(t));
+  else pr(txt);
+  const ch=typeof s.choices==='function'?s.choices():s.choices;
+  cho(ch);
+}
+
+/* ═══════════════════════════════════════
    SCENES
-   ========================================================= */
-function loadScene(id) {
-  const s = SCENES[id];
-  if (!s) { print('(Scene not found: ' + id + ')', 'death-msg'); return; }
-  setChar(s.char || 'none');
-  clearOutput();
-  const text = typeof s.text === 'function' ? s.text() : s.text;
-  if (Array.isArray(text)) text.forEach(t => print(...t));
-  else print(text);
-  const choices = typeof s.choices === 'function' ? s.choices() : s.choices;
-  showChoices(choices);
+═══════════════════════════════════════ */
+const SC = {
+
+/* ─────────────────────────────────────
+   ARC 1: Capital & The Insignia
+───────────────────────────────────── */
+'start':{
+  char:'subaru',
+  text:()=>{
+    GS.arc=1; GS.checkpoint='start'; updateHUD(); setLbl('Arc I — The Royal Capital');
+    return[
+      ['You open your eyes. Wrong sky. Wrong air. Wrong century.','nar'],
+      ['Natsuki Subaru, age seventeen, has been summoned to another world with no warning, no powers, and a bag of convenience store snacks.','nar'],
+      ['The city around you reeks of coal smoke, hay, and something vaguely magical. Stalls line the cobblestone streets. Nobody looks your way.','nar'],
+      ['"Okay," you say out loud to nobody. "Step one. Figure out where the hell I am."','dlg'],
+    ];
+  },
+  choices:[
+    { text:'Wander deeper into the market district.', action:()=>load('market') },
+    { text:'Try to find someone who speaks your language.', action:()=>load('lost_wander') },
+  ]
+},
+
+'lost_wander':{
+  char:'none',
+  text:[
+    ['Three hours of confused pointing, shouting, and increasingly desperate pantomime later — you\'ve learned nothing.','nar'],
+    ['Nightfall. You stumble down a narrow alley looking for shelter.','nar'],
+  ],
+  choices:[
+    { text:'Keep going down the alley.', action:()=>load('thug_alley') }
+  ]
+},
+
+'market':{
+  char:'none',
+  text:[
+    ['You push deeper into the market. The city is enormous — taller than anything your hometown had. Castle spires pierce low clouds.','nar'],
+    ['A flash of silver across the square catches your eye. A girl. Pointed ears.','nar'],
+    ['She\'s moving fast, checking under stalls and between crates. Searching for something.','nar'],
+  ],
+  choices:[
+    { text:'Try to follow the silver-haired girl.', action:()=>load('follow_emilia') },
+    { text:'Head down a quieter side alley.', action:()=>load('thug_alley') },
+  ]
+},
+
+'follow_emilia':{
+  char:'emilia',
+  text:[
+    ['You push through the crowd after her but the market swallows her up. You end up in a narrow alley instead.','nar'],
+  ],
+  choices:[
+    { text:'Continue.', action:()=>load('thug_alley') }
+  ]
+},
+
+'thug_alley':{
+  char:'none',
+  text:()=>{
+    if(GS.k.thug_beaten){
+      return[
+        ['<strong>※ LOOP MEMORY:</strong> The same alley. The same three figures stepping from the shadows. You know exactly how this goes.','mem'],
+        ['"Hand it over, tracksuit." Ton cracks his knuckles.','dlg'],
+      ];
+    }
+    return[
+      ['Three figures materialize from the shadows. The tallest — Ton — grins with too many teeth.','nar'],
+      ['"Hand over everything, outsider. Wallet. Jewels. That weird bag."','dlg'],
+      ['You have no jewels. You have a phone, some chips, and a very uncomfortable feeling.','nar'],
+    ];
+  },
+  choices:()=>{
+    if(GS.k.thug_beaten){
+      return[
+        { text:'[MEMORY] You know the timing. Dodge Ton\'s first swing and run before they regroup.', mem:true,
+          action:()=>load('post_thugs') }
+      ];
+    }
+    return[
+      { text:'Try to fight all three of them.', action:()=>{GS.k.thug_beaten=true; die('Chin and Kan had knives. Ton just used his fists. You didn\'t survive either.'); }},
+      { text:'Surrender everything and hope they let you go.', action:()=>load('post_thugs') },
+      { text:'Run immediately.', action:()=>{GS.k.thug_beaten=true; die('Kan was faster than he looked. You made it six steps.'); }},
+    ];
+  }
+},
+
+'post_thugs':{
+  char:'emilia',
+  text:[
+    ['You stumble out the other end of the alley, bruised or breathless or both.','nar'],
+    ['The silver-haired girl is there. She turns at your noise, and something odd crosses her face — not fear, but caution.','nar'],
+    ['"You look terrible," she says. "Are you all right?"','dlg'],
+    ['"I\'m fine," you say, which is almost certainly a lie.','dlg'],
+    ['"I don\'t have time to— wait." She scans you quickly. "You\'re not from here, are you? You came from another world."','dlg'],
+    ['"...How did you—"','dlg'],
+    ['"Your clothes. Your speech pattern. No spirit arts signature at all." She sighs, then seems to come to a decision. "Walk with me. I\'m looking for something I can\'t find alone."','dlg'],
+  ],
+  choices:[
+    { text:'"What are you looking for?" — offer to help.', action:()=>{ GS.k.emilia_name=true; load('emilia_explains'); }},
+    { text:'"Who are you?" — ask her name first.', action:()=>load('emilia_name') },
+  ]
+},
+
+'emilia_name':{
+  char:'emilia',
+  text:[
+    ['"My name is Emilia. Just Emilia — the rest is complicated."','dlg'],
+    ['"I\'m Subaru. Subaru Natsuki. The rest is also complicated."','dlg'],
+    ['She almost smiles.','nar'],
+  ],
+  choices:[
+    { text:'"What are you looking for, Emilia?"', action:()=>{ GS.k.emilia_name=true; load('emilia_explains'); }},
+  ]
+},
+
+'emilia_explains':{
+  char:'emilia',
+  text:[
+    ['"An insignia. Palm-sized, silver, carved with a crest. It was taken from me by a girl — young, blonde, fast."','dlg'],
+    ['"The girl who stole it — she said she was going to fence it at a loot house. A place that buys stolen goods, no questions asked."','dlg'],
+    ['"If I don\'t get it back, I lose something very important."','dlg'],
+    ['<em>She doesn\'t say what. You don\'t push.</em>','nar'],
+  ],
+  choices:[
+    { text:'"I know how thieves think. Let me help."', action:()=>load('find_felt') },
+  ]
+},
+
+'find_felt':{
+  char:'none',
+  text:()=>{
+    if(GS.k.felt_exists){
+      return[
+        ['<strong>※ LOOP MEMORY:</strong> The thief is a small blonde girl named Felt. She works out of the Stolen Goods Warehouse in the slums — Old Man Rom\'s place. She won\'t part with the insignia for free.','mem'],
+      ];
+    }
+    return[
+      ['You ask around. Carefully. Three merchants, two beggars, and one child who only communicated in pointing gestures.','nar'],
+      ['Eventually you have a lead: a small warehouse in the slum district, run by a giant called Old Man Rom. He buys fenced goods. The thief — apparently a young blonde girl — is a regular.','nar'],
+    ];
+  },
+  choices:()=>{
+    if(GS.k.felt_exists){
+      return[
+        { text:'[MEMORY] Go directly to Rom\'s warehouse. Ask for Felt.', mem:true, action:()=>load('loot_house_enter') }
+      ];
+    }
+    return[
+      { text:'Head to the warehouse in the slums.', action:()=>{ GS.k.felt_exists=true; GS.k.rom_exists=true; load('loot_house_enter'); }},
+    ];
+  }
+},
+
+'loot_house_enter':{
+  char:'rom',
+  text:[
+    ['The warehouse basement is lit by two lamps and smells of tallow and old coin.','nar'],
+    ['An enormous man fills a chair that seems too small for him. One eye covered by a leather patch. He regards you and Emilia without moving.','nar'],
+    ['"Half-demon girl and a strange-clothes boy. You\'re looking for Felt."','dlg'],
+    ['"We\'d like to buy back something she took," Emilia says carefully.','dlg'],
+    ['"Felt\'s upstairs. She don\'t sell to just anyone." He leans forward slightly. "Convince her."','dlg'],
+  ],
+  choices:[
+    { text:'Go upstairs to find Felt.', action:()=>load('meet_felt') },
+  ]
+},
+
+'meet_felt':{
+  char:'felt',
+  text:[
+    ['Felt is smaller than expected. Blonde hair like a haystack in a windstorm, red eyes that weigh everything they see.','nar'],
+    ['She has the insignia. She\'s tossing it in the air and catching it with one hand.','nar'],
+    ['"Silver girl and her weird pet. Here to beg for this back?" She catches it one last time and holds it out, then pulls it away. "I fenced it fair. You want it — you buy it."','dlg'],
+    ['"Name your price," Emilia says.','dlg'],
+    ['"Ten large silver. And don\'t make me repeat it."','dlg'],
+    ['Emilia checks her coin purse. Her expression does not change, but you know: she doesn\'t have it.','nar'],
+  ],
+  choices:()=>{
+    if(GS.k.phone_value){
+      return[
+        ['<strong>※ LOOP MEMORY:</strong> Felt is practical. She doesn\'t know what your phone is — but she could sell it. That\'s all a thief needs to know.','mem'],
+        { text:'[MEMORY] Show her the phone and explain it\'s from another world — rare, unique, impossible to replicate.', mem:true,
+          action:()=>load('felt_deal') }
+      ];
+    }
+    return[
+      { text:'Offer your phone as trade — a device from another world.', action:()=>{ GS.k.phone_value=true; load('felt_trade_attempt'); }},
+      { text:'Try to negotiate the price down with words.', action:()=>die('Felt had heard every negotiation tactic in the capital. She showed you the door. Emilia lost the insignia.') },
+      { text:'Demand she give it back — it was stolen property.', action:()=>die('Felt laughed for thirty seconds, then Ton grabbed you from behind. You didn\'t survive the basement stairs.') },
+    ];
+  }
+},
+
+'felt_trade_attempt':{
+  char:'felt',
+  text:[
+    ['You pull out your phone. The screen lights up. Felt\'s eyes go very wide, then very narrow.','nar'],
+    ['"What. Is. That."','dlg'],
+    ['"It\'s called a smartphone. From my world. There\'s nothing like it here — probably worth more than ten large silver to the right buyer, just for curiosity."','dlg'],
+    ['She snatches it and holds it at arm\'s length, then pokes it. The camera opens.','nar'],
+    ['She sees herself in the screen. She stares for a very long time.','nar'],
+    ['"...I don\'t know what this does," she says finally. "But I want it."','dlg'],
+  ],
+  choices:[
+    { text:'Agree to the trade.', action:()=>load('felt_deal') },
+  ]
+},
+
+'felt_deal':{
+  char:'felt',
+  text:[
+    ['The insignia lands in Emilia\'s hands. Your phone disappears into Felt\'s vest.','nar'],
+    ['"Pleasure," Felt says, already walking away. "Now get out before—"','dlg'],
+    ['She stops.','nar'],
+    ['The air in the basement changes. Old Man Rom\'s chair scrapes back.','nar'],
+    ['<em>The lamp flickers once. Then the door explodes inward.</em>','nar'],
+  ],
+  choices:[
+    { text:'Face the newcomer.', action:()=>load('elsa_arrives') }
+  ]
+},
+
+'elsa_arrives':{
+  char:'elsa',
+  text:()=>{
+    if(GS.k.elsa_ambush){
+      return[
+        ['<strong>※ LOOP MEMORY:</strong> You have died here before. Elsa Granhiert, the Bowel Hunter, was hired to recover the insignia. She kills everyone in the room.','mem'],
+        ['You need to keep Felt and Emilia alive until Reinhard van Astrea arrives. He is a knight who patrols this district.','mem'],
+        ['The key: get Rom to create noise. A fight he cannot win — but loud enough to be heard on the street.','mem'],
+      ];
+    }
+    return[
+      ['The woman in the doorway is beautiful in the way that sharpened steel is beautiful.','nar'],
+      ['"I was hired to recover a small silver insignia," she says pleasantly. "Once I have it, the rest of you are... negotiable."','dlg'],
+      ['She moves. Rom swings a club that should have been decisive.','nar'],
+      ['It doesn\'t matter.','nar'],
+    ];
+  },
+  choices:()=>{
+    if(GS.k.elsa_ambush){
+      return[
+        { text:'[MEMORY] Scream as loudly as you can out the window while Rom engages Elsa. Draw the street\'s attention.', mem:true,
+          action:()=>load('elsa_stall') }
+      ];
+    }
+    return[
+      { text:'Attack Elsa to protect Emilia.', action:()=>{ GS.k.elsa_ambush=true; die('Elsa was faster, stronger, and entirely unbothered by your effort. She seemed to enjoy it.'); }},
+      { text:'Throw yourself in front of Emilia.', action:()=>{ GS.k.elsa_ambush=true; die('You absorbed the first blow. The second one finished what the first started.'); }},
+      { text:'Run and find help.', action:()=>{ GS.k.elsa_ambush=true; die('Elsa was already at the door before you turned around.'); }},
+    ];
+  }
+},
+
+'elsa_stall':{
+  char:'elsa',
+  text:[
+    ['You throw yourself at the high window and scream. Not words. Just noise. Loud, continuous, impossible-to-ignore noise.','nar'],
+    ['Rom roars and charges Elsa. He knows he\'ll lose. He charges anyway.','nar'],
+    ['The fight is awful. The noise brings people. And one of the people it brings is a young man with red hair and a sword that seems to hum.','nar'],
+    ['"Reinhard van Astrea," Elsa says, and for the first time something resembling caution crosses her face. "How inconvenient."','dlg'],
+  ],
+  choices:[
+    { text:'Watch what happens next.', action:()=>load('reinhard_saves') }
+  ]
+},
+
+'reinhard_saves':{
+  char:'emilia',
+  text:[
+    ['Elsa flees. Reinhard lets her, because his priority is the wounded in the room.','nar'],
+    ['Emilia is unharmed. Felt is unharmed, clutching your phone in one hand and her own knife in the other.','nar'],
+    ['Rom is alive, barely.','nar'],
+    ['Emilia kneels beside him and begins quietly working whatever healing magic she has.','nar'],
+    ['"You kept screaming," she says without looking up. "That was... not heroic, exactly. But it worked."','dlg'],
+    ['"I\'m not heroic," you say. "I\'m just loud."','dlg'],
+    ['<br><strong>✦ ARC I CLEARED ✦</strong><br>The insignia is safe. Everyone lives.','suc'],
+  ],
+  choices:[
+    { text:'Accept Emilia\'s invitation to Roswaal\'s Mansion.', action:()=>{ GS.arc=2; GS.checkpoint='mansion_arrive'; updateHUD(); load('mansion_arrive'); }},
+  ]
+},
+
+/* ─────────────────────────────────────
+   ARC 2: The Mansion & Julius
+───────────────────────────────────── */
+'mansion_arrive':{
+  char:'rem',
+  text:()=>{
+    GS.arc=2; setLbl('Arc II — The Mansion');
+    return[
+      ['Roswaal\'s mansion is a tower of impossible architecture in the middle of nowhere. You have been assigned a room and a maid.','nar'],
+      ['The maid is Rem. She has blue hair, a white headband with a bow, and a gaze that has not left you since you walked in.','nar'],
+      ['"You smell of the Witch," she says. Not an accusation. A fact.','dlg'],
+      ['"...I don\'t know what that means."','dlg'],
+      ['"It means you should be careful."','dlg'],
+    ];
+  },
+  choices:[
+    { text:'Spend the day working hard to earn everyone\'s trust.', action:()=>load('mansion_work') },
+    { text:'Explore the mansion on your own.', action:()=>{
+      setChar('ram');
+      die('Ram found you in a restricted corridor. She didn\'t ask for explanations.');
+    }},
+    { text:'Ask to see Beatrice, the spirit in the library.', action:()=>load('beatrice_intro') },
+  ]
+},
+
+'beatrice_intro':{
+  char:'beatrice',
+  text:[
+    ['The library is between one room and the next. You open six different doors before one of them opens onto it.','nar'],
+    ['A blonde girl with enormous twin drills of hair and a book as big as her torso regards you from across an ocean of shelves.','nar'],
+    ['"You found this place, I suppose. Most people can\'t."','dlg'],
+    ['"I got lucky."','dlg'],
+    ['"There is no luck. Only inevitability." She closes the book with a sound like a door sealing. "State your business and leave."','dlg'],
+  ],
+  choices:[
+    { text:'"Why do you stay in this library alone?"', action:()=>load('beatrice_waiting') },
+    { text:'Ask her about the mansion\'s layout.', action:()=>load('mansion_work') },
+  ]
+},
+
+'beatrice_waiting':{
+  char:'beatrice',
+  text:[
+    ['"I wait for someone, in fact. Someone I am supposed to meet."','dlg'],
+    ['"Who?"','dlg'],
+    ['"If I knew that, I would not be waiting, I suppose." She opens the book again, closing the conversation.','dlg'],
+    ['<em>You file this away. It feels important.</em>','nar'],
+  ],
+  choices:[
+    { text:'Return to the main mansion.', action:()=>load('mansion_work') }
+  ]
+},
+
+'mansion_work':{
+  char:'rem',
+  text:()=>{
+    if(GS.k.rem_trust){
+      return[
+        ['A week in. Rem\'s constant surveillance has softened into something that looks almost like wary acceptance.','nar'],
+        ['"You work harder than the scent suggests," she admits one morning.','dlg'],
+        ['"High praise," you say.','dlg'],
+        ['"Don\'t push it."','dlg'],
+      ];
+    }
+    GS.k.rem_trust=true;
+    return[
+      ['You throw yourself into mansion duties. Chopping wood, carrying water, repairing fences. Every task you can find.','nar'],
+      ['Rem watches. Always watches.','nar'],
+      ['By the third day, she stops following you to every room.','nar'],
+    ];
+  },
+  choices:[
+    { text:'Continue building trust for the royal capital trip.', action:()=>load('capital_summons') }
+  ]
+},
+
+'capital_summons':{
+  char:'emilia',
+  text:[
+    ['Roswaal summons everyone. A Royal Selection meeting has been called in the capital. Emilia must attend.','nar'],
+    ['"You will come too," he says, gesturing to you in his languid way. "You\'ve become something of a fixture, yes-yes."','dlg'],
+    ['<em>The castle. Real knights. Real politics. For the first time, you\'re going to be seen by people who matter.</em>','nar'],
+    ['<em>Don\'t screw it up.</em>','nar'],
+  ],
+  choices:[
+    { text:'Travel to the capital.', action:()=>load('castle_arrival') }
+  ]
+},
+
+'castle_arrival':{
+  char:'julius',
+  text:[
+    ['The castle is everything the city is not: cold, ordered, immaculate.','nar'],
+    ['Knights line the corridor. The Royal Guard.','nar'],
+    ['One of them — violet hair, knight\'s uniform pressed to a razor\'s edge, posture like a drawn blade — turns to look at you with something between assessment and dismissal.','nar'],
+    ['Julius Euclius. First-class knight of the Royal Guard. You can tell he is excellent at everything, immediately, without being told.','nar'],
+    ['"You\'re Lady Emilia\'s... attendant?" he asks. The pause is worse than the word.','dlg'],
+    ['"I\'m her knight," you say. "Subaru Natsuki."','dlg'],
+    ['"A knight," Julius repeats. Very carefully.','dlg'],
+  ],
+  choices:[
+    { text:'"That\'s right. Problem with that?"', action:()=>load('julius_challenge') },
+    { text:'Let it go. Stay professional.', action:()=>load('castle_session') },
+  ]
+},
+
+'castle_session':{
+  char:'emilia',
+  text:[
+    ['You swallow the retort. Julius inclines his head, indifferent, and moves on.','nar'],
+    ['The Selection meeting is brutal — politics and procedure and five women who each seem to believe the throne belongs to them and no one else.','nar'],
+    ['Emilia holds her own. Barely.','nar'],
+    ['Afterward, in the corridor, Julius finds you again.','nar'],
+    ['"You showed restraint earlier," he says. "That was... correct. Wisdom, or self-control?"','dlg'],
+    ['"Self-control," you admit. "The wisdom is still arriving."','dlg'],
+    ['He almost smiles.','nar'],
+  ],
+  choices:[
+    { text:'Continue to Arc 3.', action:()=>{ GS.arc=3; GS.checkpoint='arc3_start'; updateHUD(); load('arc3_start'); }},
+  ]
+},
+
+'julius_challenge':{
+  char:'julius',
+  text:[
+    ['"A problem?" Julius considers this. "Not a problem. But perhaps a question of credentials."','dlg'],
+    ['"If you are Lady Emilia\'s knight, you should be capable of conducting yourself as one."','dlg'],
+    ['"Then prove I\'m not."','dlg'],
+    ['You say it before you can stop it.','nar'],
+    ['Julius looks at you for a long moment.','nar'],
+    ['"If you insist."','dlg'],
+  ],
+  choices:[
+    { text:'Accept the duel — you\'ve made your bed.', action:()=>load('julius_duel') }
+  ]
+},
+
+'julius_duel':{
+  char:'julius',
+  text:[
+    ['The courtyard. Weapons selected — practice blades, but Julius handles his like he was born holding it.','nar'],
+    ['He defeats you in under three minutes.','nar'],
+    ['<em>Three minutes is generous. It was probably two.</em>','nar'],
+    ['He doesn\'t gloat. That\'s almost worse.','nar'],
+    ['"You have heart," he says, helping you up. "You have none of the rest. Heart without craft is courage wasted."','dlg'],
+    ['You say nothing. What would be the point.','nar'],
+    ['An hour later, in the antechamber, Emilia finds you sitting alone.','nar'],
+    ['"The other knights are calling you the Half-Elf\'s Jester," she says, very quietly.','dlg'],
+    ['"...I know."','dlg'],
+  ],
+  choices:()=>{
+    if(GS.k.julius_fought){
+      return[
+        ['<strong>※ LOOP MEMORY:</strong> You\'ve been here before. This shame is old. This time — ask Julius to teach you something instead.','mem'],
+        { text:'[MEMORY] Go back to Julius and ask him, genuinely, to teach you what you\'re missing.', mem:true,
+          action:()=>load('julius_teaches') }
+      ];
+    }
+    GS.k.julius_fought=true;
+    return[
+      { text:'Isolate yourself. Nurse the wound.', action:()=>die('You withdrew from everyone. Rem, finding you non-responsive in your room for three days, made a decision that ended badly for you.') },
+      { text:'Go back to Julius and demand a rematch.', action:()=>die('He declined. Then accepted when you became belligerent. Same result. Faster.') },
+      { text:'Find Julius. Ask him, honestly, what you\'re doing wrong.', action:()=>load('julius_teaches') },
+    ];
+  }
+},
+
+'julius_teaches':{
+  char:'julius',
+  text:[
+    ['Julius finds your request surprising enough that he pauses before answering.','nar'],
+    ['"Most men in your position would hate me," he says.','dlg'],
+    ['"Most men in my position haven\'t died as many times as I have," you say, which is true in ways he can\'t understand.','dlg'],
+    ['He teaches you for two hours. Not swordsmanship — he has nothing to work with there. But observation. Positioning. Reading a situation before it becomes a crisis.','nar'],
+    ['"You rely on reaction," he says. "A knight anticipates. A knight reads the room before the sword clears the scabbard."','dlg'],
+    ['<em>You store this. Not as flattery — as a tool.</em>','nar'],
+    ['<strong>Julius\'s Lesson acquired.</strong>','sys'],
+  ],
+  choices:[
+    { text:'Return to the mansion.', action:()=>{ GS.k.julius_lesson=true; load('mansion_curse'); }},
+  ]
+},
+
+'mansion_curse':{
+  char:'rem',
+  text:[
+    ['You return to find the mansion changed. A stillness has settled over it that wasn\'t there before.','nar'],
+    ['Animals have stopped coming near the treeline. Rem and Ram both move with the deliberate tension of people who know something is circling.','nar'],
+    ['"Something is in the forest," Rem says. "It has been there since yesterday. Mabeasts."','dlg'],
+    ['"What kind?"','dlg'],
+    ['"The kind that don\'t come to a house unless they\'re drawn. Something in here is drawing them."','dlg'],
+    ['<em>She looks at you when she says it.</em>','nar'],
+  ],
+  choices:[
+    { text:'Investigate the forest yourself.', action:()=>load('curse_forest') },
+    { text:'Ask Rem to investigate together.', action:()=>load('curse_together') },
+    { text:'Search the mansion for what could be drawing them.', action:()=>load('curse_source_found') },
+  ]
+},
+
+'curse_forest':{
+  char:'none',
+  text:[
+    ['You find the Wolgarm nest. A dozen of them. And in the center — a curse construct, buried in the roots.','nar'],
+    ['It thrums. It has been drawing mabeasts for weeks. It was placed deliberately.','nar'],
+  ],
+  choices:()=>{
+    if(GS.k.curse_source){
+      return[
+        ['<strong>※ LOOP MEMORY:</strong> The curse responds to fire. Ram\'s wind magic can scatter what fire leaves. But you need both sisters working together.','mem'],
+        { text:'[MEMORY] Return and tell Rem and Ram — they need to fight together.', mem:true,
+          action:()=>load('curse_cleared') }
+      ];
+    }
+    GS.k.curse_source=true;
+    return[
+      { text:'Try to destroy it alone.', action:()=>die('The construct detonated when touched by someone without countermeasures. The Wolgarm took care of the rest.') },
+      { text:'Retreat and get Rem and Ram.', action:()=>load('curse_together') },
+    ];
+  }
+},
+
+'curse_together':{
+  char:'rem',
+  text:[
+    ['Rem and Ram work in the way only siblings can — in absolute silence, without needing to negotiate.','nar'],
+    ['Rem burns. Ram scatters. The Wolgarm are driven back and the construct collapses into ash.','nar'],
+    ['Afterward, in the quiet, Ram says something she clearly didn\'t plan to say.','nar'],
+    ['"You fetched us instead of dying heroically. That was the correct choice."','dlg'],
+    ['"High praise," Rem says, which is almost a joke.','dlg'],
+  ],
+  choices:[
+    { text:'Continue.', action:()=>load('curse_cleared') }
+  ]
+},
+
+'curse_source_found':{
+  char:'none',
+  text:[
+    ['You find nothing. But you know now what you don\'t know.','nar'],
+  ],
+  choices:[{ text:'Go to the forest.', action:()=>load('curse_forest') }]
+},
+
+'curse_cleared':{
+  char:'emilia',
+  text:[
+    ['The mansion breathes again.','nar'],
+    ['Emilia finds you at dinner, looking at the treeline from the window.','nar'],
+    ['"Thank you," she says. "For not treating this like someone else\'s problem."','dlg'],
+    ['"It became my problem when I moved in," you say.','dlg'],
+    ['<br><strong>✦ ARC II CLEARED ✦</strong>','suc'],
+  ],
+  choices:[
+    { text:'Proceed to Arc 3.', action:()=>{ GS.arc=3; GS.checkpoint='arc3_start'; updateHUD(); load('arc3_start'); }},
+  ]
+},
+
+/* ─────────────────────────────────────
+   ARC 3: Collapse & The White Whale
+───────────────────────────────────── */
+'arc3_start':{
+  char:'subaru',
+  text:()=>{
+    GS.arc=3; GS.checkpoint='arc3_start'; setLbl('Arc III — The White Whale');
+    return[
+      ['The Selection reconvenes. Emilia goes to the castle. You go with her.','nar'],
+      ['And something goes wrong — slowly at first, then catastrophically.','nar'],
+      ['You push too hard. You try to solve too much. You make promises you can\'t keep to people who didn\'t ask for them.','nar'],
+      ['Emilia tells you, very quietly, that she is releasing you from any obligation to her.','nar'],
+      ['"You need to stop acting like my life is yours to manage, Subaru."','dlg'],
+      ['You leave the castle alone. And the road back to the mansion goes through the Great Mist.','nar'],
+    ];
+  },
+  choices:[
+    { text:'Try to explain yourself to Emilia.', action:()=>load('subaru_pushes') },
+    { text:'Accept it. Walk back.', action:()=>load('whale_road_first') },
+  ]
+},
+
+'subaru_pushes':{
+  char:'emilia',
+  text:[
+    ['You say too much. You use her own kindness as a lever, which she recognizes immediately.','nar'],
+    ['"You\'re not doing this for me," she says. "You\'re doing it because you need to be needed. That\'s not the same thing."','dlg'],
+    ['<em>It lands like a blade because it\'s true.</em>','nar'],
+    ['She walks back inside.','nar'],
+  ],
+  choices:[
+    { text:'Walk home alone.', action:()=>load('whale_road_first') }
+  ]
+},
+
+'whale_road_first':{
+  char:'whale',
+  text:[
+    ['Fog. The wrong kind. Salt and rot and cold that doesn\'t belong to the season.','nar'],
+    ['It rises from the trees on both sides of the road like a wall with something behind it.','nar'],
+    ['Then the White Whale surfaces out of the mist above you.','nar'],
+    ['<em>It is the size of a cathedral. It is impossible. It turns one enormous eye toward you and makes a sound that isn\'t a sound.</em>','nar'],
+  ],
+  choices:[
+    { text:'Fight it.', action:()=>die('You died before you finished the thought.') },
+    { text:'Run.', action:()=>die('The whale\'s fog erased you from memory before your body hit the ground. Nobody looked for you.') },
+  ]
+},
+
+'rem_confession_trigger':{
+  char:'rem',
+  text:[
+    ['You return to the mansion through some checkpoint miracle — broken, empty.','nar'],
+    ['You sit on the floor of your room and let yourself fall apart, carefully, where no one can see.','nar'],
+    ['A knock.','nar'],
+    ['Rem is at the door holding tea you won\'t drink.','nar'],
+    ['"Tell me," she says. Just that.','dlg'],
+    ['So you do. Everything except the one thing the Witch won\'t let you say.','nar'],
+    ['She listens to all of it without moving.','nar'],
+    ['"You hate yourself," she says, when you\'re done.','dlg'],
+    ['"...Yeah."','dlg'],
+    ['"Then let me tell you what I see instead. I see someone who stands up. Every time, no matter what. That person is my hero, Subaru-kun."','dlg'],
+    ['<em>Something shifts. Something that has been closed for too long opens up, just slightly.</em>','nar'],
+  ],
+  choices:[
+    { text:'Accept it. Accept <em>her</em>. Stand up.', action:()=>{ GS.k.rem_speech=true; GS.checkpoint='rebuild'; load('rebuild'); }},
+  ]
+},
+
+'rebuild':{
+  char:'subaru',
+  text:[
+    ['You stand. You wash your face. You go downstairs.','nar'],
+    ['The White Whale exists. The road to the Sanctuary runs through its territory. It has terrorized that road for decades.','nar'],
+    ['To kill it, you need an army. To get an army, you need a deal. The best deal available is with Crusch Karsten, rival candidate — who has wanted to slay the Whale for years.','nar'],
+    ['<em>You have one thing to offer her: the knowledge of where it will be, and when.</em>','nar'],
+  ],
+  choices:[
+    { text:'Ride to Crusch\'s estate.', action:()=>load('crusch_meeting') },
+  ]
+},
+
+'crusch_meeting':{
+  char:'none',
+  text:()=>{
+    if(GS.k.whale_alliance){
+      return[
+        ['<strong>※ LOOP MEMORY:</strong> Crusch Karsten wants the Whale dead — but her price is the entire corpse. Miasma organs, bile glands, the whole thing. Worth a kingdom.','mem'],
+      ];
+    }
+    return[
+      ['Crusch Karsten receives you in her study. She is exactly as impressive as her reputation.','nar'],
+      ['"You want my army to fight the Whale. Name your offer."','dlg'],
+    ];
+  },
+  choices:()=>{
+    if(GS.k.whale_alliance){
+      return[
+        { text:'[MEMORY] Offer the entire Whale corpse as her exclusive payment.', mem:true, action:()=>load('crusch_deal') }
+      ];
+    }
+    return[
+      { text:'Offer your knowledge of the Whale\'s location.', action:()=>{ GS.k.whale_alliance=true; die('She already had its location. Knowledge of the tides isn\'t payment for drowning in them.'); }},
+      { text:'Offer Emilia\'s political support.', action:()=>{ GS.k.whale_alliance=true; die('Crusch declined to be offered something that wasn\'t yours to give.'); }},
+      { text:'Offer her the Whale\'s entire corpse — exclusive rights to it.', action:()=>{ GS.k.whale_alliance=true; load('crusch_deal'); }},
+    ];
+  }
+},
+
+'crusch_deal':{
+  char:'rem',
+  text:[
+    ['Crusch leans back in her chair and smiles for the first time.','nar'],
+    ['"The Whale\'s corpse. That\'s a kingdom\'s worth of alchemical materials." A pause. "Deal."','dlg'],
+    ['Three days later. The army assembled at the crossroads. Rem is beside you on horseback.','nar'],
+    ['The mist rolls in at midnight, exactly as you said it would.','nar'],
+    ['"We\'re really doing this," Rem says.','dlg'],
+    ['"We\'re really doing this."','dlg'],
+  ],
+  choices:[
+    { text:'Lead the charge.', action:()=>load('whale_battle') }
+  ]
+},
+
+'whale_battle':{
+  char:'whale',
+  text:[
+    ['The Whale surfaces. Enormous. Impossible. Three hundred arrows fail to make it flinch.','nar'],
+    ['Then it opens its jaws and the fog pours out and suddenly there are <em>three</em> of them.','nar'],
+    ['"It\'s splitting!" someone screams.','nar'],
+    ['"The copies don\'t cast real fog — only the original does," you shout. "Watch the mist trail!"','dlg'],
+  ],
+  choices:()=>{
+    if(GS.k.whale_tactic){
+      return[
+        ['<strong>※ LOOP MEMORY:</strong> The Whale cannot fly. It takes enormous effort to stay aloft. Gravity magic, concentrated at the base of the real one, forces it down and exposes it.','mem'],
+        { text:'[MEMORY] Direct the gravity mages to pin the real Whale to the ground.', mem:true,
+          action:()=>load('whale_final') }
+      ];
+    }
+    return[
+      { text:'Attack all three simultaneously.', action:()=>{ GS.k.whale_tactic=true; die('Two were copies. The real one used the distraction to erase Wilhelm van Astrea. The army broke.'); }},
+      { text:'Have the mages focus gravity magic on the real one — the only one struggling to stay up.', action:()=>load('whale_final') },
+    ];
+  }
+},
+
+'whale_final':{
+  char:'subaru',
+  text:[
+    ['Three gravity mages focus. The real Whale lurches downward, fighting it, losing.','nar'],
+    ['Wilhelm van Astrea — the Sword Demon, who has spent seventy years waiting for this — drives a blade through the Whale\'s eye.','nar'],
+    ['The copies dissolve. The original screams.','nar'],
+    ['The great fog clears. The road opens.','nar'],
+    ['<em>Wilhelm kneels in the field beside the corpse, weeping. You don\'t ask why. Some griefs are their own explanation.</em>','nar'],
+    ['<br><strong>✦ ARC III CLEARED — THE WHITE WHALE IS DEAD ✦</strong>','suc'],
+  ],
+  choices:[
+    { text:'Follow Emilia to the Sanctuary.', action:()=>{ GS.arc=4; GS.checkpoint='sanctuary_arrive'; updateHUD(); load('sanctuary_arrive'); }},
+  ]
+},
+
+/* ─────────────────────────────────────
+   ARC 4: The Sanctuary
+───────────────────────────────────── */
+'sanctuary_arrive':{
+  char:'emilia',
+  text:()=>{
+    GS.arc=4; setLbl('Arc IV — The Sanctuary');
+    return[
+      ['The Sanctuary is a concealed village sealed by a magical barrier centuries old.','nar'],
+      ['Those with mixed blood — half-elves, demi-humans — cannot leave unless the barrier\'s three trials are completed.','nar'],
+      ['Emilia is trapped here. And the trials are inside the Tomb of the Witch of Greed.','nar'],
+      ['"I\'m frightened," Emilia tells you. Not the way she\'d tell anyone else.','dlg'],
+      ['"I know," you say. "Go in anyway."','dlg'],
+    ];
+  },
+  choices:[
+    { text:'Explore the Sanctuary before she goes in.', action:()=>load('garfiel_intro') },
+    { text:'Enter the Tomb to scout it first.', action:()=>load('echidna_intro') },
+  ]
+},
+
+'garfiel_intro':{
+  char:'garfiel',
+  text:[
+    ['Garfiel Tinzel lands in front of you from a roof with the ease of someone who does this every hour.','nar'],
+    ['Tiger ears. Fangs. Eyes like hammered gold. Young face wearing an expression ten years older than it should be.','nar'],
+    ['"New outsiders. You ain\'t leavin\' until the barrier drops. That\'s the law and I\'m the law."','dlg'],
+    ['He bares his teeth.','nar'],
+    ['"Somethin\' about you makes me want to hate you specifically. Can\'t figure why."','dlg'],
+  ],
+  choices:[
+    { text:'Challenge him back.', action:()=>die('Garfiel\'s beast form was not a metaphor. It was enormous. You were not.') },
+    { text:'Ask about the Sanctuary\'s history — carefully.', action:()=>{ GS.k.garfiel_mother=true; load('garfiel_mother_hint'); }},
+    { text:'Let it go. Head to the Tomb.', action:()=>load('echidna_intro') },
+  ]
+},
+
+'garfiel_mother_hint':{
+  char:'garfiel',
+  text:[
+    ['You ask the right questions gently enough that he answers one of them by accident.','nar'],
+    ['His mother is inside the Sanctuary. One of the Ryuzu — the original. Kept in stasis in a capsule. She cannot be freed until the barrier falls.','nar'],
+    ['He has been guarding this village his whole life because of her.','nar'],
+    ['<em>Fear of loss. Not pride. That\'s what drives him.</em>','nar'],
+  ],
+  choices:[
+    { text:'Head to the Tomb.', action:()=>load('echidna_intro') }
+  ]
+},
+
+'echidna_intro':{
+  char:'echidna',
+  text:()=>{
+    if(!GS.k.echidna_met) GS.k.echidna_met=true;
+    GS.checkpoint='echidna_intro';
+    return[
+      ['The Tomb is dark for exactly as long as it takes you to blink.','nar'],
+      ['Then you are sitting at a long table in a white room. Sunlight you cannot place. A girl in black pouring tea.','nar'],
+      ['"You\'re dead," you say.','dlg'],
+      ['"Technically yes. This is a dream. You\'re in it. Welcome."','dlg'],
+      ['Echidna, Witch of Greed, slides a cup across the table.','nar'],
+      ['"I know about your power. Return by Death — death as checkpoint, memory as currency. I find it extraordinarily interesting."','dlg'],
+      ['"You\'re going to use me for something," you say.','dlg'],
+      ['"I\'m going to tell you things in exchange for your continued survival. Same result, better framing."','dlg'],
+    ];
+  },
+  choices:[
+    { text:'"Tell me about the trials."', action:()=>load('echidna_trials_info') },
+    { text:'"Tell me about Roswaal."', action:()=>load('echidna_roswaal_info') },
+  ]
+},
+
+'echidna_trials_info':{
+  char:'echidna',
+  text:[
+    ['"The First Trial: confront your past. The Second: your present. The Third: your future."','dlg'],
+    ['"For Emilia — the First Trial is her worst memory. The forest of Elior, frozen. Everyone she loved, sleeping under ice by her own hand."','dlg'],
+    ['"She ran from the Trial in her first attempt. She will need a reason to go back. Specifically: someone who will wait."','dlg'],
+    ['"Waiting," she says, refilling your cup, "is an act of profound faith. Most people underestimate it."','dlg'],
+  ],
+  choices:[
+    { text:'Ask about Roswaal.', action:()=>load('echidna_roswaal_info') },
+    { text:'Return to Emilia.', action:()=>{ GS.k.trial_knowledge=true; load('emilia_first_trial'); }},
+  ]
+},
+
+'echidna_roswaal_info':{
+  char:'echidna',
+  text:[
+    ['"Roswaal has a Gospel. A book that predicts the future — a copy of the Tome of Wisdom."','dlg'],
+    ['"He has been engineering all of this. The Witch Cult attacks, the White Whale on that road, your arrival — all of it angled to force you to clear this Sanctuary."','dlg'],
+    ['"He wants the barrier down. He has always wanted the barrier down. Ask yourself why."','dlg'],
+    ['<em>She doesn\'t explain further. She never explains further.</em>','nar'],
+    ['<strong>Roswaal\'s secret noted.</strong>','sys'],
+  ],
+  choices:[
+    { text:'Return to Emilia.', action:()=>{ GS.k.trial_knowledge=true; GS.k.roswaal_exposed=true; load('emilia_first_trial'); }},
+  ]
+},
+
+'emilia_first_trial':{
+  char:'emilia',
+  text:[
+    ['Emilia stands at the Tomb entrance, not moving.','nar'],
+    ['"I went in," she says. "I saw everything. The forest. The ice. The day I — the day it happened."','dlg'],
+    ['"I couldn\'t finish it. I ran."','dlg'],
+    ['"Tell me what it showed you," you say.','dlg'],
+    ['She does. Piece by terrible piece. The sleeping spirits. The village that will never wake. The choice she made as a child that she still can\'t decide was right or wrong.','nar'],
+  ],
+  choices:()=>{
+    if(GS.k.trial_knowledge){
+      return[
+        { text:'[MEMORY] Tell her exactly what the Trial needs from her: not victory. Acceptance.', mem:true,
+          action:()=>load('emilia_returns') },
+      ];
+    }
+    return[
+      { text:'Tell her she doesn\'t have to go back in.', action:()=>die('The Witch Cult arrived while the barrier stood. Without it down, the Sanctuary was undefended.') },
+      { text:'Tell her the Trial isn\'t punishment — it\'s asking her to accept what happened.', action:()=>load('emilia_returns') },
+    ];
+  }
+},
+
+'emilia_returns':{
+  char:'emilia',
+  text:[
+    ['"The Trial isn\'t asking if you made the right choice," you say. "It\'s asking whether you can keep living with the person you were when you made it."','dlg'],
+    ['"That\'s not — that doesn\'t make it easier."','dlg'],
+    ['"I know. But you\'ve already been living with it for years. You survived that. You can survive this."','dlg'],
+    ['She goes back in.','nar'],
+    ['You sit at the entrance.','nar'],
+    ['<em>You wait.</em>','nar'],
+  ],
+  choices:[
+    { text:'Continue waiting.', action:()=>load('garfiel_confrontation') }
+  ]
+},
+
+'garfiel_confrontation':{
+  char:'garfiel',
+  text:[
+    ['Garfiel finds you on the second day. He crouches across from you and doesn\'t say anything for a while.','nar'],
+    ['"You\'re still here."','dlg'],
+    ['"She\'s still in there."','dlg'],
+    ['Another silence.','nar'],
+    ['"My mum\'s in one of the stasis chambers," he says. "The original Ryuzu. Been there since I was born. Barrier comes down, she\'s free. Barrier stays up—"','dlg'],
+    ['He doesn\'t finish.','nar'],
+  ],
+  choices:()=>{
+    if(GS.k.garfiel_mother){
+      return[
+        { text:'[MEMORY] Promise him: the first thing you\'ll do when the barrier falls is make sure she walks out free.', mem:true,
+          action:()=>load('sanctuary_end') },
+      ];
+    }
+    return[
+      { text:'Promise him his mother will be the first one freed.', action:()=>load('sanctuary_end') },
+      { text:'Try to explain why the barrier needs to fall regardless.', action:()=>die('Garfiel\'s protectiveness of his mother overwhelmed his logic. He became the obstacle instead of the ally.') },
+    ];
+  }
+},
+
+'sanctuary_end':{
+  char:'emilia',
+  text:[
+    ['On the third day, Emilia walks out.','nar'],
+    ['She is not the same person who walked in. She looks like someone who has been through something and come out the other side intact.','nar'],
+    ['The barrier shatters. Not loudly — it simply stops existing.','nar'],
+    ['The residents of the Sanctuary pour out into open land for the first time in generations.','nar'],
+    ['Garfiel is running before anyone else.','nar'],
+    ['<em>You don\'t watch. Some things are private.</em>','nar'],
+    ['Emilia stands beside you.','nar'],
+    ['"You waited," she says.','dlg'],
+    ['"Yeah."','dlg'],
+    ['<br><strong>✦ ARC IV CLEARED — THE SANCTUARY IS OPEN ✦</strong>','suc'],
+  ],
+  choices:[
+    { text:'Move to Arc 5: The city of Pristella is under siege.', action:()=>{ GS.arc=5; GS.checkpoint='pristella'; updateHUD(); load('pristella'); }},
+  ]
+},
+
+/* ─────────────────────────────────────
+   ARC 5: Pristella
+───────────────────────────────────── */
+'pristella':{
+  char:'none',
+  text:()=>{
+    GS.arc=5; setLbl('Arc V — The City of Pristella');
+    return[
+      ['Pristella. Canal city. Fifty thousand people.','nar'],
+      ['Four water gates. Four Sin Archbishops.','nar'],
+      ['If any gate is opened or destroyed, the city floods.','nar'],
+      ['The Witch Cult has them all.','nar'],
+      ['<em>You are one person against four unkillable monsters.</em>','nar'],
+      ['"We split up," Emilia says. "We have to."','dlg'],
+    ];
+  },
+  choices:[
+    { text:'Find Beatrice. She\'s somewhere in the city.', action:()=>load('find_beatrice') },
+    { text:'Head directly to Gate 1 — confront Sirius.', action:()=>load('sirius_approach') },
+  ]
+},
+
+'find_beatrice':{
+  char:'beatrice',
+  text:[
+    ['You find the loop-library in a warehouse district. The door works on the third try.','nar'],
+    ['Beatrice is sitting on a pile of texts that would fill a cathedral, holding one book and looking at nothing.','nar'],
+    ['"You found me," she says. "I suppose most people can\'t."','dlg'],
+    ['"I remembered from last time." You sit down across from her. "You said you were waiting for someone."','dlg'],
+    ['"I have been. For four centuries. I thought they would never come."','dlg'],
+    ['"What if they\'re here," you say. "What if I\'m asking you to choose to fight instead of waiting to be chosen?"','dlg'],
+    ['She looks at you for a very long time.','nar'],
+    ['"You would need to form a pact with me. A spirit contract. It\'s not trivial."','dlg'],
+    ['"I know. I\'m asking anyway."','dlg'],
+  ],
+  choices:[
+    { text:'"Fight beside me — not as a tool. As an equal."', action:()=>{ GS.k.beatrice_pact=true; load('beatrice_agrees'); }},
+    { text:'"I just need your magic."', action:()=>die('Beatrice closed the book. "Then you don\'t need me." The door to the library ceased to exist. Gate 1 fell shortly after.') },
+  ]
+},
+
+'beatrice_agrees':{
+  char:'beatrice',
+  text:[
+    ['She closes the book.','nar'],
+    ['"Four centuries is long enough to wait, I suppose."','dlg'],
+    ['She takes your hand.','nar'],
+    ['The pact forms like a door opening both ways at once.','nar'],
+    ['"Try not to die immediately," she says. "That would be embarrassing."','dlg'],
+    ['<strong>Pact with Beatrice formed. Gate spirit magic available.</strong>','sys'],
+  ],
+  choices:[
+    { text:'Go to Gate 1 — face Sirius.', action:()=>load('sirius_approach') }
+  ]
+},
+
+'sirius_approach':{
+  char:'sirius',
+  text:()=>{
+    if(GS.k.sirius_trick){
+      setChar('subaru');
+      return[
+        ['<strong>※ LOOP MEMORY:</strong> Sirius\'s Wrath power connects emotions through crowds. She shares pain outward. But she can\'t process love — her Gospel has no mechanism for it. Force the crowd\'s warmth through the connection and it breaks her.','mem'],
+      ];
+    }
+    return[
+      ['Sirius stands on the gate, chains orbiting her like a personal solar system.','nar'],
+      ['"Archbishop of Wrath. Everyone in this city who feels anything is connected to me right now. Hurt me — they scream with me."','dlg'],
+      ['The crowd nearby goes rigid with shared terror. The connection is real.','nar'],
+    ];
+  },
+  choices:()=>{
+    if(GS.k.sirius_trick){
+      return[
+        { text:'[MEMORY] Route the crowd\'s love through the connection — an emotion Wrath can\'t process.', mem:true,
+          action:()=>load('sirius_down') },
+      ];
+    }
+    return[
+      { text:'Attack Sirius directly.', action:()=>{ GS.k.sirius_trick=true; die('The crowd\'s agony flowed back through the connection into you. Fifty thousand shared heartbreaks is not survivable.'); }},
+      { text:'Try to negotiate.', action:()=>die('Sirius infected the crowd with despair while you talked. The gates fell.') },
+    ];
+  }
+},
+
+'sirius_down':{
+  char:'beatrice',
+  text:[
+    ['You close your eyes and reach through the crowd\'s connection for what Wrath cannot digest.','nar'],
+    ['A mother and her child at a canal stall. Two old men laughing. A baker who whistles every morning.','nar'],
+    ['Ordinary, stubborn, unkillable love.','nar'],
+    ['You push it through.','nar'],
+    ['Sirius doubles over like she\'s been struck by something she has no name for.','nar'],
+    ['Beatrice binds her before she recovers.','nar'],
+    ['"That was creative, in fact," Beatrice says.','dlg'],
+    ['"Gate 1 clear. Moving to Gate 2."','dlg'],
+  ],
+  choices:[
+    { text:'Move to Gate 2 — face Lye Batenkaitos.', action:()=>load('lye_approach') }
+  ]
+},
+
+'lye_approach':{
+  char:'lye',
+  text:()=>{
+    if(GS.k.gluttony_name){
+      setChar('subaru');
+      return[
+        ['<strong>※ LOOP MEMORY:</strong> Lye eats names. He has to know it first. Give him a false one, let him try to consume it, and Beatrice takes him while he\'s choking on nothing.','mem'],
+      ];
+    }
+    return[
+      ['Lye Batenkaitos is sitting on the gate railing eating what looks like a sandwich.','nar'],
+      ['"Oh good, more food." He opens his mouth. Impossibly wide. "Name first. It\'s polite."','dlg'],
+    ];
+  },
+  choices:()=>{
+    if(GS.k.gluttony_name){
+      return[
+        { text:'[MEMORY] Give him a completely false name. "Natsuki Schwarz."', mem:true, action:()=>load('lye_down') }
+      ];
+    }
+    return[
+      { text:'"Subaru Natsuki."', action:()=>{ GS.k.gluttony_name=true; die('"Subaru Natsuki" — consumed. You still existed, but nobody in the world knew your name. Nobody came to find you.'); }},
+      { text:'Refuse to give your name.', action:()=>die('He took your voice instead. Then your memory. Same result, slower.') },
+    ];
+  }
+},
+
+'lye_down':{
+  char:'beatrice',
+  text:[
+    ['"Natsuki Schwarz," you say.','dlg'],
+    ['Lye\'s eyes light up. He swallows. Then frowns. The name doesn\'t... sit right.','nar'],
+    ['He\'s still frowning when Beatrice\'s binding hits him from the left.','nar'],
+    ['"You gave him a false name," she says, impressed despite herself.','dlg'],
+    ['"I read it in a book. Sort of."','dlg'],
+    ['"Gate 2 clear."','dlg'],
+  ],
+  choices:[
+    { text:'Find Regulus at Gate 3 — the final Archbishop.', action:()=>load('regulus_approach') }
+  ]
+},
+
+'regulus_approach':{
+  char:'regulus',
+  text:()=>{
+    if(GS.k.regulus_timing){
+      setChar('subaru');
+      return[
+        ['<strong>※ LOOP MEMORY:</strong> Regulus\'s Lion\'s Heart stops his own heartbeat, making him untouchable. But between the end of one monologue and the beginning of his next breath — a fraction of a second — his heart starts. That\'s the window.','mem'],
+      ];
+    }
+    return[
+      ['Regulus Corneas stands in the plaza with his hands in his pockets, talking.','nar'],
+      ['He is still talking when the first volley of arrows reaches him and stops, hovering, a centimeter from his chest.','nar'],
+      ['"—and another thing about the concept of ownership that this world fundamentally misunderstands—"','dlg'],
+      ['Every attack stops. Every mage\'s spell dissipates. Nothing reaches him.','nar'],
+    ];
+  },
+  choices:()=>{
+    if(GS.k.regulus_timing){
+      return[
+        { text:'[MEMORY] Wait. Listen to every word. Strike the instant he pauses to breathe.', mem:true,
+          action:()=>load('regulus_down') }
+      ];
+    }
+    return[
+      { text:'Attack with everything simultaneously.', action:()=>{ GS.k.regulus_timing=true; die('Every attack halted. He kept talking while you died of exhaustion trying.'); }},
+      { text:'Wait and listen. Study his pattern.', action:()=>load('regulus_down') },
+    ];
+  }
+},
+
+'regulus_down':{
+  char:'beatrice',
+  text:[
+    ['You stand still and listen to Regulus Corneas explain his theory of personal sovereignty for eleven uninterrupted minutes.','nar'],
+    ['You learn that he has been married to exactly one hundred and fifty women who are currently sealed in his heart.','nar'],
+    ['You learn about his views on property, self-determination, and the nature of rights.','nar'],
+    ['You learn the precise rhythm of his breathing.','nar'],
+    ['When he reaches the end of a long sentence and his lungs empty—','nar'],
+    ['Beatrice fires.','nar'],
+    ['The blast passes through his defenses in the single moment his heart beats.','nar'],
+    ['Regulus Corneas looks down at himself with genuine disbelief.','nar'],
+    ['"...That\'s not within my—"','dlg'],
+    ['He falls.','nar'],
+    ['"Gates 3 and 4 are secured," Emilia\'s voice crackles through the communication crystal.','dlg'],
+    ['"We won."','dlg'],
+  ],
+  choices:[
+    { text:'Lower your weapon. Let it be over.', action:()=>load('final_scene') }
+  ]
+},
+
+'final_scene':{
+  char:'emilia',
+  text:[
+    ['Pristella stands. Fifty thousand people are alive. The four gates hold.','nar'],
+    ['You sit on a canal bridge and watch the sun rise over water that should have been a grave.','nar'],
+    ['Emilia finds you. She sits beside you without asking.','nar'],
+    ['For a long time neither of you says anything. The city slowly comes back to itself around you.','nar'],
+    ['"You died a lot to get here," she says eventually.','dlg'],
+    ['You almost laugh.','nar'],
+    ['"Yeah."','dlg'],
+    ['"I didn\'t know that, before. I do now, I think. Not the details — but that every good thing in front of me cost you something I can\'t measure."','dlg'],
+    ['<em>You think of Rem, who told you to love yourself before you knew you needed to. Of Beatrice, who waited four hundred years and chose you anyway. Of Garfiel weeping into his mother\'s hair. Of Wilhelm, kneeling beside the Whale\'s body in the empty road.</em>','nar'],
+    ['<em>Of every death that got you here.</em>','nar'],
+    ['"It\'s enough," you say. "It\'s more than enough."','dlg'],
+    ['<br><strong>✦ ARC V CLEARED ✦</strong><br><strong>◈ STORY COMPLETE ◈</strong>','suc'],
+  ],
+  choices:[
+    { text:'See your final record.', action:()=>showVictory() }
+  ]
 }
 
-/* =========================================================
-   SCENE DEFINITIONS
-   ========================================================= */
-const SCENES = {
+}; // end SC
 
-  /* ══════════════════════════════════════
-     ▌ ARC 1: The Capital & The Insignia ▐
-     ══════════════════════════════════════ */
-  'start': {
-    char: 'subaru',
-    text: () => {
-      GS.arc = 1; GS.checkpoint = 'start'; updateHUD(); setArcHeader('Arc I — The Capital');
-      return [
-        ['You open your eyes. The sky is wrong — too blue, too crystalline. The city smells of coal smoke and magic.', 'narrative'],
-        ['You are Subaru Natsuki. High-schooler. Summoned by no one, to nowhere. In your hands: a phone with no signal and a bag of chips.', 'narrative'],
-        ['<em>Somewhere in this capital, someone needs help. Find them.</em>', 'narrative'],
-      ];
-    },
-    choices: [
-      { text: 'Head down a narrow, shadowed alleyway.', action: () => loadScene('alley') },
-      { text: 'Ask the nearest merchant for information.', action: () => loadScene('merchant_bad') },
-    ]
-  },
-
-  'merchant_bad': {
-    char: 'none',
-    text: [
-      ['You approach an irritable merchant. He takes one look at your tracksuit and sneers.', 'narrative'],
-      ['"Get away from my stall, you foreign vagrant."', 'dialogue'],
-      ['By nightfall you are lost, cold, and utterly helpless.', 'narrative'],
-    ],
-    choices: [
-      { text: 'Try to find shelter in a doorway.', action: () => die('Froze to death on a stone floor on the first night.') }
-    ]
-  },
-
-  'alley': {
-    char: 'none',
-    text: [
-      ['Three figures block the alley. The tallest cracks his knuckles.', 'narrative'],
-      ['"Hand over your stuff. All of it."', 'dialogue'],
-    ],
-    choices: [
-      { text: 'Try to sprint past them.', action: () => die('Stabbed in the back before you made it five steps.') },
-      { text: 'Plead and surrender your phone and snacks.', action: () => loadScene('meet_emilia') },
-    ]
-  },
-
-  'meet_emilia': {
-    char: 'emilia',
-    text: [
-      ['A girl appears like frost — silver hair, violet eyes, pointed ears that mark her as something other.', 'narrative'],
-      ['"You there. Leave these people alone."', 'dialogue'],
-      ['The thugs flee. She turns to you, only faintly curious.', 'narrative'],
-      ['"I am looking for something I dropped. A small insignia. Have you seen it?"', 'dialogue'],
-      ['<em>You have nothing. No power, no magic, no special ability. But you can help her look.</em>', 'narrative'],
-    ],
-    choices: [
-      { text: 'Offer to help her search. Start from the loot house district.', action: () => loadScene('loot_house') },
-    ]
-  },
-
-  'loot_house': {
-    char: 'none',
-    text: () => {
-      if (GS.k.loot_house_trap) {
-        setChar('elsa');
-        return [
-          ['<strong>※ LOOP MEMORY:</strong> This silence is wrong. Elsa the Bowel Hunter is already inside, waiting in the dark.', 'knowledge'],
-        ];
-      }
-      return [
-        ['The loot house is suspiciously quiet. Not even rats.', 'narrative'],
-        ['<em>Something feels wrong, but you can\'t name it.</em>', 'narrative'],
-      ];
-    },
-    choices: () => {
-      if (GS.k.loot_house_trap) {
-        return [
-          { text: '[MEMORY] Shout a warning. Draw Elsa out before she can ambush.', knowledge: true,
-            action: () => loadScene('beat_elsa') },
-        ];
-      }
-      return [
-        { text: 'Open the door and walk straight in.', action: () => {
-          GS.k.loot_house_trap = true;
-          die('Elsa eviscerated you in the doorway. A horrifying, mercifully quick death.', 0);
-        }},
-        { text: 'Knock loudly on the door first.', action: () => {
-          GS.k.loot_house_trap = true;
-          die('Elsa attacks through the door with inhuman speed. Dead before you blink.', 0);
-        }},
-      ];
-    }
-  },
-
-  'beat_elsa': {
-    char: 'emilia',
-    text: [
-      ['Your shout gives Emilia a precious second. She raises an ice barrier just as a shadowy blur launches from the stairwell.', 'narrative'],
-      ['"What—" Emilia begins.', 'dialogue'],
-      ['Reinhard van Astrea arrives with the force of a comet. One look at him and Elsa flees into the night.', 'narrative'],
-      ['"You knew something was wrong," Emilia says quietly. "How?"', 'dialogue'],
-      ['<em>You can\'t explain. But you are alive. The insignia is recovered.</em>', 'narrative'],
-      ['<strong>✦ ARC I CLEARED ✦</strong>', 'success-msg'],
-    ],
-    choices: [
-      { text: 'Accept Emilia\'s invitation to Roswaal\'s Mansion.', action: () => {
-        GS.arc = 2; GS.checkpoint = 'mansion'; updateHUD();
-        loadScene('mansion');
-      }}
-    ]
-  },
-
-  /* ══════════════════════════════════════
-     ▌ ARC 2: The Mansion of Paranoia ▐
-     ══════════════════════════════════════ */
-  'mansion': {
-    char: 'rem',
-    text: () => {
-      GS.arc = 2; setArcHeader('Arc II — The Mansion');
-      return [
-        ['You wake in a silk-sheeted bed. Roswaal\'s manor is all tower-high ceilings and candlelit corridors.', 'narrative'],
-        ['The blue-haired maid watching you does not look welcoming.', 'narrative'],
-        ['"You smell of the Witch."', 'dialogue'],
-        ['Her sister Ram stands in the doorway, expression unreadable.', 'narrative'],
-      ];
-    },
-    choices: [
-      { text: 'Dedicate yourself entirely to useful work — earn trust.', action: () => {
-        if (GS.k.rem_suspicion && GS.scent < 3) {
-          loadScene('mansion_cleared');
-        } else {
-          GS.k.rem_suspicion = true;
-          die('You were killed in your sleep. Your scent was too strong, your behavior too strange.', 1);
-        }
-      }},
-      { text: 'Wander the mansion alone to map its layout.', action: () => {
-        setChar('ram');
-        die('Ram found you lurking near the forbidden east wing. She did not ask questions.', 1);
-      }},
-      { text: 'Try to tell Emilia about "Return by Death."', action: () => loadScene('taboo') },
-    ]
-  },
-
-  'taboo': {
-    char: 'subaru',
-    text: [
-      ['You take a breath and try to say the words.', 'narrative'],
-      ['Time stops. A hand of shadow closes around your heart. The pain is absolute — not physical but <em>metaphysical</em>, as though your soul is being squeezed.', 'narrative'],
-      ['<em>You cannot tell anyone. The Witch will not allow it.</em>', 'narrative'],
-    ],
-    choices: [
-      { text: 'Endure it. Come back to the present.', action: () => loadScene('mansion') }
-    ]
-  },
-
-  'mansion_cleared': {
-    char: 'emilia',
-    text: [
-      ['A week passes. Rem\'s hostility softens into something approaching cautious warmth. Ram remains Ram.', 'narrative'],
-      ['Roswaal Mathers returns and summons you to his study.', 'narrative'],
-      ['"You have proven yourself useful, yes-yes. You will accompany Lady Emilia to the Royal Selection in the capital."', 'dialogue'],
-      ['<em>Something larger is beginning.</em>', 'narrative'],
-      ['<strong>✦ ARC II CLEARED ✦</strong>', 'success-msg'],
-    ],
-    choices: [
-      { text: 'Ride to the Royal Selection.', action: () => {
-        GS.arc = 3; GS.checkpoint = 'royal_selection'; updateHUD();
-        loadScene('royal_selection');
-      }}
-    ]
-  },
-
-  /* ══════════════════════════════════════
-     ▌ ARC 3: Collapse & The White Whale ▐
-     ══════════════════════════════════════ */
-  'royal_selection': {
-    char: 'priscilla',
-    text: () => {
-      GS.arc = 3; setArcHeader('Arc III — The White Whale');
-      return [
-        ['The throne room. Five candidates. One empty throne.', 'narrative'],
-        ['Priscilla Barielle catches your eye with a contemptuous smile.', 'narrative'],
-        ['"Is this the half-devil\'s lapdog? How charming."', 'dialogue'],
-        ['<em>The old Subaru would have exploded. Would have screamed something foolish in front of everyone.</em>', 'narrative'],
-      ];
-    },
-    choices: [
-      { text: 'Make a loud, defiant speech claiming to be Emilia\'s knight.', action: () => loadScene('humiliation') },
-      { text: 'Stay composed. Whisper to Emilia to keep moving.', action: () => loadScene('cautious_return') },
-    ]
-  },
-
-  'humiliation': {
-    char: 'subaru',
-    text: [
-      ['You speak. And keep speaking. Your words echo off cold stone.', 'narrative'],
-      ['"I\'m Emilia\'s knight! I\'ve saved her life — any of you would be dead without someone like me—"', 'dialogue'],
-      ['Silence. Then Emilia\'s voice, barely above a whisper.', 'narrative'],
-      ['"...Subaru. Stop. Please."', 'dialogue'],
-      ['She turns away. Everyone is watching. Your chest caves in.', 'narrative'],
-      ['<em>You are escorted out of the castle.</em>', 'narrative'],
-    ],
-    choices: [
-      { text: 'Return to the mansion alone, broken.', action: () => loadScene('broken_loop') }
-    ]
-  },
-
-  'cautious_return': {
-    char: 'rem',
-    text: [
-      ['You swallow your pride. Emilia completes her statement without incident.', 'narrative'],
-      ['On the road back, Rem rides beside you in comfortable silence.', 'narrative'],
-      ['Then — fog. Wrong kind of fog. The kind that smells of salt and rot.', 'narrative'],
-      ['"Subaru-kun. The White Whale is near. We need to leave. <em>Now.</em>"', 'dialogue'],
-    ],
-    choices: [
-      { text: 'Try to fight the Whale on instinct.', action: () => die('The Whale erased you from existence. Rem spent the rest of her life looking for someone she could no longer remember.', 0) },
-      { text: 'Flee at full gallop back toward the capital.', action: () => die('The Whale overtook you in seconds. Rem died trying to buy you time.', 0) },
-      { text: 'Accept defeat. Return to the mansion and find another way.', action: () => loadScene('broken_loop') },
-    ]
-  },
-
-  'broken_loop': {
-    char: 'subaru',
-    text: () => {
-      GS.k.isBroken = true; GS.checkpoint = 'broken_loop';
-      return [
-        ['You are back at the mansion. You have lost count of the loops.', 'narrative'],
-        ['Rem is alive here — she doesn\'t know about the dozens of times she has died for you. <em>She has no idea.</em>', 'narrative'],
-        ['You sit on the floor of your room and let yourself fall apart, quietly.', 'narrative'],
-        ['"I\'m useless. I can\'t change anything. Everyone would be better off if I just—"', 'dialogue'],
-        ['A soft knock at the door.', 'narrative'],
-      ];
-    },
-    choices: [
-      { text: 'Ignore it. Sink deeper.', action: () => die('Ram found you catatonic. She had you removed from the property.', 1) },
-      { text: 'Open the door.', action: () => loadScene('rem_dialogue') },
-    ]
-  },
-
-  'rem_dialogue': {
-    char: 'rem',
-    text: [
-      ['Rem stands in the doorway holding a tray with tea she knows you won\'t drink.', 'narrative'],
-      ['"I knocked six times. I was going to leave."', 'dialogue'],
-      ['She sets the tray down and sits across from you on the floor, uninvited.', 'narrative'],
-      ['"Tell me what happened."', 'dialogue'],
-      ['<em>You can\'t. The Witch won\'t let you. But you can tell her everything except the one forbidden thing.</em>', 'narrative'],
-      ['You talk for hours. She listens to all of it.', 'narrative'],
-      ['"Subaru-kun. You only hate yourself because you refuse to see what I see — someone who keeps standing up, no matter how many times he falls. That person is the hero of my story."', 'dialogue'],
-      ['<em>Something in your chest, broken for so long you forgot the shape of it, shifts back into place.</em>', 'narrative'],
-    ],
-    choices: [
-      { text: 'Accept it. Accept <em>her</em>. Start from zero.', action: () => {
-        GS.k.isBroken = false;
-        GS.k.trustRem = true;
-        loadScene('alliance_start');
-      }}
-    ]
-  },
-
-  'alliance_start': {
-    char: 'subaru',
-    text: [
-      ['You stand up. For real this time.', 'narrative'],
-      ['The White Whale cannot be fought alone. You need an army. Crusch Karsten, rival candidate, commands the finest military force in the capital.', 'narrative'],
-      ['<em>You have nothing to offer her. You will have to figure out what she needs.</em>', 'narrative'],
-    ],
-    choices: [
-      { text: 'Ride to Crusch\'s estate and request an audience.', action: () => loadScene('negotiation') }
-    ]
-  },
-
-  'negotiation': {
-    char: 'priscilla',
-    text: () => {
-      if (GS.k.whale_weakness) {
-        setChar('none');
-        return [
-          ['<strong>※ LOOP MEMORY:</strong> You know what Crusch truly wants — the White Whale\'s massive corpse, which contains rare and valuable miasma organs. That is your bargaining chip.', 'knowledge'],
-        ];
-      }
-      return [
-        ['Crusch Karsten receives you without a smile.', 'narrative'],
-        ['"You want my army. The Whale has hunted this road for decades. What could you possibly offer me?"', 'dialogue'],
-        ['<em>You flounder. She shows you the door.</em>', 'narrative'],
-      ];
-    },
-    choices: () => {
-      if (GS.k.whale_weakness) {
-        return [
-          { text: '[MEMORY] Offer the entire White Whale corpse — miasma organs and all — as payment.', knowledge: true,
-            action: () => loadScene('alliance_success') },
-        ];
-      }
-      return [
-        { text: 'Offer your future service and loyalty.', action: () => {
-          GS.k.whale_weakness = true;
-          die('Crusch declined. The Whale found Rem on the road the following night.', 0);
-        }},
-        { text: 'Offer Emilia\'s political favor.', action: () => die('Crusch was insulted. You made a powerful enemy. Rem died alone.', 0) },
-      ];
-    }
-  },
-
-  'alliance_success': {
-    char: 'rem',
-    text: [
-      ['Crusch smiles for the first time. A deal is struck.', 'narrative'],
-      ['The Iron Fang mercenaries. Crusch\'s cavalry. Mages who can fire from a hundred meters.', 'narrative'],
-      ['Rem finds you polishing your borrowed blade in the courtyard.', 'narrative'],
-      ['"We\'re really going to fight it, aren\'t we."', 'dialogue'],
-      ['"Yeah," you say. "This time it dies."', 'dialogue'],
-    ],
-    choices: [
-      { text: 'Lead the army to the whale road at midnight.', action: () => loadScene('whale_fight') }
-    ]
-  },
-
-  'whale_fight': {
-    char: 'whale',
-    text: [
-      ['The fog arrives first — a wall of white silence rolling across the moonlit road.', 'narrative'],
-      ['Then the Whale rises out of it. <em>Enormous.</em> A mountain that breathes.', 'narrative'],
-      ['"Begin the assault!" Crusch\'s voice cuts through the panic.', 'dialogue'],
-      ['Arrows flash. Magic crackles. The Whale barely notices.', 'narrative'],
-    ],
-    choices: [
-      { text: 'Charge it directly — show the men courage.', action: () => die('Crushed under the Whale\'s maw. Inspiring, briefly.', 0) },
-      { text: 'Observe the Whale\'s movement pattern first.', action: () => loadScene('whale_split') },
-    ]
-  },
-
-  'whale_split': {
-    char: 'whale',
-    text: [
-      ['The Whale opens its mouth. A pulse of fog — and suddenly there are <em>three</em> of them.', 'narrative'],
-      ['The army falters. Which is real? Which are mirages?', 'narrative'],
-      ['"They\'re splitting the forces!" Wilhelm screams over the chaos.', 'dialogue'],
-      ['<em>You have seen this before. In a previous loop. You remember something.</em>', 'narrative'],
-    ],
-    choices: [
-      { text: 'Guess and attack the leftmost copy.', action: () => die('You guessed wrong. The real Whale annihilated a third of the army.', 0) },
-      { text: 'Remember: the Whale cannot fly. Gravity magic pulls the real one down.', action: () => loadScene('whale_gravity') },
-    ]
-  },
-
-  'whale_gravity': {
-    char: 'subaru',
-    text: [
-      ['"The real one is the only one that can\'t stay aloft! Gravity mages — NOW!"', 'dialogue'],
-      ['Three mages redirect their casting skyward. The real Whale lurches downward, struggling, exposed.', 'narrative'],
-      ['Wilhelm van Astrea — grief made flesh — drives his blade into the Whale\'s eye socket with seventy years of precision.', 'narrative'],
-      ['The Whale screams. The copies dissolve. One final blow.', 'narrative'],
-      ['The fog clears. The road is littered with bodies and silence and the corpse of a legend.', 'narrative'],
-      ['<strong>✦ ARC III CLEARED — THE WHITE WHALE IS DEAD ✦</strong>', 'success-msg'],
-    ],
-    choices: [
-      { text: 'Follow the map to the Sanctuary. Emilia needs you.', action: () => {
-        GS.arc = 4; GS.checkpoint = 'sanctuary_arrive'; updateHUD();
-        loadScene('sanctuary_arrive');
-      }}
-    ]
-  },
-
-  /* ══════════════════════════════════════
-     ▌ ARC 4: The Sanctuary & The Trials ▐
-     ══════════════════════════════════════ */
-  'sanctuary_arrive': {
-    char: 'emilia',
-    text: () => {
-      GS.arc = 4; setArcHeader('Arc IV — The Sanctuary');
-      return [
-        ['The Sanctuary is a hidden village sealed behind a magical barrier. Those with mixed blood — demi-human, half-elf — cannot leave unless the barrier\'s trials are completed.', 'narrative'],
-        ['Emilia is trapped here. And she is falling apart.', 'narrative'],
-        ['"I need to enter the Tomb," she tells you. "I have to face the trials. But I\'m frightened, Subaru."', 'dialogue'],
-        ['<em>The Witch of Greed built this place. Something waits inside that Tomb.</em>', 'narrative'],
-      ];
-    },
-    choices: [
-      { text: 'Encourage Emilia. Explore the village first.', action: () => loadScene('garfiel_intro') },
-      { text: 'Enter the Tomb yourself to scout it.', action: () => loadScene('echidna_first') },
-    ]
-  },
-
-  'garfiel_intro': {
-    char: 'garfiel',
-    text: [
-      ['A boy with tiger ears and golden eyes drops from a tree directly in front of you.', 'narrative'],
-      ['"New guy. Ya ain\'t leaving until the trials are done. That\'s the rule. My rule."', 'dialogue'],
-      ['He bares teeth that are too sharp.', 'narrative'],
-      ['"The Great Garfiel Tinzel don\'t trust outsiders. Especially ones who smell like they\'ve been near a Witch."', 'dialogue'],
-    ],
-    choices: [
-      { text: 'Challenge him to prove yourself.', action: () => die('Garfiel\'s beast form tore through you before you landed a punch.', 0) },
-      { text: 'Show him you\'re not a threat. Ask about the trials.', action: () => loadScene('echidna_first') },
-      { text: 'Ask about his mother.', action: () => {
-        GS.k.garfiel_method = true;
-        loadScene('echidna_first');
-      }},
-    ]
-  },
-
-  'echidna_first': {
-    char: 'echidna',
-    text: () => {
-      if (!GS.k.echidna_met) {
-        GS.k.echidna_met = true;
-        GS.checkpoint = 'echidna_first';
-      }
-      return [
-        ['You enter the Tomb alone. The darkness swallows you whole.', 'narrative'],
-        ['Then: a white room. A long table. A teapot.', 'narrative'],
-        ['A girl in a black dress with white hair and golden eyes pours tea with the practiced ease of someone who has done it ten thousand times.', 'narrative'],
-        ['"Welcome to my domain. I am Echidna, the Witch of Greed. I am dead, of course — this is a dream. Do sit down."', 'dialogue'],
-        ['She slides a teacup toward you.', 'narrative'],
-        ['"I know about your power. I find it <em>fascinating</em>. Tell me — how many times have you died?"', 'dialogue'],
-      ];
-    },
-    choices: [
-      { text: 'Drink the tea. Answer honestly.', action: () => loadScene('echidna_deal') },
-      { text: 'Refuse the tea. Ask about the trials.', action: () => loadScene('echidna_deal') },
-    ]
-  },
-
-  'echidna_deal': {
-    char: 'echidna',
-    text: [
-      ['"The trials test the candidate\'s past, present, and future. Emilia must complete all three."', 'dialogue'],
-      ['"But you, Subaru Natsuki — your power is a loophole in fate\'s architecture. I want to study it. In exchange, I can show you things."', 'dialogue'],
-      ['"Specifically: Roswaal Mathers has a Gospel — a book that predicts the future. He has been <em>orchestrating</em> all of this, including the Witch Cult\'s attacks, to force you to clear this Sanctuary."', 'dialogue'],
-      ['<em>The tea tastes like grief and curiosity.</em>', 'narrative'],
-      ['"Knowing this — what will you do?"', 'dialogue'],
-    ],
-    choices: [
-      { text: 'Accept Echidna\'s terms. Use this knowledge.', action: () => {
-        GS.k.roswaal_gospel = true;
-        loadScene('trial_loop');
-      }},
-      { text: 'Reject Echidna. Figure it out alone.', action: () => loadScene('trial_loop') },
-    ]
-  },
-
-  'trial_loop': {
-    char: 'emilia',
-    text: () => {
-      if (GS.k.trial_seen) {
-        return [
-          ['<strong>※ LOOP MEMORY:</strong> The First Trial shows your past. Emilia\'s trauma: the day Elior Forest froze over. The day everyone she loved became ice. She has to relive it and accept it.', 'knowledge'],
-          ['You know what she needs: not rescue, but someone to stand at the edge of the dream and say <em>"I will wait."</em>', 'knowledge'],
-        ];
-      }
-      GS.k.trial_seen = true;
-      return [
-        ['Emilia enters the Tomb. She emerges twelve hours later, shaking.', 'narrative'],
-        ['"It was — I saw everything. The forest. The ice. I thought I had forgotten but it was all still there."', 'dialogue'],
-        ['"I couldn\'t finish it. I ran."', 'dialogue'],
-        ['<em>She needs to go back in. And she needs a reason to.</em>', 'narrative'],
-      ];
-    },
-    choices: () => {
-      if (GS.k.trial_seen) {
-        return [
-          { text: '[MEMORY] Tell Emilia exactly what the trial shows — and why she must face it to be free.', knowledge: true,
-            action: () => loadScene('emilia_trials') },
-        ];
-      }
-      return [
-        { text: 'Tell her to rest. Wait for tomorrow.', action: () => die('The Witch Cult attacked the Sanctuary overnight. Without the barrier down, everyone died.', 1) },
-        { text: 'Push her to re-enter immediately. She can do it.', action: () => die('Emilia collapsed under the weight of the trial. The trauma was too sudden.', 0) },
-      ];
-    }
-  },
-
-  'emilia_trials': {
-    char: 'emilia',
-    text: [
-      ['You hold her hands. You tell her everything you know. Everything Echidna told you.', 'narrative'],
-      ['"The trial isn\'t punishing you, Emilia. It\'s asking you to <em>accept</em> what happened. The ice. The sleeping spirits. Your choice that day. It wasn\'t your fault."', 'dialogue'],
-      ['She looks at you for a long time.', 'narrative'],
-      ['"How do you know that?"', 'dialogue'],
-      ['"Because I\'ve watched you choose, over and over, to protect people. Someone who does that doesn\'t deserve to be defined by a single tragedy."', 'dialogue'],
-      ['<em>She goes back in.</em>', 'narrative'],
-    ],
-    choices: [
-      { text: 'Wait at the Tomb entrance — however long it takes.', action: () => loadScene('garfiel_boss') }
-    ]
-  },
-
-  'garfiel_boss': {
-    char: 'garfiel',
-    text: [
-      ['Three days. Garfiel finds you sleeping against the Tomb door.', 'narrative'],
-      ['He crouches beside you. Something in his usual snarl is gone.', 'narrative'],
-      ['"...Why are ya still here?"', 'dialogue'],
-      ['"Because she\'s still in there."', 'dialogue'],
-      ['Long silence. Then:', 'narrative'],
-      ['"My mum\'s in one of those capsules. Ryuzu — the real one. She can\'t leave as long as the barrier stands."', 'dialogue'],
-      ['<em>This is why he protects the Sanctuary. Not pride. Fear of loss.</em>', 'narrative'],
-    ],
-    choices: () => {
-      if (GS.k.garfiel_method) {
-        return [
-          { text: '[MEMORY] Tell him you already know. Promise: when the barrier falls, his mother is the first one free.', knowledge: true,
-            action: () => loadScene('sanctuary_cleared') },
-        ];
-      }
-      return [
-        { text: 'Promise him: when the barrier falls, Ryuzu will be free first.', action: () => loadScene('sanctuary_cleared') },
-        { text: 'Try to explain the bigger stakes.', action: () => die('Garfiel snapped. In beast form, he dismantled you in seconds.', 0) },
-      ];
-    }
-  },
-
-  'sanctuary_cleared': {
-    char: 'emilia',
-    text: [
-      ['On the fourth day, Emilia walks out of the Tomb.', 'narrative'],
-      ['She is not shaking. She is not afraid.', 'narrative'],
-      ['The barrier shatters like glass. The residents pour out into open air for the first time in generations.', 'narrative'],
-      ['Garfiel is the first to reach his mother.', 'narrative'],
-      ['Emilia finds you in the crowd and takes your hand without saying anything.', 'narrative'],
-      ['You stand there in silence while the Sanctuary breathes free.', 'narrative'],
-      ['<strong>✦ ARC IV CLEARED — THE BARRIER IS BROKEN ✦</strong>', 'success-msg'],
-    ],
-    choices: [
-      { text: 'Journey to the city of Pristella. The Witch Cult is moving.', action: () => {
-        GS.arc = 5; GS.checkpoint = 'pristella_arrive'; updateHUD();
-        loadScene('pristella_arrive');
-      }}
-    ]
-  },
-
-  /* ══════════════════════════════════════
-     ▌ ARC 5: The City of Pristella       ▐
-     ══════════════════════════════════════ */
-  'pristella_arrive': {
-    char: 'none',
-    text: () => {
-      GS.arc = 5; setArcHeader('Arc V — The City of Pristella');
-      return [
-        ['Pristella. A canal city built on water, beautiful and fragile as porcelain.', 'narrative'],
-        ['The Witch Cult has taken control of the four water gates. Each is held by a Sin Archbishop.', 'narrative'],
-        ['If any gate is destroyed, the city floods. Fifty thousand people die.', 'narrative'],
-        ['"We need to split up," Emilia says. "Each Archbishop must be dealt with simultaneously."', 'dialogue'],
-        ['<em>You count the odds. They are catastrophic. You go anyway.</em>', 'narrative'],
-      ];
-    },
-    choices: [
-      { text: 'Visit the library to find Beatrice. She may be essential.', action: () => loadScene('beatrice_pact') },
-      { text: 'Go directly to Water Gate 1 — confront the nearest Archbishop.', action: () => loadScene('sirius_encounter') },
-    ]
-  },
-
-  'beatrice_pact': {
-    char: 'beatrice',
-    text: [
-      ['The library exists outside normal space. Beatrice has been inside it for four hundred years, waiting.', 'narrative'],
-      ['"I suppose you found me, in fact. Most people don\'t."', 'dialogue'],
-      ['She closes her enormous book with a thump and regards you with ancient, tired eyes.', 'narrative'],
-      ['"I have been waiting for the person I am supposed to meet. I believed it was impossible. I was wrong."', 'dialogue'],
-      ['"Are you that person, I suppose?"', 'dialogue'],
-      ['"I don\'t know," you say. "But I need a partner, not a spirit under contract. Someone who chooses to fight."', 'dialogue'],
-      ['<em>She stares at you for a very long time.</em>', 'narrative'],
-    ],
-    choices: [
-      { text: '"I want you to fight beside me. Not as a servant. As an equal."', action: () => {
-        GS.k.beatrice_pact = true;
-        loadScene('sirius_encounter');
-      }},
-      { text: 'Request her magical power alone.', action: () => die('Beatrice remained in the library. Without her, you were overwhelmed at Gate 1.', 0) },
-    ]
-  },
-
-  'sirius_encounter': {
-    char: 'sirius',
-    text: () => {
-      if (GS.k.sirius_trick) {
-        setChar('subaru');
-        return [
-          ['<strong>※ LOOP MEMORY:</strong> Sirius\'s Gospel power — Wrath — spreads emotions through crowds. She can make the crowd feel your pain, and vice versa. The trick: mirror her own fear back at her.', 'knowledge'],
-        ];
-      }
-      return [
-        ['Sirius stands on the water gate, chains dancing around her.', 'narrative'],
-        ['"Archbishop of Wrath. Anyone who feels anything in this city is mine to control right now. Fight me and the crowd dies screaming."', 'dialogue'],
-        ['<em>The people around you suddenly go rigid with shared terror — her power flowing through them.</em>', 'narrative'],
-      ];
-    },
-    choices: () => {
-      if (GS.k.sirius_trick) {
-        return [
-          { text: '[MEMORY] Force her to feel the crowd\'s love — an emotion Wrath cannot digest.', knowledge: true,
-            action: () => loadScene('sirius_down') },
-        ];
-      }
-      return [
-        { text: 'Attack Sirius directly.', action: () => {
-          GS.k.sirius_trick = true;
-          die('The crowd\'s pain was redirected into you. You died from fifty thousand simultaneous heartbreaks.', 0);
-        }},
-        { text: 'Try to reason with Sirius.', action: () => die('She infected you with shared grief. You stood still until the gate fell.', 0) },
-      ];
-    }
-  },
-
-  'sirius_down': {
-    char: 'subaru',
-    text: [
-      ['You reach into the crowd\'s shared emotion and find what Wrath cannot consume: the warmth of a mother holding a child. A merchant laughing with a friend. Ordinary, stubborn love.', 'narrative'],
-      ['You push it through the connection.', 'narrative'],
-      ['Sirius doubles over like she\'s been struck. The chains go still.', 'narrative'],
-      ['"That\'s — not — fair—"', 'dialogue'],
-      ['Beatrice seals her with a binding spell before she can recover.', 'narrative'],
-      ['"Gate 1 is clear," you say into the communication crystal.', 'dialogue'],
-    ],
-    choices: [
-      { text: 'Move to Water Gate 2 — Gluttony waits there.', action: () => loadScene('gluttony_encounter') }
-    ]
-  },
-
-  'gluttony_encounter': {
-    char: 'lye',
-    text: () => {
-      if (GS.k.gluttony_name) {
-        setChar('subaru');
-        return [
-          ['<strong>※ LOOP MEMORY:</strong> Lye Batenkaitos eats names. To take a name, he must first speak it. If he never learns your name — he cannot erase you.', 'knowledge'],
-        ];
-      }
-      return [
-        ['Lye Batenkaitos sits on the gate railing, dangling his legs like a child.', 'narrative'],
-        ['"And you are? Your name tastes delicious even before I eat it."', 'dialogue'],
-        ['He opens his mouth impossibly wide.', 'narrative'],
-        ['"Bon appétit."', 'dialogue'],
-      ];
-    },
-    choices: () => {
-      if (GS.k.gluttony_name) {
-        return [
-          { text: '[MEMORY] Never say your name. Give him a false one. Then use Beatrice\'s magic to bind him while he tries to eat the fake.', knowledge: true,
-            action: () => loadScene('gluttony_down') },
-        ];
-      }
-      return [
-        { text: 'State your name — show no fear.', action: () => {
-          GS.k.gluttony_name = true;
-          die('Lye ate "Subaru Natsuki." You were erased from all memory. No one knew to revive you.', 0);
-        }},
-        { text: 'Refuse to speak.', action: () => die('He laughed and ate your voice instead. Same result.', 0) },
-      ];
-    }
-  },
-
-  'gluttony_down': {
-    char: 'beatrice',
-    text: [
-      ['"Emm... the name I\'m tasting is wrong, in fact," Lye mutters, frowning at empty air.', 'dialogue'],
-      ['Beatrice\'s binding hits him mid-chew. He struggles, confused, furious.', 'narrative'],
-      ['"Gate 2 secured," Beatrice says calmly, as though she has done this before.', 'dialogue'],
-      ['"You\'re getting good at this," you tell her.', 'dialogue'],
-      ['"I\'ve had four hundred years of practice doing nothing, I suppose. Motivation helps."', 'dialogue'],
-    ],
-    choices: [
-      { text: 'Rush to Water Gate 3 — Regulus is the final Archbishop.', action: () => loadScene('regulus_encounter') }
-    ]
-  },
-
-  'regulus_encounter': {
-    char: 'regulus',
-    text: () => {
-      if (GS.k.regulus_weakness) {
-        setChar('subaru');
-        return [
-          ['<strong>※ LOOP MEMORY:</strong> Regulus Corneas, Archbishop of Greed. His ability — Lion\'s Heart — stops his own heart, making him untouchable. But his heart must beat to activate it. The window is the moment between breaths.', 'knowledge'],
-        ];
-      }
-      return [
-        ['Regulus Corneas stands in the center of the gate plaza, hands in his pockets, talking to no one.', 'narrative'],
-        ['"...and another thing — the concept of ownership is completely misunderstood by this world — I have earned everything I have through the natural superiority of my being—"', 'dialogue'],
-        ['Every blade that reaches him stops cold, unable to touch him.', 'narrative'],
-        ['"My rights. My absolute, sovereign rights."', 'dialogue'],
-      ];
-    },
-    choices: () => {
-      if (GS.k.regulus_weakness) {
-        return [
-          { text: '[MEMORY] Strike the instant between his monologue\'s end and his next breath — the only moment his heart beats.', knowledge: true,
-            action: () => loadScene('regulus_down') },
-        ];
-      }
-      return [
-        { text: 'Attack with full force.', action: () => {
-          GS.k.regulus_weakness = true;
-          die('Every strike stopped millimeters from him. He talked while you died.', 0);
-        }},
-        { text: 'Try to engage him in argument.', action: () => die('He talked for four hours. The flood came.', 0) },
-      ];
-    }
-  },
-
-  'regulus_down': {
-    char: 'subaru',
-    text: [
-      ['You wait. You listen to every word of his monologue with the focus of a surgeon.', 'narrative'],
-      ['There. The pause. His lungs empty and haven\'t yet refilled.', 'narrative'],
-      ['Beatrice fires.', 'narrative'],
-      ['The blast passes through his defenses like a needle through silk.', 'narrative'],
-      ['Regulus Corneas looks down at himself with genuine surprise.', 'narrative'],
-      ['"...That\'s not... within my rights..."', 'dialogue'],
-      ['He falls.', 'narrative'],
-      ['"Gates 3 and 4 secured," Emilia\'s voice crackles through the crystal. "We\'ve won."', 'dialogue'],
-    ],
-    choices: [
-      { text: 'Stand down. Let it be over.', action: () => loadScene('epilogue') }
-    ]
-  },
-
-  'epilogue': {
-    char: 'emilia',
-    text: [
-      ['The canals of Pristella reflect a sunrise you nearly didn\'t live to see.', 'narrative'],
-      ['Fifty thousand people are alive. The water gates stand.', 'narrative'],
-      ['Emilia finds you sitting on a bridge railing, watching the light move across the water.', 'narrative'],
-      ['"You know," she says, sitting beside you, "I used to think you were reckless. Foolish. That you threw yourself at problems without thinking."', 'dialogue'],
-      ['"You were right," you say.', 'dialogue'],
-      ['"No. I was wrong." She looks at you. "You were the only one who kept trying when everyone else — including me — stopped believing."', 'dialogue'],
-      ['<em>You think of Rem, of Beatrice, of Wilhelm weeping over the Whale\'s corpse. Of Garfiel holding his mother\'s hand. Of Emilia walking out of the Tomb.</em>', 'narrative'],
-      ['<em>You died to get here. Over and over. Each death carved something away until what remained was someone who knew, finally, that he was enough.</em>', 'narrative'],
-      ['<strong>✦ ARC V CLEARED ✦</strong>', 'success-msg'],
-      ['<strong>◈ GAME COMPLETE ◈</strong>', 'system-msg'],
-    ],
-    choices: [
-      { text: 'See your final results.', action: () => showVictory() }
-    ]
-  },
-};
-
-/* =========================================================
-   VICTORY SCREEN
-   ========================================================= */
-function showVictory() {
-  const knowledgeCount = Object.values(GS.k).filter(Boolean).length;
-  document.getElementById('v-deaths').textContent = GS.deaths;
-  document.getElementById('v-scent').textContent = GS.scent;
-  document.getElementById('v-knowledge').textContent = knowledgeCount;
+/* ═══════════════════════════════════════
+   VICTORY
+═══════════════════════════════════════ */
+function showVictory(){
+  document.getElementById('vd').textContent=GS.deaths;
+  document.getElementById('vk').textContent=GS.loops;
   document.getElementById('victory-screen').classList.add('show');
 }
 
-/* =========================================================
+/* ═══════════════════════════════════════
    INIT
-   ========================================================= */
-// Don't auto-start — wait for title screen button
+═══════════════════════════════════════ */
+function startGame(){
+  document.getElementById('title-screen').classList.add('gone');
+  setTimeout(()=>{ document.getElementById('title-screen').style.display='none'; },900);
+  initArcDots();
+  updateHUD();
+  load('start');
+}
 </script>
 </body>
 </html>
