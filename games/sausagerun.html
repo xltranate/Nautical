@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sausage Run - Fullscreen</title>
+    <style>
+        /* Erase default window borders and hide standard scrollbars */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000; /* Black canvas layer while loading */
+        }
+
+        /* Stretch the game iframe to fill the exact size of the browser screen */
+        #game {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <iframe 
+        id="game" 
+        src="https://html5.gamedistribution.com/rvvASMiM/a820dda4a2f54232af0ed7d876baae60/index.html?gd_sdk_referrer_url=https%3A%2F%2Fgeometry-dashonline.io%2Fsausage-run&amp;gd_zone_config=eyJwYXJlbnRVUkwiOiJodHRwczovL2dlb21ldHJ5LWRhc2hvbmxpbmUuaW8vc2F1c2FnZS1ydW4iLCJwYXJlbnREb21haW4iOiJnZW9tZXRyeS1kYXNob25saW5lLmlvIiwidG9wRG9tYWluIjoiZ2VvbWV0cnktZGFzaG9ubGluZS5pbyIsImhhc0ltcHJlc3Npb24iOnRydWUsImxvYWRlckVuYWJsZWQiOnRydWUsImhvc3QiOiJodG1sNS5nYW1lZGlzdHJpYnV0aW9uLmNvbSIsInZlcnNpb24iOiIxLjUuMTgifQ%253D%253D"
+        allow="autoplay; fullscreen; gamepad" 
+        sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-scripts allow-same-origin allow-downloads"
+        scrolling="no" 
+        frameborder="0" 
+        allowfullscreen>
+    </iframe>
+
+</body>
+</html>
