@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /* Ensures no gaps around the iframe */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #game-area {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Styling for the button to trigger fullscreen */
+        #fullscreen-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <button id="fullscreen-btn">Click to Enter Fullscreen</button>
+
+    <div class="game-container">
+        <iframe 
+            class="game-iframe" 
+            id="game-area" 
+            src="https://lab-havoc.1games.io/" 
+            allowfullscreen="true" 
+            webkitallowfullscreen="true" 
+            mozallowfullscreen="true"
+            allow="autoplay; fullscreen; camera; focus-without-user-activation *; monetization; gamepad; keyboard-map *; xr-spatial-tracking; clipboard-write; web-share; accelerometer; magnetometer; gyroscope; display-capture" 
+            sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-scripts allow-same-origin allow-downloads">
+        </iframe>
+    </div>
+
+    <script>
+        const btn = document.getElementById('fullscreen-btn');
+        const iframe = document.getElementById('game-area');
+
+        btn.addEventListener('click', () => {
+            if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+            } else if (iframe.webkitRequestFullscreen) {
+                iframe.webkitRequestFullscreen();
+            } else if (iframe.msRequestFullscreen) {
+                iframe.msRequestFullscreen();
+            }
+            // Hide the button once fullscreen is activated
+            btn.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
